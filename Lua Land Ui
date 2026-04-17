@@ -450,6 +450,76 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	SubtitleText.TextXAlignment = Enum.TextXAlignment.Left
 	SubtitleText.Parent = TitleBar
 
+	-- â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+	-- â•‘   CLOSE & MINIMIZE BUTTONS (NEW)     â•‘
+	-- â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+	-- Close Button
+	local CloseBtn = Instance.new("ImageButton")
+	CloseBtn.Name = "CloseButton"
+	CloseBtn.Size = UDim2.new(0, 20, 0, 20)
+	CloseBtn.Position = UDim2.new(1, -30, 0, 15)
+	CloseBtn.BackgroundTransparency = 1
+	CloseBtn.Image = "rbxassetid://130629964514885"
+	CloseBtn.ImageColor3 = Color3.fromRGB(255, 80, 80)
+	CloseBtn.Parent = TitleBar
+
+	CloseBtn.MouseEnter:Connect(function()
+		TweenService:Create(CloseBtn, TweenInfo.new(0.15), {ImageColor3 = Color3.fromRGB(255, 40, 40)}):Play()
+	end)
+	CloseBtn.MouseLeave:Connect(function()
+		TweenService:Create(CloseBtn, TweenInfo.new(0.15), {ImageColor3 = Color3.fromRGB(255, 80, 80)}):Play()
+	end)
+	CloseBtn.MouseButton1Click:Connect(function()
+		TweenService:Create(MainFrame, TweenInfo.new(0.2), {Size = UDim2.new(0, 0, 0, 0), Position = UDim2.new(MainFrame.Position.X.Scale, MainFrame.Position.X.Offset + 250, MainFrame.Position.Y.Scale, MainFrame.Position.Y.Offset + 175)}):Play()
+		task.delay(0.25, function()
+			ScreenGui:Destroy()
+		end)
+	end)
+
+	-- Minimize Button
+	local MinimizeBtn = Instance.new("TextButton")
+	MinimizeBtn.Name = "MinimizeButton"
+	MinimizeBtn.Size = UDim2.new(0, 20, 0, 20)
+	MinimizeBtn.Position = UDim2.new(1, -56, 0, 15)
+	MinimizeBtn.BackgroundTransparency = 1
+	MinimizeBtn.Text = ""
+	MinimizeBtn.Parent = TitleBar
+
+	-- Minimize icon: a simple horizontal line drawn via a Frame
+	local MinimizeLine = Instance.new("Frame")
+	MinimizeLine.Name = "MinimizeLine"
+	MinimizeLine.Size = UDim2.new(1, 0, 0, 2)
+	MinimizeLine.Position = UDim2.new(0, 0, 0.65, 0)
+	MinimizeLine.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+	MinimizeLine.BorderSizePixel = 0
+	MinimizeLine.Parent = MinimizeBtn
+
+	local MinLineCorner = Instance.new("UICorner")
+	MinLineCorner.CornerRadius = UDim.new(1, 0)
+	MinLineCorner.Parent = MinimizeLine
+
+	local IsMinimized = false
+	local NormalSize = UDim2.new(0, 500, 0, 350)
+	local MinimizedSize = UDim2.new(0, 500, 0, 50)
+
+	MinimizeBtn.MouseEnter:Connect(function()
+		TweenService:Create(MinimizeLine, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+	end)
+	MinimizeBtn.MouseLeave:Connect(function()
+		TweenService:Create(MinimizeLine, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(200, 200, 200)}):Play()
+	end)
+	MinimizeBtn.MouseButton1Click:Connect(function()
+		IsMinimized = not IsMinimized
+		if IsMinimized then
+			TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = MinimizedSize}):Play()
+		else
+			TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = NormalSize}):Play()
+		end
+	end)
+
+	-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
 	local Dragging = false
 	local DragInput
 	local DragStart
@@ -501,6 +571,11 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	SidebarPadding.PaddingTop = UDim.new(0, 5)
 	SidebarPadding.Parent = Sidebar
 
+	-- Auto-size Sidebar canvas
+	SidebarLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+		Sidebar.CanvasSize = UDim2.new(0, 0, 0, SidebarLayout.AbsoluteContentSize.Y + 10)
+	end)
+
 	local ContentContainer = Instance.new("Frame")
 	ContentContainer.Name = "ContentContainer"
 	ContentContainer.Size = UDim2.new(1, -130, 1, -50)
@@ -546,14 +621,20 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		TabText.TextXAlignment = Enum.TextXAlignment.Left
 		TabText.Parent = TabButton
 
+		-- â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+		-- â•‘   AUTO CANVAS SCROLLING FRAME (NEW)      â•‘
+		-- â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 		local TabContent = Instance.new("ScrollingFrame")
 		TabContent.Name = TabName .. "Content"
 		TabContent.Size = UDim2.new(1, 0, 1, 0)
+		TabContent.CanvasSize = UDim2.new(0, 0, 0, 0) -- starts at 0; auto-expands below
+		TabContent.AutomaticCanvasSize = Enum.AutomaticSize.Y -- auto grow canvas vertically
 		TabContent.BackgroundTransparency = 1
 		TabContent.ScrollBarThickness = 2
 		TabContent.BorderSizePixel = 0
 		TabContent.Visible = false
 		TabContent.Parent = ContentContainer
+		-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 		local ContentLayout = Instance.new("UIListLayout")
 		ContentLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -668,7 +749,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		function TabHandling:CreateTextbox(TextboxConfig, Callback)
 			local PlaceholderTextString = TextboxConfig.Placeholder or "None"
 			local TextString = TextboxConfig.Text or ""
-			
+
 			local TextboxFrame = Instance.new("Frame")
 			TextboxFrame.Size = UDim2.new(1, 0, 0, 35)
 			TextboxFrame.BackgroundTransparency = 1
