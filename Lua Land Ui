@@ -4,13 +4,10 @@ local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  COMPLETE LUCIDE ICONS DICTIONARY  (1,715 icons)
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 local IconsDict = {
-	["a-arrow-down"] = "rbxassetid://92867583610071",
-	["a-arrow-up"] = "rbxassetid://132318504999733",
-	["a-large-small"] = "rbxassetid://111491496660216",
+	["arrow-down"] = "rbxassetid://92867583610071",
+	["arrow-up"] = "rbxassetid://132318504999733",
+	["large-small"] = "rbxassetid://111491496660216",
 	["accessibility"] = "rbxassetid://114029945302017",
 	["activity"] = "rbxassetid://94212016861936",
 	["air-vent"] = "rbxassetid://81517226012329",
@@ -1725,9 +1722,6 @@ local IconsDict = {
 	["zoom-out"] = "rbxassetid://108334162607319",
 }
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  INTERNAL: filter tab elements by search query
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 local function RunSearch(query, ElementRegistry)
 	local q = query:lower():gsub("^%s+", ""):gsub("%s+$", "")
 	for _, entry in ipairs(ElementRegistry) do
@@ -1739,7 +1733,6 @@ local function RunSearch(query, ElementRegistry)
 	end
 end
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 function LuaLandLibrary:CreateWindow(WindowConfig)
 	local TitleString     = WindowConfig.Title     or "Lua Land Ui Library"
@@ -1765,7 +1758,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	UICorner.CornerRadius = UDim.new(0, 8)
 	UICorner.Parent = MainFrame
 
-	-- â”€â”€ TitleBar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	local TitleBar = Instance.new("Frame")
 	TitleBar.Name = "TitleBar"
 	TitleBar.Size = UDim2.new(1, 0, 0, 50)
@@ -1806,8 +1798,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	SubtitleText.ZIndex = 10
 	SubtitleText.Parent = TitleBar
 
-	-- â”€â”€ Close Button (WHITE) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-	local CloseBtn = Instance.new("ImageButton")
+    local CloseBtn = Instance.new("ImageButton")
 	CloseBtn.Name = "CloseButton"
 	CloseBtn.Size = UDim2.new(0, 20, 0, 20)
 	CloseBtn.Position = UDim2.new(1, -30, 0, 15)
@@ -1832,7 +1823,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		task.delay(0.22, function() ScreenGui:Destroy() end)
 	end)
 
-	-- â”€â”€ Minimize Button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	local MinimizeBtn = Instance.new("TextButton")
 	MinimizeBtn.Name = "MinimizeButton"
 	MinimizeBtn.Size = UDim2.new(0, 20, 0, 20)
@@ -1865,7 +1855,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		TweenService:Create(MinimizeLine, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(200, 200, 200)}):Play()
 	end)
 
-	-- â”€â”€ Drag â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	local Dragging, DragInput, DragStart, StartPos = false, nil, nil, nil
 	TitleBar.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1
@@ -1888,8 +1877,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 	end)
 
-	-- â”€â”€ Body (hides entirely on minimize â†’ search bar gone) â”€â”€
-	local Body = Instance.new("Frame")
+    local Body = Instance.new("Frame")
 	Body.Name = "Body"
 	Body.Size = UDim2.new(1, 0, 1, -50)
 	Body.Position = UDim2.new(0, 0, 0, 50)
@@ -1908,7 +1896,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 	end)
 
-	-- â”€â”€ Sidebar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	local Sidebar = Instance.new("ScrollingFrame")
 	Sidebar.Name = "Sidebar"
 	Sidebar.Size = UDim2.new(0, 130, 1, 0)
@@ -1932,16 +1919,14 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		Sidebar.CanvasSize = UDim2.new(0, 0, 0, SidebarLayout.AbsoluteContentSize.Y + 10)
 	end)
 
-	-- â”€â”€ Content Container â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-	local ContentContainer = Instance.new("Frame")
+    local ContentContainer = Instance.new("Frame")
 	ContentContainer.Name = "ContentContainer"
 	ContentContainer.Size = UDim2.new(1, -130, 1, 0)
 	ContentContainer.Position = UDim2.new(0, 130, 0, 0)
 	ContentContainer.BackgroundTransparency = 1
 	ContentContainer.Parent = Body
 
-	-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-	local WindowHandling = {}
+    local WindowHandling = {}
 	local TabsCollection  = {}
 
 	function WindowHandling:CreateTab(TabConfig)
@@ -1960,7 +1945,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		local SearchTextColor   = TabConfig.SearchTextColor   or Color3.fromRGB(255, 255, 255)
 		local SearchIconColor   = TabConfig.SearchIconColor   or Color3.fromRGB(255, 255, 255)
 
-		-- â”€â”€ Sidebar Tab Button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		local TabButton = Instance.new("TextButton")
 		TabButton.Name = TabName .. "Tab"
 		TabButton.Size = UDim2.new(1, 0, 0, 30)
@@ -1992,7 +1976,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		TabText.TextXAlignment = Enum.TextXAlignment.Left
 		TabText.Parent = TabButton
 
-		-- â”€â”€ Tab Wrapper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		local TabWrapper = Instance.new("Frame")
 		TabWrapper.Name = TabName .. "Wrapper"
 		TabWrapper.Size = UDim2.new(1, 0, 1, 0)
@@ -2067,7 +2050,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			end)
 		end
 
-		-- â”€â”€ Scroll Content â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		local TabContent = Instance.new("ScrollingFrame")
 		TabContent.Name = TabName .. "Content"
 		TabContent.Size = UDim2.new(1, 0, 1, -SearchBarHeight)
@@ -2107,8 +2089,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			TabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 		end
 
-		-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-		local TabHandling = {}
+	   local TabHandling = {}
 
 		local function Reg(frame, label)
 			if ShowSearch then
@@ -2116,7 +2097,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			end
 		end
 
-		-- â”€â”€ Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateSection(SectionText)
 			local SectionLabel = Instance.new("TextLabel")
 			SectionLabel.Size = UDim2.new(1, 0, 0, 20)
@@ -2144,7 +2124,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(TxtLabel, LabelText)
 		end
 
-		-- â”€â”€ Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateToggle(ToggleText, Callback)
 			local ToggleFrame = Instance.new("Frame")
 			ToggleFrame.Size = UDim2.new(1, 0, 0, 35)
@@ -2206,7 +2185,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(ToggleFrame, ToggleText)
 		end
 
-		-- â”€â”€ Button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateButton(ButtonText, Callback)
 			local ButtonFrame = Instance.new("TextButton")
 			ButtonFrame.Name = "Button_" .. ButtonText
@@ -2245,7 +2223,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(ButtonFrame, ButtonText)
 		end
 
-		-- â”€â”€ Textbox â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateTextbox(TextboxConfig, Callback)
 			local PlaceholderStr = TextboxConfig.Placeholder or "Type here..."
 			local DefaultText    = TextboxConfig.Text        or ""
@@ -2274,7 +2251,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(TextboxFrame, PlaceholderStr)
 		end
 
-		-- â”€â”€ Slider with circle thumb â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateSlider(SliderText, MinValue, MaxValue, Callback)
 			local SliderFrame = Instance.new("Frame")
 			SliderFrame.Size = UDim2.new(1, 0, 0, 50)
@@ -2381,9 +2357,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(SliderFrame, SliderText)
 		end
 
-		-- â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
-		-- â•‘  CHECKBOX â€” checkmark icon rbxassetid://9754130783
-		-- â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 		function TabHandling:CreateCheckbox(CheckboxText, Callback)
 			local CheckboxFrame = Instance.new("Frame")
 			CheckboxFrame.Size = UDim2.new(1, 0, 0, 35)
