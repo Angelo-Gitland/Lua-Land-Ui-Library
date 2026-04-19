@@ -394,9 +394,9 @@ local IconsDict = {
 	["zap"] = "rbxassetid://102881251417484",
 }
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 --  INTERNAL: filter tab elements by search query
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 local function RunSearch(query, ElementRegistry)
 	local q = query:lower():gsub("^%s+", ""):gsub("%s+$", "")
 	for _, entry in ipairs(ElementRegistry) do
@@ -408,18 +408,12 @@ local function RunSearch(query, ElementRegistry)
 	end
 end
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 function LuaLandLibrary:CreateWindow(WindowConfig)
 	local TitleString     = WindowConfig.Title     or "Lua Land Ui Library"
 	local SubtitleString  = WindowConfig.Subtitle  or "Lua Land Dev"
 	local TitleIconString = WindowConfig.TitleIcon or "script"
-
-	-- â”€â”€ Window dimensions (Fluent-like size) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-	local WIN_W      = 620  -- wider
-	local WIN_H      = 420  -- taller
-	local TITLEBAR_H = 60   -- taller title bar
-	local SIDEBAR_W  = 155  -- wider sidebar
 
 	local ScreenGui = Instance.new("ScreenGui")
 	ScreenGui.Name = "LuaLandGui"
@@ -429,43 +423,28 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 	local MainFrame = Instance.new("Frame")
 	MainFrame.Name = "MainFrame"
-	MainFrame.Size = UDim2.new(0, WIN_W, 0, WIN_H)
-	MainFrame.Position = UDim2.new(0.5, -WIN_W / 2, 0.5, -WIN_H / 2)
-	MainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+	MainFrame.Size = UDim2.new(0, 500, 0, 350)
+	MainFrame.Position = UDim2.new(0.5, -250, 0.5, -175)
+	MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 	MainFrame.BorderSizePixel = 0
 	MainFrame.ClipsDescendants = true
 	MainFrame.Parent = ScreenGui
 
 	local UICorner = Instance.new("UICorner")
-	UICorner.CornerRadius = UDim.new(0, 10)
+	UICorner.CornerRadius = UDim.new(0, 8)
 	UICorner.Parent = MainFrame
-
-	-- Subtle border stroke
-	local UIStroke = Instance.new("UIStroke")
-	UIStroke.Color = Color3.fromRGB(45, 45, 45)
-	UIStroke.Thickness = 1.2
-	UIStroke.Parent = MainFrame
 
 	-- â”€â”€ TitleBar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	local TitleBar = Instance.new("Frame")
 	TitleBar.Name = "TitleBar"
-	TitleBar.Size = UDim2.new(1, 0, 0, TITLEBAR_H)
-	TitleBar.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-	TitleBar.BorderSizePixel = 0
+	TitleBar.Size = UDim2.new(1, 0, 0, 50)
+	TitleBar.BackgroundTransparency = 1
 	TitleBar.ZIndex = 10
 	TitleBar.Parent = MainFrame
 
-	-- Bottom border line on title bar
-	local TitleBorder = Instance.new("Frame")
-	TitleBorder.Size = UDim2.new(1, 0, 0, 1)
-	TitleBorder.Position = UDim2.new(0, 0, 1, -1)
-	TitleBorder.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	TitleBorder.BorderSizePixel = 0
-	TitleBorder.Parent = TitleBar
-
 	local TitleIcon = Instance.new("ImageLabel")
-	TitleIcon.Size = UDim2.new(0, 28, 0, 28)
-	TitleIcon.Position = UDim2.new(0, 14, 0.5, -14)
+	TitleIcon.Size = UDim2.new(0, 24, 0, 24)
+	TitleIcon.Position = UDim2.new(0, 10, 0, 13)
 	TitleIcon.BackgroundTransparency = 1
 	TitleIcon.Image = IconsDict[TitleIconString] or IconsDict["script"]
 	TitleIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
@@ -473,39 +452,37 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	TitleIcon.Parent = TitleBar
 
 	local TitleText = Instance.new("TextLabel")
-	TitleText.Size = UDim2.new(0, 250, 0, 22)
-	TitleText.Position = UDim2.new(0, 52, 0, 10)
+	TitleText.Size = UDim2.new(0, 200, 0, 20)
+	TitleText.Position = UDim2.new(0, 44, 0, 8)
 	TitleText.BackgroundTransparency = 1
 	TitleText.Text = TitleString
 	TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
-	TitleText.TextSize = 17
+	TitleText.TextSize = 16
 	TitleText.Font = Enum.Font.GothamBold
 	TitleText.TextXAlignment = Enum.TextXAlignment.Left
 	TitleText.ZIndex = 10
 	TitleText.Parent = TitleBar
 
 	local SubtitleText = Instance.new("TextLabel")
-	SubtitleText.Size = UDim2.new(0, 250, 0, 16)
-	SubtitleText.Position = UDim2.new(0, 52, 0, 32)
+	SubtitleText.Size = UDim2.new(0, 200, 0, 15)
+	SubtitleText.Position = UDim2.new(0, 44, 0, 28)
 	SubtitleText.BackgroundTransparency = 1
 	SubtitleText.Text = SubtitleString
-	SubtitleText.TextColor3 = Color3.fromRGB(140, 140, 140)
+	SubtitleText.TextColor3 = Color3.fromRGB(180, 180, 180)
 	SubtitleText.TextSize = 12
 	SubtitleText.Font = Enum.Font.Gotham
 	SubtitleText.TextXAlignment = Enum.TextXAlignment.Left
 	SubtitleText.ZIndex = 10
 	SubtitleText.Parent = TitleBar
 
-	-- â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
-	-- â•‘  CLOSE BUTTON â€” WHITE icon (same as minimize)   â•‘
-	-- â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+	-- â”€â”€ Close Button (WHITE icon) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	local CloseBtn = Instance.new("ImageButton")
 	CloseBtn.Name = "CloseButton"
-	CloseBtn.Size = UDim2.new(0, 22, 0, 22)
-	CloseBtn.Position = UDim2.new(1, -36, 0.5, -11)
+	CloseBtn.Size = UDim2.new(0, 20, 0, 20)
+	CloseBtn.Position = UDim2.new(1, -30, 0, 15)
 	CloseBtn.BackgroundTransparency = 1
 	CloseBtn.Image = "rbxassetid://130629964514885"
-	CloseBtn.ImageColor3 = Color3.fromRGB(255, 255, 255)   -- WHITE
+	CloseBtn.ImageColor3 = Color3.fromRGB(255, 255, 255)
 	CloseBtn.ZIndex = 10
 	CloseBtn.Parent = TitleBar
 
@@ -517,18 +494,19 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	end)
 	CloseBtn.MouseButton1Click:Connect(function()
 		TweenService:Create(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-			Size     = UDim2.new(0, WIN_W, 0, 0),
-			Position = UDim2.new(MainFrame.Position.X.Scale, MainFrame.Position.X.Offset,
-			                     MainFrame.Position.Y.Scale, MainFrame.Position.Y.Offset + WIN_H / 2)
+			Size = UDim2.new(0, 500, 0, 0),
+			Position = UDim2.new(
+				MainFrame.Position.X.Scale, MainFrame.Position.X.Offset,
+				MainFrame.Position.Y.Scale, MainFrame.Position.Y.Offset + 175)
 		}):Play()
 		task.delay(0.22, function() ScreenGui:Destroy() end)
 	end)
 
-	-- â”€â”€ Minimize Button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+	-- â”€â”€ Minimize Button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	local MinimizeBtn = Instance.new("TextButton")
 	MinimizeBtn.Name = "MinimizeButton"
-	MinimizeBtn.Size = UDim2.new(0, 22, 0, 22)
-	MinimizeBtn.Position = UDim2.new(1, -64, 0.5, -11)
+	MinimizeBtn.Size = UDim2.new(0, 20, 0, 20)
+	MinimizeBtn.Position = UDim2.new(1, -56, 0, 15)
 	MinimizeBtn.BackgroundTransparency = 1
 	MinimizeBtn.Text = ""
 	MinimizeBtn.ZIndex = 10
@@ -547,8 +525,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	MinLineCorner.Parent = MinimizeLine
 
 	local IsMinimized   = false
-	local NormalSize    = UDim2.new(0, WIN_W, 0, WIN_H)
-	local MinimizedSize = UDim2.new(0, WIN_W, 0, TITLEBAR_H)
+	local NormalSize    = UDim2.new(0, 500, 0, 350)
+	local MinimizedSize = UDim2.new(0, 500, 0, 50)
 
 	MinimizeBtn.MouseEnter:Connect(function()
 		TweenService:Create(MinimizeLine, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(255, 255, 255)}):Play()
@@ -586,22 +564,18 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 	end)
 
-	-- â”€â”€ Body (below title bar) â€” hidden on minimize â”€â”€â”€â”€â”€â”€
+	-- â”€â”€ Body (hides on minimize so search bar disappears) â”€
 	local Body = Instance.new("Frame")
 	Body.Name = "Body"
-	Body.Size = UDim2.new(1, 0, 1, -TITLEBAR_H)
-	Body.Position = UDim2.new(0, 0, 0, TITLEBAR_H)
+	Body.Size = UDim2.new(1, 0, 1, -50)
+	Body.Position = UDim2.new(0, 0, 0, 50)
 	Body.BackgroundTransparency = 1
 	Body.ClipsDescendants = true
 	Body.Parent = MainFrame
 
-	-- â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
-	-- â•‘  MINIMIZE â€” hides Body (search bar lives there) â•‘
-	-- â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 	MinimizeBtn.MouseButton1Click:Connect(function()
 		IsMinimized = not IsMinimized
 		if IsMinimized then
-			-- First hide body so search bar disappears instantly
 			Body.Visible = false
 			TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
 				Size = MinimizedSize
@@ -610,7 +584,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
 				Size = NormalSize
 			}):Play()
-			-- Show body after tween starts expanding
 			task.delay(0.05, function() Body.Visible = true end)
 		end
 	end)
@@ -618,46 +591,37 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	-- â”€â”€ Sidebar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	local Sidebar = Instance.new("ScrollingFrame")
 	Sidebar.Name = "Sidebar"
-	Sidebar.Size = UDim2.new(0, SIDEBAR_W, 1, 0)
+	Sidebar.Size = UDim2.new(0, 130, 1, 0)
 	Sidebar.Position = UDim2.new(0, 0, 0, 0)
-	Sidebar.BackgroundColor3 = Color3.fromRGB(13, 13, 13)
-	Sidebar.BorderSizePixel = 0
+	Sidebar.BackgroundTransparency = 1
 	Sidebar.ScrollBarThickness = 2
+	Sidebar.BorderSizePixel = 0
 	Sidebar.Parent = Body
-
-	-- Sidebar right border
-	local SidebarBorder = Instance.new("Frame")
-	SidebarBorder.Size = UDim2.new(0, 1, 1, 0)
-	SidebarBorder.Position = UDim2.new(1, -1, 0, 0)
-	SidebarBorder.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-	SidebarBorder.BorderSizePixel = 0
-	SidebarBorder.Parent = Sidebar
 
 	local SidebarLayout = Instance.new("UIListLayout")
 	SidebarLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	SidebarLayout.Padding = UDim.new(0, 4)
+	SidebarLayout.Padding = UDim.new(0, 5)
 	SidebarLayout.Parent = Sidebar
 
 	local SidebarPadding = Instance.new("UIPadding")
 	SidebarPadding.PaddingLeft   = UDim.new(0, 10)
 	SidebarPadding.PaddingRight  = UDim.new(0, 10)
-	SidebarPadding.PaddingTop    = UDim.new(0, 8)
-	SidebarPadding.PaddingBottom = UDim.new(0, 8)
+	SidebarPadding.PaddingTop    = UDim.new(0, 5)
 	SidebarPadding.Parent = Sidebar
 
 	SidebarLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-		Sidebar.CanvasSize = UDim2.new(0, 0, 0, SidebarLayout.AbsoluteContentSize.Y + 16)
+		Sidebar.CanvasSize = UDim2.new(0, 0, 0, SidebarLayout.AbsoluteContentSize.Y + 10)
 	end)
 
 	-- â”€â”€ Content Container â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	local ContentContainer = Instance.new("Frame")
 	ContentContainer.Name = "ContentContainer"
-	ContentContainer.Size = UDim2.new(1, -SIDEBAR_W, 1, 0)
-	ContentContainer.Position = UDim2.new(0, SIDEBAR_W, 0, 0)
+	ContentContainer.Size = UDim2.new(1, -130, 1, 0)
+	ContentContainer.Position = UDim2.new(0, 130, 0, 0)
 	ContentContainer.BackgroundTransparency = 1
 	ContentContainer.Parent = Body
 
-	-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+	-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 	local WindowHandling = {}
 	local TabsCollection  = {}
 
@@ -665,41 +629,45 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		local TabName       = TabConfig.Name or "Tab"
 		local TabIconString = TabConfig.Icon or "book"
 
-		-- Search bar config
+		-- Search bar customisation options:
+		--   SearchBar          = true/false  (default true)
+		--   SearchPlaceholder  = string
+		--   SearchBarColor     = Color3
+		--   SearchTextColor    = Color3
+		--   SearchIconColor    = Color3
 		local ShowSearch        = TabConfig.SearchBar         ~= false
 		local SearchPlaceholder = TabConfig.SearchPlaceholder or "Search From This Page..."
-		local SearchBarColor    = TabConfig.SearchBarColor    or Color3.fromRGB(22, 22, 22)
+		local SearchBarColor    = TabConfig.SearchBarColor    or Color3.fromRGB(20, 20, 20)
 		local SearchTextColor   = TabConfig.SearchTextColor   or Color3.fromRGB(255, 255, 255)
 		local SearchIconColor   = TabConfig.SearchIconColor   or Color3.fromRGB(255, 255, 255)
 
 		-- â”€â”€ Sidebar Tab Button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		local TabButton = Instance.new("TextButton")
 		TabButton.Name = TabName .. "Tab"
-		TabButton.Size = UDim2.new(1, 0, 0, 36)
-		TabButton.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
+		TabButton.Size = UDim2.new(1, 0, 0, 30)
+		TabButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 		TabButton.BorderSizePixel  = 0
 		TabButton.Text = ""
-		TabButton.AutoButtonColor = false
 		TabButton.Parent = Sidebar
 
 		local TabCorner = Instance.new("UICorner")
-		TabCorner.CornerRadius = UDim.new(0, 7)
+		TabCorner.CornerRadius = UDim.new(0, 6)
 		TabCorner.Parent = TabButton
 
 		local TabIcon = Instance.new("ImageLabel")
-		TabIcon.Size = UDim2.new(0, 18, 0, 18)
-		TabIcon.Position = UDim2.new(0, 10, 0.5, -9)
+		TabIcon.Size = UDim2.new(0, 16, 0, 16)
+		TabIcon.Position = UDim2.new(0, 8, 0.5, -8)
 		TabIcon.BackgroundTransparency = 1
 		TabIcon.Image = IconsDict[TabIconString] or IconsDict["book"]
-		TabIcon.ImageColor3 = Color3.fromRGB(180, 180, 180)
+		TabIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
 		TabIcon.Parent = TabButton
 
 		local TabText = Instance.new("TextLabel")
-		TabText.Size = UDim2.new(1, -38, 1, 0)
-		TabText.Position = UDim2.new(0, 34, 0, 0)
+		TabText.Size = UDim2.new(1, -34, 1, 0)
+		TabText.Position = UDim2.new(0, 30, 0, 0)
 		TabText.BackgroundTransparency = 1
 		TabText.Text = TabName
-		TabText.TextColor3 = Color3.fromRGB(180, 180, 180)
+		TabText.TextColor3 = Color3.fromRGB(255, 255, 255)
 		TabText.TextSize = 13
 		TabText.Font = Enum.Font.GothamMedium
 		TabText.TextXAlignment = Enum.TextXAlignment.Left
@@ -714,30 +682,25 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		TabWrapper.Parent = ContentContainer
 
 		-- â”€â”€ Search Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-		local SearchBarHeight = ShowSearch and 38 or 0
+		local SearchBarHeight = ShowSearch and 34 or 0
 		local ElementRegistry = {}
 
 		if ShowSearch then
 			local SearchBarFrame = Instance.new("Frame")
 			SearchBarFrame.Name = "SearchBarFrame"
-			SearchBarFrame.Size = UDim2.new(1, -20, 0, 28)
-			SearchBarFrame.Position = UDim2.new(0, 10, 0, 5)
+			SearchBarFrame.Size = UDim2.new(1, -20, 0, 26)
+			SearchBarFrame.Position = UDim2.new(0, 10, 0, 4)
 			SearchBarFrame.BackgroundColor3 = SearchBarColor
 			SearchBarFrame.BorderSizePixel = 0
 			SearchBarFrame.Parent = TabWrapper
 
 			local SBCorner = Instance.new("UICorner")
-			SBCorner.CornerRadius = UDim.new(0, 7)
+			SBCorner.CornerRadius = UDim.new(0, 6)
 			SBCorner.Parent = SearchBarFrame
 
-			local SBStroke = Instance.new("UIStroke")
-			SBStroke.Color = Color3.fromRGB(40, 40, 40)
-			SBStroke.Thickness = 1
-			SBStroke.Parent = SearchBarFrame
-
 			local SearchIcon = Instance.new("ImageButton")
-			SearchIcon.Size = UDim2.new(0, 15, 0, 15)
-			SearchIcon.Position = UDim2.new(0, 8, 0.5, -7.5)
+			SearchIcon.Size = UDim2.new(0, 14, 0, 14)
+			SearchIcon.Position = UDim2.new(0, 7, 0.5, -7)
 			SearchIcon.BackgroundTransparency = 1
 			SearchIcon.Image = "rbxassetid://118685771787843"
 			SearchIcon.ImageColor3 = SearchIconColor
@@ -745,13 +708,13 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 			local SearchBox = Instance.new("TextBox")
 			SearchBox.Name = "SearchBox"
-			SearchBox.Size = UDim2.new(1, -60, 1, 0)
-			SearchBox.Position = UDim2.new(0, 28, 0, 0)
+			SearchBox.Size = UDim2.new(1, -56, 1, 0)
+			SearchBox.Position = UDim2.new(0, 26, 0, 0)
 			SearchBox.BackgroundTransparency = 1
 			SearchBox.PlaceholderText = SearchPlaceholder
 			SearchBox.Text = ""
 			SearchBox.TextColor3 = SearchTextColor
-			SearchBox.PlaceholderColor3 = Color3.fromRGB(90, 90, 90)
+			SearchBox.PlaceholderColor3 = Color3.fromRGB(110, 110, 110)
 			SearchBox.TextSize = 12
 			SearchBox.Font = Enum.Font.Gotham
 			SearchBox.TextXAlignment = Enum.TextXAlignment.Left
@@ -759,8 +722,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			SearchBox.Parent = SearchBarFrame
 
 			local ClearBtn = Instance.new("ImageButton")
-			ClearBtn.Size = UDim2.new(0, 15, 0, 15)
-			ClearBtn.Position = UDim2.new(1, -22, 0.5, -7.5)
+			ClearBtn.Size = UDim2.new(0, 14, 0, 14)
+			ClearBtn.Position = UDim2.new(1, -20, 0.5, -7)
 			ClearBtn.BackgroundTransparency = 1
 			ClearBtn.Image = "rbxassetid://130629964514885"
 			ClearBtn.ImageColor3 = Color3.fromRGB(255, 255, 255)
@@ -803,42 +766,30 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		ContentLayout.Parent = TabContent
 
 		local ContentPadding = Instance.new("UIPadding")
-		ContentPadding.PaddingLeft   = UDim.new(0, 12)
-		ContentPadding.PaddingRight  = UDim.new(0, 16)
-		ContentPadding.PaddingTop    = UDim.new(0, 8)
-		ContentPadding.PaddingBottom = UDim.new(0, 12)
+		ContentPadding.PaddingLeft   = UDim.new(0, 10)
+		ContentPadding.PaddingRight  = UDim.new(0, 15)
+		ContentPadding.PaddingTop    = UDim.new(0, 5)
+		ContentPadding.PaddingBottom = UDim.new(0, 10)
 		ContentPadding.Parent = TabContent
 
-		-- Register tab
-		table.insert(TabsCollection, {Button = TabButton, Wrapper = TabWrapper, Icon = TabIcon, Text = TabText})
-
-		local function SetActive(active)
-			TabButton.BackgroundColor3 = active and Color3.fromRGB(32, 32, 32) or Color3.fromRGB(22, 22, 22)
-			TabIcon.ImageColor3  = active and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(180, 180, 180)
-			TabText.TextColor3   = active and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(180, 180, 180)
-			TabText.Font         = active and Enum.Font.GothamBold or Enum.Font.GothamMedium
-		end
+		-- Tab registration
+		table.insert(TabsCollection, {Button = TabButton, Wrapper = TabWrapper})
 
 		TabButton.MouseButton1Click:Connect(function()
 			for _, t in ipairs(TabsCollection) do
 				t.Wrapper.Visible = false
-				SetActive(false)
-				-- Reset each tab's active state individually
-				t.Button.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
-				t.Icon.ImageColor3        = Color3.fromRGB(180, 180, 180)
-				t.Text.TextColor3         = Color3.fromRGB(180, 180, 180)
-				t.Text.Font               = Enum.Font.GothamMedium
+				t.Button.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 			end
 			TabWrapper.Visible = true
-			SetActive(true)
+			TabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 		end)
 
 		if #TabsCollection == 1 then
 			TabWrapper.Visible = true
-			SetActive(true)
+			TabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 		end
 
-		-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+		-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 		local TabHandling = {}
 
 		local function Reg(frame, label)
@@ -849,40 +800,25 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 		-- â”€â”€ Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateSection(SectionText)
-			local SFrame = Instance.new("Frame")
-			SFrame.Size = UDim2.new(1, 0, 0, 28)
-			SFrame.BackgroundTransparency = 1
-			SFrame.Parent = TabContent
-
-			local SLine = Instance.new("Frame")
-			SLine.Size = UDim2.new(1, 0, 0, 1)
-			SLine.Position = UDim2.new(0, 0, 0.5, 0)
-			SLine.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-			SLine.BorderSizePixel = 0
-			SLine.Parent = SFrame
-
-			local SLabel = Instance.new("TextLabel")
-			SLabel.Size = UDim2.new(0, 0, 1, 0)
-			SLabel.AutomaticSize = Enum.AutomaticSize.X
-			SLabel.Position = UDim2.new(0, 0, 0, 0)
-			SLabel.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
-			SLabel.BackgroundTransparency = 0
-			SLabel.Text = " " .. SectionText .. " "
-			SLabel.TextColor3 = Color3.fromRGB(130, 130, 130)
-			SLabel.TextSize = 11
-			SLabel.Font = Enum.Font.GothamBold
-			SLabel.Parent = SFrame
-
-			Reg(SFrame, SectionText)
+			local SectionLabel = Instance.new("TextLabel")
+			SectionLabel.Size = UDim2.new(1, 0, 0, 20)
+			SectionLabel.BackgroundTransparency = 1
+			SectionLabel.Text = SectionText
+			SectionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+			SectionLabel.TextSize = 14
+			SectionLabel.Font = Enum.Font.GothamBold
+			SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
+			SectionLabel.Parent = TabContent
+			Reg(SectionLabel, SectionText)
 		end
 
 		-- â”€â”€ Label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateLabel(LabelText)
 			local TxtLabel = Instance.new("TextLabel")
-			TxtLabel.Size = UDim2.new(1, 0, 0, 24)
+			TxtLabel.Size = UDim2.new(1, 0, 0, 25)
 			TxtLabel.BackgroundTransparency = 1
 			TxtLabel.Text = LabelText
-			TxtLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
+			TxtLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 			TxtLabel.TextSize = 13
 			TxtLabel.Font = Enum.Font.Gotham
 			TxtLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -893,29 +829,29 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		-- â”€â”€ Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateToggle(ToggleText, Callback)
 			local ToggleFrame = Instance.new("Frame")
-			ToggleFrame.Size = UDim2.new(1, 0, 0, 38)
-			ToggleFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+			ToggleFrame.Size = UDim2.new(1, 0, 0, 35)
+			ToggleFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
 			ToggleFrame.Parent = TabContent
 
 			local TCorner = Instance.new("UICorner")
-			TCorner.CornerRadius = UDim.new(0, 7)
+			TCorner.CornerRadius = UDim.new(0, 6)
 			TCorner.Parent = ToggleFrame
 
 			local TText = Instance.new("TextLabel")
-			TText.Size = UDim2.new(1, -70, 1, 0)
-			TText.Position = UDim2.new(0, 12, 0, 0)
+			TText.Size = UDim2.new(1, -60, 1, 0)
+			TText.Position = UDim2.new(0, 10, 0, 0)
 			TText.BackgroundTransparency = 1
 			TText.Text = ToggleText
-			TText.TextColor3 = Color3.fromRGB(230, 230, 230)
+			TText.TextColor3 = Color3.fromRGB(255, 255, 255)
 			TText.TextSize = 13
 			TText.Font = Enum.Font.GothamMedium
 			TText.TextXAlignment = Enum.TextXAlignment.Left
 			TText.Parent = ToggleFrame
 
 			local ToggleOuter = Instance.new("Frame")
-			ToggleOuter.Size = UDim2.new(0, 44, 0, 22)
-			ToggleOuter.Position = UDim2.new(1, -56, 0.5, -11)
-			ToggleOuter.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+			ToggleOuter.Size = UDim2.new(0, 40, 0, 20)
+			ToggleOuter.Position = UDim2.new(1, -50, 0.5, -10)
+			ToggleOuter.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 			ToggleOuter.Parent = ToggleFrame
 
 			local OuterCorner = Instance.new("UICorner")
@@ -924,7 +860,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 			local ToggleInner = Instance.new("Frame")
 			ToggleInner.Size = UDim2.new(0, 16, 0, 16)
-			ToggleInner.Position = UDim2.new(0, 3, 0.5, -8)
+			ToggleInner.Position = UDim2.new(0, 2, 0.5, -8)
 			ToggleInner.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 			ToggleInner.Parent = ToggleOuter
 
@@ -942,10 +878,10 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			ToggleButton.MouseButton1Click:Connect(function()
 				Toggled = not Toggled
 				TweenService:Create(ToggleInner, TweenInfo.new(0.2), {
-					Position = Toggled and UDim2.new(1, -19, 0.5, -8) or UDim2.new(0, 3, 0.5, -8)
+					Position = Toggled and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)
 				}):Play()
 				TweenService:Create(ToggleOuter, TweenInfo.new(0.2), {
-					BackgroundColor3 = Toggled and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(45, 45, 45)
+					BackgroundColor3 = Toggled and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(50, 50, 50)
 				}):Play()
 				Callback(Toggled)
 			end)
@@ -957,26 +893,21 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		function TabHandling:CreateButton(ButtonText, Callback)
 			local ButtonFrame = Instance.new("TextButton")
 			ButtonFrame.Name = "Button_" .. ButtonText
-			ButtonFrame.Size = UDim2.new(1, 0, 0, 38)
-			ButtonFrame.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
+			ButtonFrame.Size = UDim2.new(1, 0, 0, 35)
+			ButtonFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 			ButtonFrame.AutoButtonColor = false
 			ButtonFrame.Text = ""
 			ButtonFrame.Parent = TabContent
 
 			local BCorner = Instance.new("UICorner")
-			BCorner.CornerRadius = UDim.new(0, 7)
+			BCorner.CornerRadius = UDim.new(0, 6)
 			BCorner.Parent = ButtonFrame
-
-			local BStroke = Instance.new("UIStroke")
-			BStroke.Color = Color3.fromRGB(45, 45, 45)
-			BStroke.Thickness = 1
-			BStroke.Parent = ButtonFrame
 
 			local BLabel = Instance.new("TextLabel")
 			BLabel.Size = UDim2.new(1, 0, 1, 0)
 			BLabel.BackgroundTransparency = 1
 			BLabel.Text = ButtonText
-			BLabel.TextColor3 = Color3.fromRGB(230, 230, 230)
+			BLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 			BLabel.TextSize = 13
 			BLabel.Font = Enum.Font.GothamMedium
 			BLabel.Parent = ButtonFrame
@@ -985,14 +916,13 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				TweenService:Create(ButtonFrame, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(38, 38, 38)}):Play()
 			end)
 			ButtonFrame.MouseLeave:Connect(function()
-				TweenService:Create(ButtonFrame, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(28, 28, 28)}):Play()
+				TweenService:Create(ButtonFrame, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(25, 25, 25)}):Play()
 			end)
 			ButtonFrame.MouseButton1Down:Connect(function()
-				TweenService:Create(ButtonFrame, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(20, 20, 20)}):Play()
+				TweenService:Create(ButtonFrame, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(15, 15, 15)}):Play()
 			end)
 			ButtonFrame.MouseButton1Up:Connect(function()
 				TweenService:Create(ButtonFrame, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(38, 38, 38)}):Play()
-				Callback()
 			end)
 			ButtonFrame.MouseButton1Click:Connect(function() Callback() end)
 
@@ -1003,96 +933,69 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		function TabHandling:CreateTextbox(TextboxConfig, Callback)
 			local PlaceholderStr = TextboxConfig.Placeholder or "Type here..."
 			local DefaultText    = TextboxConfig.Text        or ""
-			local LabelStr       = TextboxConfig.Label       or ""
 
 			local TextboxFrame = Instance.new("Frame")
-			TextboxFrame.Size = UDim2.new(1, 0, 0, LabelStr ~= "" and 56 or 38)
-			TextboxFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+			TextboxFrame.Size = UDim2.new(1, 0, 0, 35)
+			TextboxFrame.BackgroundTransparency = 1
 			TextboxFrame.Parent = TabContent
 
-			local TFCorner = Instance.new("UICorner")
-			TFCorner.CornerRadius = UDim.new(0, 7)
-			TFCorner.Parent = TextboxFrame
-
-			if LabelStr ~= "" then
-				local TLabel = Instance.new("TextLabel")
-				TLabel.Size = UDim2.new(1, -12, 0, 18)
-				TLabel.Position = UDim2.new(0, 12, 0, 6)
-				TLabel.BackgroundTransparency = 1
-				TLabel.Text = LabelStr
-				TLabel.TextColor3 = Color3.fromRGB(140, 140, 140)
-				TLabel.TextSize = 11
-				TLabel.Font = Enum.Font.GothamBold
-				TLabel.TextXAlignment = Enum.TextXAlignment.Left
-				TLabel.Parent = TextboxFrame
-			end
-
 			local TBox = Instance.new("TextBox")
-			TBox.Size = UDim2.new(1, -24, 0, 26)
-			TBox.Position = LabelStr ~= ""
-				and UDim2.new(0, 12, 0, 24)
-				or  UDim2.new(0, 12, 0.5, -13)
-			TBox.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
+			TBox.Size = UDim2.new(1, 0, 1, 0)
+			TBox.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
 			TBox.PlaceholderText = PlaceholderStr
 			TBox.Text = DefaultText
-			TBox.TextColor3 = Color3.fromRGB(230, 230, 230)
-			TBox.PlaceholderColor3 = Color3.fromRGB(90, 90, 90)
+			TBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+			TBox.PlaceholderColor3 = Color3.fromRGB(200, 200, 200)
 			TBox.TextSize = 13
-			TBox.Font = Enum.Font.Gotham
-			TBox.TextXAlignment = Enum.TextXAlignment.Left
-			TBox.ClearTextOnFocus = false
+			TBox.Font = Enum.Font.GothamMedium
 			TBox.Parent = TextboxFrame
 
-			local TBoxCorner = Instance.new("UICorner")
-			TBoxCorner.CornerRadius = UDim.new(0, 5)
-			TBoxCorner.Parent = TBox
-
-			local TBoxPad = Instance.new("UIPadding")
-			TBoxPad.PaddingLeft = UDim.new(0, 8)
-			TBoxPad.Parent = TBox
+			local BoxCorner = Instance.new("UICorner")
+			BoxCorner.CornerRadius = UDim.new(0, 6)
+			BoxCorner.Parent = TBox
 
 			TBox.FocusLost:Connect(function() Callback(TBox.Text) end)
 
-			Reg(TextboxFrame, LabelStr ~= "" and LabelStr or PlaceholderStr)
+			Reg(TextboxFrame, PlaceholderStr)
 		end
 
 		-- â”€â”€ Slider with circle thumb â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateSlider(SliderText, MinValue, MaxValue, Callback)
 			local SliderFrame = Instance.new("Frame")
-			SliderFrame.Size = UDim2.new(1, 0, 0, 52)
-			SliderFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+			SliderFrame.Size = UDim2.new(1, 0, 0, 50)
+			SliderFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
 			SliderFrame.Parent = TabContent
 
 			local SCorner = Instance.new("UICorner")
-			SCorner.CornerRadius = UDim.new(0, 7)
+			SCorner.CornerRadius = UDim.new(0, 6)
 			SCorner.Parent = SliderFrame
 
 			local SText = Instance.new("TextLabel")
-			SText.Size = UDim2.new(1, -80, 0, 22)
-			SText.Position = UDim2.new(0, 12, 0, 6)
+			SText.Size = UDim2.new(1, -20, 0, 20)
+			SText.Position = UDim2.new(0, 10, 0, 5)
 			SText.BackgroundTransparency = 1
 			SText.Text = SliderText
-			SText.TextColor3 = Color3.fromRGB(230, 230, 230)
+			SText.TextColor3 = Color3.fromRGB(255, 255, 255)
 			SText.TextSize = 13
 			SText.Font = Enum.Font.GothamMedium
 			SText.TextXAlignment = Enum.TextXAlignment.Left
 			SText.Parent = SliderFrame
 
 			local SValueText = Instance.new("TextLabel")
-			SValueText.Size = UDim2.new(0, 60, 0, 22)
-			SValueText.Position = UDim2.new(1, -72, 0, 6)
+			SValueText.Size = UDim2.new(0, 50, 0, 20)
+			SValueText.Position = UDim2.new(1, -60, 0, 5)
 			SValueText.BackgroundTransparency = 1
 			SValueText.Text = tostring(MinValue)
-			SValueText.TextColor3 = Color3.fromRGB(100, 170, 255)
+			SValueText.TextColor3 = Color3.fromRGB(255, 255, 255)
 			SValueText.TextSize = 13
 			SValueText.Font = Enum.Font.GothamBold
 			SValueText.TextXAlignment = Enum.TextXAlignment.Right
 			SValueText.Parent = SliderFrame
 
 			local SliderBg = Instance.new("Frame")
-			SliderBg.Size = UDim2.new(1, -24, 0, 4)
-			SliderBg.Position = UDim2.new(0, 12, 0, 38)
-			SliderBg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+			SliderBg.Size = UDim2.new(1, -20, 0, 4)
+			SliderBg.Position = UDim2.new(0, 10, 0, 37)
+			SliderBg.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 			SliderBg.ClipsDescendants = false
 			SliderBg.Parent = SliderFrame
 
@@ -1102,7 +1005,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 			local SliderFill = Instance.new("Frame")
 			SliderFill.Size = UDim2.new(0, 0, 1, 0)
-			SliderFill.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+			SliderFill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 			SliderFill.ZIndex = 2
 			SliderFill.Parent = SliderBg
 
@@ -1110,9 +1013,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			FillCorner.CornerRadius = UDim.new(1, 0)
 			FillCorner.Parent = SliderFill
 
-			-- Circle thumb centred on the track
 			local SliderThumb = Instance.new("Frame")
-			SliderThumb.Size = UDim2.new(0, 14, 0, 14)
+			SliderThumb.Size = UDim2.new(0, 12, 0, 12)
 			SliderThumb.AnchorPoint = Vector2.new(0.5, 0.5)
 			SliderThumb.Position = UDim2.new(0, 0, 0.5, 0)
 			SliderThumb.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1134,7 +1036,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			local SliderDragging = false
 
 			local function UpdateSlider(mouseX)
-				local percent = math.clamp((mouseX - SliderBg.AbsolutePosition.X) / SliderBg.AbsoluteSize.X, 0, 1)
+				local percent = math.clamp(
+					(mouseX - SliderBg.AbsolutePosition.X) / SliderBg.AbsoluteSize.X, 0, 1)
 				SliderFill.Size = UDim2.new(percent, 0, 1, 0)
 				SliderThumb.Position = UDim2.new(percent, 0, 0.5, 0)
 				local val = math.floor(MinValue + (MaxValue - MinValue) * percent)
@@ -1165,49 +1068,60 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(SliderFrame, SliderText)
 		end
 
-		-- â”€â”€ Checkbox â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+		-- â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+		-- â•‘   CHECKBOX â€” checkmark icon when ticked (NEW) â•‘
+		-- â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 		function TabHandling:CreateCheckbox(CheckboxText, Callback)
 			local CheckboxFrame = Instance.new("Frame")
-			CheckboxFrame.Size = UDim2.new(1, 0, 0, 38)
-			CheckboxFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+			CheckboxFrame.Size = UDim2.new(1, 0, 0, 35)
+			CheckboxFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
 			CheckboxFrame.Parent = TabContent
 
 			local CCorner = Instance.new("UICorner")
-			CCorner.CornerRadius = UDim.new(0, 7)
+			CCorner.CornerRadius = UDim.new(0, 6)
 			CCorner.Parent = CheckboxFrame
 
+			-- Box background
 			local BoxVisual = Instance.new("Frame")
-			BoxVisual.Size = UDim2.new(0, 18, 0, 18)
-			BoxVisual.Position = UDim2.new(0, 12, 0.5, -9)
-			BoxVisual.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+			BoxVisual.Size = UDim2.new(0, 16, 0, 16)
+			BoxVisual.Position = UDim2.new(0, 10, 0.5, -8)
+			BoxVisual.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 			BoxVisual.Parent = CheckboxFrame
 
 			local BoxCorner = Instance.new("UICorner")
 			BoxCorner.CornerRadius = UDim.new(0, 4)
 			BoxCorner.Parent = BoxVisual
 
-			local BoxStroke = Instance.new("UIStroke")
-			BoxStroke.Color = Color3.fromRGB(60, 60, 60)
-			BoxStroke.Thickness = 1
-			BoxStroke.Parent = BoxVisual
-
+			-- Blue fill shown when checked
 			local BoxFill = Instance.new("Frame")
-			BoxFill.Size = UDim2.new(1, -4, 1, -4)
-			BoxFill.Position = UDim2.new(0, 2, 0, 2)
-			BoxFill.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+			BoxFill.Size = UDim2.new(1, 0, 1, 0)
+			BoxFill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 			BoxFill.Visible = false
 			BoxFill.Parent = BoxVisual
 
 			local FillCorner = Instance.new("UICorner")
-			FillCorner.CornerRadius = UDim.new(0, 2)
+			FillCorner.CornerRadius = UDim.new(0, 4)
 			FillCorner.Parent = BoxFill
 
+			-- â”€â”€ Checkmark icon (shown when checked) â”€â”€â”€â”€â”€â”€
+			local CheckIcon = Instance.new("ImageLabel")
+			CheckIcon.Name = "CheckIcon"
+			CheckIcon.Size = UDim2.new(0, 12, 0, 12)
+			CheckIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+			CheckIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
+			CheckIcon.BackgroundTransparency = 1
+			CheckIcon.Image = "rbxassetid://9754130783"
+			CheckIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
+			CheckIcon.Visible = false
+			CheckIcon.ZIndex = 3
+			CheckIcon.Parent = BoxVisual
+
 			local CText = Instance.new("TextLabel")
-			CText.Size = UDim2.new(1, -44, 1, 0)
-			CText.Position = UDim2.new(0, 40, 0, 0)
+			CText.Size = UDim2.new(1, -40, 1, 0)
+			CText.Position = UDim2.new(0, 35, 0, 0)
 			CText.BackgroundTransparency = 1
 			CText.Text = CheckboxText
-			CText.TextColor3 = Color3.fromRGB(230, 230, 230)
+			CText.TextColor3 = Color3.fromRGB(255, 255, 255)
 			CText.TextSize = 13
 			CText.Font = Enum.Font.GothamMedium
 			CText.TextXAlignment = Enum.TextXAlignment.Left
@@ -1222,9 +1136,13 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			local Checked = false
 			CheckboxBtn.MouseButton1Click:Connect(function()
 				Checked = not Checked
-				BoxFill.Visible = Checked
+				BoxFill.Visible   = Checked
+				CheckIcon.Visible = Checked
+				-- Tween box colour: blue when checked, dark when not
 				TweenService:Create(BoxVisual, TweenInfo.new(0.15), {
-					BackgroundColor3 = Checked and Color3.fromRGB(0, 100, 200) or Color3.fromRGB(35, 35, 35)
+					BackgroundColor3 = Checked
+						and Color3.fromRGB(0, 170, 255)
+						or  Color3.fromRGB(40, 40, 40)
 				}):Play()
 				Callback(Checked)
 			end)
