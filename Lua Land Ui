@@ -5,9 +5,9 @@ local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
 
 local IconsDict = {
-	["arrow-down"] = "rbxassetid://92867583610071",
-	["arrow-up"] = "rbxassetid://132318504999733",
-	["large-small"] = "rbxassetid://111491496660216",
+	["a-arrow-down"] = "rbxassetid://92867583610071",
+	["a-arrow-up"] = "rbxassetid://132318504999733",
+	["a-large-small"] = "rbxassetid://111491496660216",
 	["accessibility"] = "rbxassetid://114029945302017",
 	["activity"] = "rbxassetid://94212016861936",
 	["air-vent"] = "rbxassetid://81517226012329",
@@ -283,7 +283,6 @@ local IconsDict = {
 	["candy-cane"] = "rbxassetid://71689468772492",
 	["candy-off"] = "rbxassetid://110232752314832",
 	["candy"] = "rbxassetid://107812129154678",
-	["cannabis-off"] = "rbxassetid://101938500363812",
 	["cannabis"] = "rbxassetid://98792006538601",
 	["captions-off"] = "rbxassetid://105223545364193",
 	["captions"] = "rbxassetid://104960225031445",
@@ -300,7 +299,6 @@ local IconsDict = {
 	["cast"] = "rbxassetid://98202245922071",
 	["castle"] = "rbxassetid://119275077187784",
 	["cat"] = "rbxassetid://124252153404931",
-	["cctv-off"] = "rbxassetid://75925370187295",
 	["cctv"] = "rbxassetid://99979894766624",
 	["chart-area"] = "rbxassetid://123446436762366",
 	["chart-bar-big"] = "rbxassetid://72336824986044",
@@ -386,7 +384,6 @@ local IconsDict = {
 	["circle-parking"] = "rbxassetid://124034962915196",
 	["circle-pause"] = "rbxassetid://139337739700879",
 	["circle-percent"] = "rbxassetid://133311912860256",
-	["circle-pile"] = "rbxassetid://116353155251541",
 	["circle-play"] = "rbxassetid://120408917249739",
 	["circle-plus"] = "rbxassetid://113157136350384",
 	["circle-pound-sterling"] = "rbxassetid://105476153083828",
@@ -435,7 +432,6 @@ local IconsDict = {
 	["clock-fading"] = "rbxassetid://93205297285245",
 	["clock-plus"] = "rbxassetid://93367709263150",
 	["clock"] = "rbxassetid://121808839832144",
-	["closed-caption"] = "rbxassetid://99832644030788",
 	["cloud-alert"] = "rbxassetid://91967273658626",
 	["cloud-backup"] = "rbxassetid://111649579696132",
 	["cloud-check"] = "rbxassetid://97318598202432",
@@ -517,8 +513,6 @@ local IconsDict = {
 	["database-search"] = "rbxassetid://92017137080138",
 	["database-zap"] = "rbxassetid://131199921258418",
 	["database"] = "rbxassetid://126791525623846",
-	["decimals-arrow-left"] = "rbxassetid://120198500638749",
-	["decimals-arrow-right"] = "rbxassetid://118263047146797",
 	["delete"] = "rbxassetid://126279426372342",
 	["dessert"] = "rbxassetid://71508133278830",
 	["diameter"] = "rbxassetid://97429051503783",
@@ -569,7 +563,6 @@ local IconsDict = {
 	["egg-fried"] = "rbxassetid://90622538210545",
 	["egg-off"] = "rbxassetid://92288321309285",
 	["egg"] = "rbxassetid://117851493400222",
-	["ellipse"] = "rbxassetid://71559658267482",
 	["ellipsis-vertical"] = "rbxassetid://117978708573781",
 	["ellipsis"] = "rbxassetid://140019550645825",
 	["equal-approximately"] = "rbxassetid://105382689698323",
@@ -596,40 +589,32 @@ local IconsDict = {
 	["file-axis-3d"] = "rbxassetid://133912328009885",
 	["file-badge"] = "rbxassetid://74564895394477",
 	["file-box"] = "rbxassetid://119264004071690",
-	["file-braces-corner"] = "rbxassetid://77253337986109",
 	["file-braces"] = "rbxassetid://95314128621234",
 	["file-chart-column-increasing"] = "rbxassetid://134449481172067",
 	["file-chart-column"] = "rbxassetid://82048481252560",
 	["file-chart-line"] = "rbxassetid://71954360551345",
 	["file-chart-pie"] = "rbxassetid://81072193564497",
-	["file-check-corner"] = "rbxassetid://76295552859171",
 	["file-check"] = "rbxassetid://82604001452455",
 	["file-clock"] = "rbxassetid://102325208830990",
-	["file-code-corner"] = "rbxassetid://78293841184371",
 	["file-code"] = "rbxassetid://130978036895504",
 	["file-cog"] = "rbxassetid://101385347151368",
 	["file-diff"] = "rbxassetid://96147216772241",
 	["file-digit"] = "rbxassetid://89220220354580",
 	["file-down"] = "rbxassetid://120650154178290",
-	["file-exclamation-point"] = "rbxassetid://102821865889635",
 	["file-headphone"] = "rbxassetid://100533735901986",
 	["file-heart"] = "rbxassetid://132214916401696",
 	["file-image"] = "rbxassetid://123334057511782",
 	["file-input"] = "rbxassetid://124728604166044",
 	["file-key"] = "rbxassetid://118790255921100",
 	["file-lock"] = "rbxassetid://72170228691242",
-	["file-minus-corner"] = "rbxassetid://119263271735124",
 	["file-minus"] = "rbxassetid://111014798459222",
 	["file-music"] = "rbxassetid://134948051536671",
 	["file-output"] = "rbxassetid://92146832572911",
 	["file-pen-line"] = "rbxassetid://104622936345006",
 	["file-pen"] = "rbxassetid://79556179730240",
 	["file-play"] = "rbxassetid://89006821567838",
-	["file-plus-corner"] = "rbxassetid://76544604043974",
 	["file-plus"] = "rbxassetid://78881710800060",
-	["file-question-mark"] = "rbxassetid://127617422859576",
 	["file-scan"] = "rbxassetid://129480105228213",
-	["file-search-corner"] = "rbxassetid://90974165234008",
 	["file-search"] = "rbxassetid://97780235974933",
 	["file-signal"] = "rbxassetid://122070252538165",
 	["file-sliders"] = "rbxassetid://85787771732439",
@@ -638,25 +623,21 @@ local IconsDict = {
 	["file-symlink"] = "rbxassetid://91865722036510",
 	["file-terminal"] = "rbxassetid://116757454755476",
 	["file-text"] = "rbxassetid://90496405707281",
-	["file-type-corner"] = "rbxassetid://124902230275209",
 	["file-type"] = "rbxassetid://115272552799361",
 	["file-up"] = "rbxassetid://131173039312748",
 	["file-user"] = "rbxassetid://99552018455009",
 	["file-video-camera"] = "rbxassetid://81719056173960",
 	["file-volume"] = "rbxassetid://111264764438958",
-	["file-x-corner"] = "rbxassetid://87554136773609",
 	["file-x"] = "rbxassetid://107333775515154",
 	["file"] = "rbxassetid://74748492079329",
 	["files"] = "rbxassetid://102806336233202",
 	["film"] = "rbxassetid://120978945609706",
-	["fingerprint-pattern"] = "rbxassetid://80934710831288",
 	["fingerprint"] = "rbxassetid://112173305232811",
 	["fire-extinguisher"] = "rbxassetid://111643493006960",
 	["fish-off"] = "rbxassetid://89756724887508",
 	["fish-symbol"] = "rbxassetid://118475177681618",
 	["fish"] = "rbxassetid://124360663785796",
 	["fishing-hook"] = "rbxassetid://121038780855899",
-	["fishing-rod"] = "rbxassetid://71754848048049",
 	["flag-off"] = "rbxassetid://112944528856799",
 	["flag-triangle-left"] = "rbxassetid://88045221285272",
 	["flag-triangle-right"] = "rbxassetid://108292480304566",
@@ -731,7 +712,6 @@ local IconsDict = {
 	["gauge"] = "rbxassetid://110273524101447",
 	["gavel"] = "rbxassetid://78952298198456",
 	["gem"] = "rbxassetid://112904952151156",
-	["georgian-lari"] = "rbxassetid://98084432591687",
 	["ghost"] = "rbxassetid://113822048130017",
 	["gift"] = "rbxassetid://109855212076373",
 	["git-branch-minus"] = "rbxassetid://97385010649411",
@@ -785,14 +765,12 @@ local IconsDict = {
 	["hand-metal"] = "rbxassetid://113619498548713",
 	["hand-platter"] = "rbxassetid://88594727743168",
 	["hand"] = "rbxassetid://130703864968637",
-	["handbag"] = "rbxassetid://135675846264061",
 	["handshake"] = "rbxassetid://78442115255814",
 	["hard-drive-download"] = "rbxassetid://73913801230614",
 	["hard-drive-upload"] = "rbxassetid://85762133615118",
 	["hard-drive"] = "rbxassetid://88183305858463",
 	["hard-hat"] = "rbxassetid://128050846767382",
 	["hash"] = "rbxassetid://82890331678520",
-	["hat-glasses"] = "rbxassetid://101165538224815",
 	["haze"] = "rbxassetid://108857561768901",
 	["hd"] = "rbxassetid://71682790698278",
 	["hdmi-port"] = "rbxassetid://103693661037020",
@@ -830,31 +808,25 @@ local IconsDict = {
 	["house"] = "rbxassetid://98755624629571",
 	["ice-cream-bowl"] = "rbxassetid://124867218454386",
 	["ice-cream-cone"] = "rbxassetid://90751397288639",
-	["id-card-lanyard"] = "rbxassetid://90761480469224",
 	["id-card"] = "rbxassetid://75354294622640",
-	["image"] = "rbxassetid://112751259236831",
 	["image-down"] = "rbxassetid://78972295741235",
 	["image-minus"] = "rbxassetid://101066016918565",
 	["image-off"] = "rbxassetid://81934811700938",
 	["image-play"] = "rbxassetid://129501806784210",
 	["image-plus"] = "rbxassetid://70391970623917",
 	["image-up"] = "rbxassetid://126610009605241",
-	["image-upscale"] = "rbxassetid://106963545024679",
+	["image"] = "rbxassetid://112751259236831",
 	["images"] = "rbxassetid://79350649395557",
 	["import"] = "rbxassetid://116545008906029",
 	["inbox"] = "rbxassetid://112591360302868",
 	["indian-rupee"] = "rbxassetid://113038778381805",
 	["infinity"] = "rbxassetid://98083086936965",
 	["info"] = "rbxassetid://124560466474914",
-	["inspection-panel"] = "rbxassetid://70905313146088",
 	["instagram"] = "rbxassetid://119864798614855",
 	["italic"] = "rbxassetid://96220378864282",
-	["iteration-ccw"] = "rbxassetid://140221832794083",
-	["iteration-cw"] = "rbxassetid://95534489554662",
 	["japanese-yen"] = "rbxassetid://106362863465813",
 	["joystick"] = "rbxassetid://99416790224739",
 	["kanban"] = "rbxassetid://125934100055431",
-	["kayak"] = "rbxassetid://136107544609389",
 	["key-round"] = "rbxassetid://83619031955390",
 	["key-square"] = "rbxassetid://94621420033649",
 	["key"] = "rbxassetid://96510194465420",
@@ -888,31 +860,21 @@ local IconsDict = {
 	["leaf"] = "rbxassetid://119951075637174",
 	["leafy-green"] = "rbxassetid://105146290493154",
 	["lectern"] = "rbxassetid://106166425183862",
-	["lens-concave"] = "rbxassetid://94819631937027",
-	["lens-convex"] = "rbxassetid://74736504195474",
 	["library-big"] = "rbxassetid://106794530191412",
 	["library"] = "rbxassetid://114334671982047",
 	["life-buoy"] = "rbxassetid://81168450671956",
-	["ligature"] = "rbxassetid://111397873269411",
 	["lightbulb-off"] = "rbxassetid://83795722296178",
 	["lightbulb"] = "rbxassetid://103871245626488",
-	["line-dot-right-horizontal"] = "rbxassetid://104718593155221",
-	["line-squiggle"] = "rbxassetid://109555164424447",
-	["line-style"] = "rbxassetid://90176717785772",
 	["link-2-off"] = "rbxassetid://76885956296867",
 	["link-2"] = "rbxassetid://86072351557466",
 	["link"] = "rbxassetid://131607023382430",
 	["linkedin"] = "rbxassetid://132842789255788",
 	["list-check"] = "rbxassetid://72374358471156",
 	["list-checks"] = "rbxassetid://99809353635593",
-	["list-chevrons-down-up"] = "rbxassetid://137409641500711",
-	["list-chevrons-up-down"] = "rbxassetid://81825351389084",
 	["list-collapse"] = "rbxassetid://124505247702401",
 	["list-end"] = "rbxassetid://77650610048119",
 	["list-filter-plus"] = "rbxassetid://96385120752336",
 	["list-filter"] = "rbxassetid://103321376129527",
-	["list-indent-decrease"] = "rbxassetid://137879979228193",
-	["list-indent-increase"] = "rbxassetid://79051053161201",
 	["list-minus"] = "rbxassetid://138507965142671",
 	["list-music"] = "rbxassetid://126380635781840",
 	["list-ordered"] = "rbxassetid://83212528113913",
@@ -951,26 +913,12 @@ local IconsDict = {
 	["mail"] = "rbxassetid://103945161245599",
 	["mailbox"] = "rbxassetid://82765503320335",
 	["mails"] = "rbxassetid://90673453450080",
-	["map-minus"] = "rbxassetid://129525760577747",
-	["map-pin-check-inside"] = "rbxassetid://107130529843809",
 	["map-pin-check"] = "rbxassetid://118110914690154",
-	["map-pin-house"] = "rbxassetid://80546885029816",
-	["map-pin-minus-inside"] = "rbxassetid://79005529692964",
-	["map-pin-minus"] = "rbxassetid://74518762643623",
 	["map-pin-off"] = "rbxassetid://82474689391020",
-	["map-pin-pen"] = "rbxassetid://113515395277504",
-	["map-pin-plus-inside"] = "rbxassetid://134639656514430",
 	["map-pin-plus"] = "rbxassetid://91875228967029",
-	["map-pin-search"] = "rbxassetid://89065012915078",
-	["map-pin-x-inside"] = "rbxassetid://126235934252379",
-	["map-pin-x"] = "rbxassetid://101085273547316",
 	["map-pin"] = "rbxassetid://84279202219901",
 	["map-pinned"] = "rbxassetid://103963788475034",
-	["map-plus"] = "rbxassetid://129388826743495",
 	["map"] = "rbxassetid://95107167260947",
-	["mars-stroke"] = "rbxassetid://131973193186828",
-	["mars"] = "rbxassetid://111287112372511",
-	["martini"] = "rbxassetid://82977695401058",
 	["maximize-2"] = "rbxassetid://73085922906397",
 	["maximize"] = "rbxassetid://76045941763188",
 	["medal"] = "rbxassetid://79016002264450",
@@ -981,32 +929,16 @@ local IconsDict = {
 	["menu"] = "rbxassetid://77021539815611",
 	["merge"] = "rbxassetid://126201866476775",
 	["message-circle-check"] = "rbxassetid://132772297689418",
-	["message-circle-code"] = "rbxassetid://112865244991651",
-	["message-circle-dashed"] = "rbxassetid://81525157881897",
-	["message-circle-heart"] = "rbxassetid://101990756073677",
 	["message-circle-more"] = "rbxassetid://92856823884663",
 	["message-circle-off"] = "rbxassetid://134955643890328",
 	["message-circle-plus"] = "rbxassetid://106562979649273",
-	["message-circle-question-mark"] = "rbxassetid://107700302759934",
-	["message-circle-reply"] = "rbxassetid://137071749508334",
-	["message-circle-warning"] = "rbxassetid://119020096067894",
 	["message-circle-x"] = "rbxassetid://126843387725536",
 	["message-circle"] = "rbxassetid://127255077587058",
 	["message-square-check"] = "rbxassetid://125789987055668",
-	["message-square-code"] = "rbxassetid://110968863152123",
-	["message-square-dashed"] = "rbxassetid://107653455516238",
-	["message-square-diff"] = "rbxassetid://75472190472625",
-	["message-square-dot"] = "rbxassetid://127806382463916",
-	["message-square-heart"] = "rbxassetid://75612811742074",
-	["message-square-lock"] = "rbxassetid://81268215619563",
 	["message-square-more"] = "rbxassetid://120139782405970",
 	["message-square-off"] = "rbxassetid://99961019005789",
 	["message-square-plus"] = "rbxassetid://76934450256199",
-	["message-square-quote"] = "rbxassetid://116670768629340",
-	["message-square-reply"] = "rbxassetid://130985622754637",
-	["message-square-share"] = "rbxassetid://131017005324026",
 	["message-square-text"] = "rbxassetid://94899503194205",
-	["message-square-warning"] = "rbxassetid://138432903962261",
 	["message-square-x"] = "rbxassetid://137285463279462",
 	["message-square"] = "rbxassetid://83881670383280",
 	["messages-square"] = "rbxassetid://97532166733358",
@@ -1023,20 +955,13 @@ local IconsDict = {
 	["minimize-2"] = "rbxassetid://116269596042539",
 	["minimize"] = "rbxassetid://121304296213645",
 	["minus"] = "rbxassetid://118026365011536",
-	["mirror-rectangular"] = "rbxassetid://109046769760336",
-	["mirror-round"] = "rbxassetid://121534049429097",
 	["monitor-check"] = "rbxassetid://86651948439229",
 	["monitor-cloud"] = "rbxassetid://85931096038318",
-	["monitor-cog"] = "rbxassetid://94345128715799",
 	["monitor-dot"] = "rbxassetid://130394010063680",
-	["monitor-down"] = "rbxassetid://97466933743423",
 	["monitor-off"] = "rbxassetid://74395526657953",
-	["monitor-pause"] = "rbxassetid://76002184067562",
 	["monitor-play"] = "rbxassetid://133018824306217",
 	["monitor-smartphone"] = "rbxassetid://84335680433378",
 	["monitor-speaker"] = "rbxassetid://81744810060380",
-	["monitor-stop"] = "rbxassetid://98708958984757",
-	["monitor-up"] = "rbxassetid://96035360858377",
 	["monitor-x"] = "rbxassetid://126265210441423",
 	["monitor"] = "rbxassetid://72664649203050",
 	["moon-star"] = "rbxassetid://82782200506348",
@@ -1044,26 +969,17 @@ local IconsDict = {
 	["motorbike"] = "rbxassetid://94580787368233",
 	["mountain-snow"] = "rbxassetid://105315495740588",
 	["mountain"] = "rbxassetid://73269957566415",
-	["mouse-left"] = "rbxassetid://99144293708743",
 	["mouse-off"] = "rbxassetid://75267871697595",
-	["mouse-pointer-2-off"] = "rbxassetid://104701076865632",
-	["mouse-pointer-2"] = "rbxassetid://117093892862228",
-	["mouse-pointer-ban"] = "rbxassetid://106849413057133",
 	["mouse-pointer-click"] = "rbxassetid://107150227368485",
 	["mouse-pointer"] = "rbxassetid://72322454962935",
-	["mouse-right"] = "rbxassetid://88331710212594",
 	["mouse"] = "rbxassetid://73096068864710",
 	["move-3d"] = "rbxassetid://103365982054003",
 	["move-diagonal-2"] = "rbxassetid://117298577948096",
 	["move-diagonal"] = "rbxassetid://101433481954184",
-	["move-down-left"] = "rbxassetid://102819433534567",
-	["move-down-right"] = "rbxassetid://101479760041877",
 	["move-down"] = "rbxassetid://70510115135583",
 	["move-horizontal"] = "rbxassetid://88513523439149",
 	["move-left"] = "rbxassetid://137614740247980",
 	["move-right"] = "rbxassetid://132455779472989",
-	["move-up-left"] = "rbxassetid://139079815540148",
-	["move-up-right"] = "rbxassetid://105885140592646",
 	["move-up"] = "rbxassetid://84505444262658",
 	["move-vertical"] = "rbxassetid://86234730730899",
 	["move"] = "rbxassetid://116138709011735",
@@ -1071,19 +987,16 @@ local IconsDict = {
 	["music-3"] = "rbxassetid://94466120066498",
 	["music-4"] = "rbxassetid://132459323665838",
 	["music"] = "rbxassetid://113343203848535",
-	["navigation-2-off"] = "rbxassetid://116569611780763",
 	["navigation-2"] = "rbxassetid://81889066747907",
 	["navigation-off"] = "rbxassetid://87003270290777",
 	["navigation"] = "rbxassetid://79308213542922",
 	["network"] = "rbxassetid://127410729922644",
 	["newspaper"] = "rbxassetid://123479530460544",
 	["nfc"] = "rbxassetid://76822396542242",
-	["non-binary"] = "rbxassetid://78442360386235",
 	["notebook-pen"] = "rbxassetid://140380614761023",
 	["notebook-tabs"] = "rbxassetid://127371085570083",
 	["notebook-text"] = "rbxassetid://93061585217270",
 	["notebook"] = "rbxassetid://136132108664987",
-	["notepad-text-dashed"] = "rbxassetid://135793446376219",
 	["notepad-text"] = "rbxassetid://93404682958966",
 	["nut-off"] = "rbxassetid://78795397311573",
 	["nut"] = "rbxassetid://127146410705656",
@@ -1109,35 +1022,23 @@ local IconsDict = {
 	["paintbrush-vertical"] = "rbxassetid://105151296591292",
 	["paintbrush"] = "rbxassetid://125572663700289",
 	["palette"] = "rbxassetid://86350350950064",
-	["panda"] = "rbxassetid://132509022802512",
 	["panel-bottom-close"] = "rbxassetid://74287004071159",
-	["panel-bottom-dashed"] = "rbxassetid://131084651621603",
 	["panel-bottom-open"] = "rbxassetid://107768659586540",
 	["panel-bottom"] = "rbxassetid://132127145048511",
 	["panel-left-close"] = "rbxassetid://126579818823552",
-	["panel-left-dashed"] = "rbxassetid://75536606374585",
 	["panel-left-open"] = "rbxassetid://111075816195767",
-	["panel-left-right-dashed"] = "rbxassetid://110100707973959",
 	["panel-left"] = "rbxassetid://97419752870313",
 	["panel-right-close"] = "rbxassetid://139528655524132",
-	["panel-right-dashed"] = "rbxassetid://94959793877311",
 	["panel-right-open"] = "rbxassetid://118114419142794",
 	["panel-right"] = "rbxassetid://116365035443156",
-	["panel-top-bottom-dashed"] = "rbxassetid://134737235653344",
 	["panel-top-close"] = "rbxassetid://83578325777808",
-	["panel-top-dashed"] = "rbxassetid://70522913169237",
 	["panel-top-open"] = "rbxassetid://137959875507454",
 	["panel-top"] = "rbxassetid://75838479462875",
-	["panels-left-bottom"] = "rbxassetid://72996856149149",
-	["panels-right-bottom"] = "rbxassetid://90659068960726",
-	["panels-top-left"] = "rbxassetid://79858853850600",
 	["paperclip"] = "rbxassetid://92088291163453",
 	["parentheses"] = "rbxassetid://78950955173096",
-	["parking-meter"] = "rbxassetid://84652733960568",
 	["party-popper"] = "rbxassetid://111626795712193",
 	["pause"] = "rbxassetid://74873705394436",
 	["paw-print"] = "rbxassetid://112218825427601",
-	["pc-case"] = "rbxassetid://122978648019101",
 	["pen-line"] = "rbxassetid://109108135755303",
 	["pen-off"] = "rbxassetid://84807123119438",
 	["pen-tool"] = "rbxassetid://106145404953445",
@@ -1149,7 +1050,6 @@ local IconsDict = {
 	["pentagon"] = "rbxassetid://79184802179890",
 	["percent"] = "rbxassetid://130155041032013",
 	["person-standing"] = "rbxassetid://125020872044147",
-	["philippine-peso"] = "rbxassetid://91173798254675",
 	["phone-call"] = "rbxassetid://70555587592860",
 	["phone-forwarded"] = "rbxassetid://113269614319737",
 	["phone-incoming"] = "rbxassetid://82863576359288",
@@ -1163,10 +1063,7 @@ local IconsDict = {
 	["picture-in-picture-2"] = "rbxassetid://112803319544468",
 	["picture-in-picture"] = "rbxassetid://80579597835123",
 	["piggy-bank"] = "rbxassetid://79498575790721",
-	["pilcrow-left"] = "rbxassetid://103803000849583",
-	["pilcrow-right"] = "rbxassetid://104881733911870",
 	["pilcrow"] = "rbxassetid://139512780392871",
-	["pill-bottle"] = "rbxassetid://118394692404597",
 	["pill"] = "rbxassetid://73280534813448",
 	["pin-off"] = "rbxassetid://127696372451750",
 	["pin"] = "rbxassetid://120978111007514",
@@ -1183,19 +1080,14 @@ local IconsDict = {
 	["pocket-knife"] = "rbxassetid://134075428063965",
 	["pocket"] = "rbxassetid://136686762542964",
 	["podcast"] = "rbxassetid://109577075549215",
-	["pointer-off"] = "rbxassetid://95488389312794",
 	["pointer"] = "rbxassetid://92615117311099",
 	["popcorn"] = "rbxassetid://139446511232750",
-	["popsicle"] = "rbxassetid://112696318077073",
 	["pound-sterling"] = "rbxassetid://127482649469130",
 	["power-off"] = "rbxassetid://118768311012214",
 	["power"] = "rbxassetid://96479131758775",
 	["presentation"] = "rbxassetid://106134583757890",
-	["printer-check"] = "rbxassetid://130273549443689",
-	["printer-x"] = "rbxassetid://103002721801548",
 	["printer"] = "rbxassetid://76080649734247",
 	["projector"] = "rbxassetid://103281856385283",
-	["proportions"] = "rbxassetid://130046855997237",
 	["puzzle"] = "rbxassetid://136837798892463",
 	["pyramid"] = "rbxassetid://107811442374127",
 	["qr-code"] = "rbxassetid://105329945723350",
@@ -1208,33 +1100,17 @@ local IconsDict = {
 	["radio-receiver"] = "rbxassetid://129598303378835",
 	["radio-tower"] = "rbxassetid://93958663130054",
 	["radio"] = "rbxassetid://85611589536956",
-	["radius"] = "rbxassetid://89814505307129",
-	["rail-symbol"] = "rbxassetid://134295386306962",
 	["rainbow"] = "rbxassetid://132488862841895",
 	["rat"] = "rbxassetid://127400975953159",
-	["ratio"] = "rbxassetid://126369423897295",
-	["receipt-cent"] = "rbxassetid://91557573925201",
-	["receipt-euro"] = "rbxassetid://94015722210295",
-	["receipt-indian-rupee"] = "rbxassetid://89718170439990",
-	["receipt-japanese-yen"] = "rbxassetid://132472560758851",
-	["receipt-pound-sterling"] = "rbxassetid://73934967569625",
-	["receipt-russian-ruble"] = "rbxassetid://105164576936853",
-	["receipt-swiss-franc"] = "rbxassetid://72503668620116",
 	["receipt-text"] = "rbxassetid://138483536013737",
-	["receipt-turkish-lira"] = "rbxassetid://91950765836342",
 	["receipt"] = "rbxassetid://77877895901792",
-	["rectangle-circle"] = "rbxassetid://100642423153903",
 	["rectangle-ellipsis"] = "rbxassetid://112919953980965",
-	["rectangle-goggles"] = "rbxassetid://98605436666727",
 	["rectangle-horizontal"] = "rbxassetid://90224199814966",
 	["rectangle-vertical"] = "rbxassetid://117277050590967",
 	["recycle"] = "rbxassetid://140417023381961",
 	["redo-2"] = "rbxassetid://70451039017914",
-	["redo-dot"] = "rbxassetid://94252981719732",
 	["redo"] = "rbxassetid://116150342119054",
-	["refresh-ccw-dot"] = "rbxassetid://106702246753270",
 	["refresh-ccw"] = "rbxassetid://117913330389477",
-	["refresh-cw-off"] = "rbxassetid://140179498843054",
 	["refresh-cw"] = "rbxassetid://138133190015277",
 	["refrigerator"] = "rbxassetid://102614042652753",
 	["regex"] = "rbxassetid://100727200791841",
@@ -1251,66 +1127,39 @@ local IconsDict = {
 	["road"] = "rbxassetid://120251329173530",
 	["rocket"] = "rbxassetid://87412317685854",
 	["rocking-chair"] = "rbxassetid://110420269495360",
-	["roller-coaster"] = "rbxassetid://112426178972099",
 	["rose"] = "rbxassetid://126336840238769",
-	["rotate-3d"] = "rbxassetid://76300551576392",
-	["rotate-ccw-key"] = "rbxassetid://74976035240976",
-	["rotate-ccw-square"] = "rbxassetid://90515853170424",
 	["rotate-ccw"] = "rbxassetid://110116685948665",
-	["rotate-cw-square"] = "rbxassetid://77095448159303",
 	["rotate-cw"] = "rbxassetid://84183336178654",
-	["route-off"] = "rbxassetid://106350402024079",
 	["route"] = "rbxassetid://89968303228953",
 	["router"] = "rbxassetid://102130331994471",
 	["rows-2"] = "rbxassetid://112556185960101",
 	["rows-3"] = "rbxassetid://117215586961375",
-	["rows-4"] = "rbxassetid://125646021959055",
 	["rss"] = "rbxassetid://131789058984793",
-	["ruler-dimension-line"] = "rbxassetid://70673861371412",
 	["ruler"] = "rbxassetid://81432445547423",
-	["russian-ruble"] = "rbxassetid://126357936542156",
 	["sailboat"] = "rbxassetid://87110567187540",
 	["salad"] = "rbxassetid://128864507821603",
 	["sandwich"] = "rbxassetid://104573187458917",
 	["satellite-dish"] = "rbxassetid://136742443888305",
 	["satellite"] = "rbxassetid://134967053164645",
-	["saudi-riyal"] = "rbxassetid://102282769104635",
 	["save-all"] = "rbxassetid://116946975799440",
 	["save-off"] = "rbxassetid://87085435778560",
 	["save"] = "rbxassetid://126116963775616",
-	["scale-3d"] = "rbxassetid://72414199620352",
 	["scale"] = "rbxassetid://108203682317477",
-	["scaling"] = "rbxassetid://122360365318466",
 	["scan-barcode"] = "rbxassetid://96889457154761",
 	["scan-eye"] = "rbxassetid://99244790601968",
 	["scan-face"] = "rbxassetid://109959345069668",
 	["scan-heart"] = "rbxassetid://106280819776142",
-	["scan-line"] = "rbxassetid://126544908146540",
-	["scan-qr-code"] = "rbxassetid://105409149549927",
-	["scan-search"] = "rbxassetid://80009010551347",
-	["scan-text"] = "rbxassetid://73702396787766",
 	["scan"] = "rbxassetid://123104789658180",
 	["school"] = "rbxassetid://76351530290068",
-	["scissors-line-dashed"] = "rbxassetid://122237447974173",
 	["scissors"] = "rbxassetid://118665510911274",
-	["scooter"] = "rbxassetid://100035452787934",
 	["screen-share-off"] = "rbxassetid://107677572669805",
 	["screen-share"] = "rbxassetid://85137895705653",
 	["scroll-text"] = "rbxassetid://97321022666868",
 	["scroll"] = "rbxassetid://74072101474951",
-	["search-alert"] = "rbxassetid://127597984617505",
-	["search-check"] = "rbxassetid://75442076191356",
-	["search-code"] = "rbxassetid://117114794592802",
-	["search-slash"] = "rbxassetid://96483932261041",
-	["search-x"] = "rbxassetid://137319957522951",
 	["search"] = "rbxassetid://121018724060431",
-	["section"] = "rbxassetid://91732188298948",
 	["send-horizontal"] = "rbxassetid://111734392411664",
 	["send-to-back"] = "rbxassetid://75340312862253",
 	["send"] = "rbxassetid://127751956873796",
-	["separator-horizontal"] = "rbxassetid://84864453699927",
-	["separator-vertical"] = "rbxassetid://84031801478581",
-	["server-cog"] = "rbxassetid://138470287250966",
 	["server-crash"] = "rbxassetid://132810618000212",
 	["server-off"] = "rbxassetid://114048751507723",
 	["server"] = "rbxassetid://92188766517878",
@@ -1320,23 +1169,16 @@ local IconsDict = {
 	["share-2"] = "rbxassetid://71210767962065",
 	["share"] = "rbxassetid://87340985053299",
 	["sheet"] = "rbxassetid://134902122480171",
-	["shelving-unit"] = "rbxassetid://80116568514793",
 	["shell"] = "rbxassetid://140212943563599",
 	["shield-alert"] = "rbxassetid://114995877719925",
 	["shield-ban"] = "rbxassetid://108765041044649",
 	["shield-check"] = "rbxassetid://87354736164608",
-	["shield-cog-corner"] = "rbxassetid://111694066132698",
 	["shield-cog"] = "rbxassetid://129235695057857",
-	["shield-ellipsis"] = "rbxassetid://114794739892123",
-	["shield-half"] = "rbxassetid://117842634172647",
 	["shield-minus"] = "rbxassetid://89965059528921",
 	["shield-off"] = "rbxassetid://133426959132690",
 	["shield-plus"] = "rbxassetid://100664857995498",
-	["shield-question-mark"] = "rbxassetid://135722075265150",
-	["shield-user"] = "rbxassetid://124832775645347",
 	["shield-x"] = "rbxassetid://73370117343811",
 	["shield"] = "rbxassetid://110987169760162",
-	["ship-wheel"] = "rbxassetid://130797795829448",
 	["ship"] = "rbxassetid://83995100553930",
 	["shirt"] = "rbxassetid://106579555405966",
 	["shopping-bag"] = "rbxassetid://71885477293226",
@@ -1344,10 +1186,6 @@ local IconsDict = {
 	["shopping-cart"] = "rbxassetid://128420521375441",
 	["shovel"] = "rbxassetid://102465000512056",
 	["shower-head"] = "rbxassetid://75884944024117",
-	["shredder"] = "rbxassetid://122125164414463",
-	["shrimp"] = "rbxassetid://102625900815307",
-	["shrink"] = "rbxassetid://90953687918880",
-	["shrub"] = "rbxassetid://127326280714343",
 	["shuffle"] = "rbxassetid://132382786975101",
 	["sigma"] = "rbxassetid://126884244870899",
 	["signal-high"] = "rbxassetid://130436670012270",
@@ -1355,65 +1193,35 @@ local IconsDict = {
 	["signal-medium"] = "rbxassetid://125003021367019",
 	["signal-zero"] = "rbxassetid://130045332414754",
 	["signal"] = "rbxassetid://78424889355261",
-	["signature"] = "rbxassetid://114402748013000",
-	["signpost-big"] = "rbxassetid://115780185675001",
-	["signpost"] = "rbxassetid://106584743791433",
 	["siren"] = "rbxassetid://134210267818039",
 	["skip-back"] = "rbxassetid://70466132711334",
 	["skip-forward"] = "rbxassetid://124844823753990",
 	["skull"] = "rbxassetid://137726256442333",
 	["slack"] = "rbxassetid://96089719516736",
 	["slash"] = "rbxassetid://117792185664263",
-	["slice"] = "rbxassetid://95810504278179",
 	["sliders-horizontal"] = "rbxassetid://85538382643347",
 	["sliders-vertical"] = "rbxassetid://101190569086853",
 	["smartphone-charging"] = "rbxassetid://102837532613995",
-	["smartphone-nfc"] = "rbxassetid://82326425754446",
 	["smartphone"] = "rbxassetid://96623008834511",
 	["smile-plus"] = "rbxassetid://131981881472144",
 	["smile"] = "rbxassetid://105880397565283",
 	["snail"] = "rbxassetid://70904536548363",
 	["snowflake"] = "rbxassetid://101235206534566",
-	["soap-dispenser-droplet"] = "rbxassetid://77258480479465",
 	["sofa"] = "rbxassetid://114427687218324",
-	["solar-panel"] = "rbxassetid://132448188047921",
 	["soup"] = "rbxassetid://115092551871618",
-	["space"] = "rbxassetid://87072088914178",
 	["spade"] = "rbxassetid://131444449466462",
 	["sparkle"] = "rbxassetid://111044800239623",
 	["sparkles"] = "rbxassetid://138635884129147",
 	["speaker"] = "rbxassetid://96227183003618",
-	["speech"] = "rbxassetid://87013139446349",
-	["spell-check-2"] = "rbxassetid://81556731785534",
-	["spell-check"] = "rbxassetid://91913483031334",
-	["spline-pointer"] = "rbxassetid://84842840956804",
-	["spline"] = "rbxassetid://129406685807412",
 	["split"] = "rbxassetid://105112438805988",
-	["spool"] = "rbxassetid://124541981347743",
-	["spotlight"] = "rbxassetid://77571742539344",
-	["sport-shoe"] = "rbxassetid://120495992692630",
 	["spray-can"] = "rbxassetid://128372039366326",
 	["sprout"] = "rbxassetid://100091687832508",
 	["square-activity"] = "rbxassetid://89496630185293",
-	["square-arrow-down-left"] = "rbxassetid://108194680296901",
-	["square-arrow-down-right"] = "rbxassetid://99403846801050",
 	["square-arrow-down"] = "rbxassetid://135962519626588",
 	["square-arrow-left"] = "rbxassetid://111671474549238",
-	["square-arrow-out-down-left"] = "rbxassetid://125714881756353",
-	["square-arrow-out-down-right"] = "rbxassetid://89971003001390",
-	["square-arrow-out-up-left"] = "rbxassetid://103759986579087",
-	["square-arrow-out-up-right"] = "rbxassetid://91221896066807",
-	["square-arrow-right-enter"] = "rbxassetid://138867831495334",
-	["square-arrow-right-exit"] = "rbxassetid://133688575845430",
 	["square-arrow-right"] = "rbxassetid://113920471701361",
-	["square-arrow-up-left"] = "rbxassetid://112424670290693",
-	["square-arrow-up-right"] = "rbxassetid://76602291406940",
 	["square-arrow-up"] = "rbxassetid://106998604646718",
 	["square-asterisk"] = "rbxassetid://89186832353625",
-	["square-bottom-dashed-scissors"] = "rbxassetid://79076980104803",
-	["square-centerline-dashed-horizontal"] = "rbxassetid://77780104374341",
-	["square-centerline-dashed-vertical"] = "rbxassetid://107878435803525",
-	["square-chart-gantt"] = "rbxassetid://104034017316411",
 	["square-check-big"] = "rbxassetid://115320390907184",
 	["square-check"] = "rbxassetid://134682053539509",
 	["square-chevron-down"] = "rbxassetid://91032307924592",
@@ -1421,11 +1229,6 @@ local IconsDict = {
 	["square-chevron-right"] = "rbxassetid://90612077729930",
 	["square-chevron-up"] = "rbxassetid://85565910197337",
 	["square-code"] = "rbxassetid://81604576616881",
-	["square-dashed-bottom-code"] = "rbxassetid://100354801563230",
-	["square-dashed-bottom"] = "rbxassetid://101102319625624",
-	["square-dashed-kanban"] = "rbxassetid://90388067649847",
-	["square-dashed-mouse-pointer"] = "rbxassetid://121016142178467",
-	["square-dashed-top-solid"] = "rbxassetid://117157577548540",
 	["square-dashed"] = "rbxassetid://136905537847606",
 	["square-divide"] = "rbxassetid://99894657101970",
 	["square-dot"] = "rbxassetid://116613421354866",
@@ -1436,19 +1239,15 @@ local IconsDict = {
 	["square-m"] = "rbxassetid://117662700410577",
 	["square-menu"] = "rbxassetid://104067089444415",
 	["square-minus"] = "rbxassetid://116764432015770",
-	["square-mouse-pointer"] = "rbxassetid://76141850603920",
-	["square-parking-off"] = "rbxassetid://100857293535141",
 	["square-parking"] = "rbxassetid://133116656122387",
 	["square-pause"] = "rbxassetid://86608552787615",
 	["square-pen"] = "rbxassetid://120239476110475",
 	["square-percent"] = "rbxassetid://87111930314567",
 	["square-pi"] = "rbxassetid://75383328781618",
-	["square-pilcrow"] = "rbxassetid://131854284699367",
 	["square-play"] = "rbxassetid://108186325238481",
 	["square-plus"] = "rbxassetid://114713264461873",
 	["square-power"] = "rbxassetid://129240437805187",
 	["square-radical"] = "rbxassetid://132645931868292",
-	["square-round-corner"] = "rbxassetid://104592745113567",
 	["square-scissors"] = "rbxassetid://110601255612411",
 	["square-sigma"] = "rbxassetid://113231244246816",
 	["square-slash"] = "rbxassetid://105477013908757",
@@ -1463,11 +1262,6 @@ local IconsDict = {
 	["square-user"] = "rbxassetid://70771214183445",
 	["square-x"] = "rbxassetid://125136183850190",
 	["square"] = "rbxassetid://86304921356806",
-	["squares-exclude"] = "rbxassetid://102345385822324",
-	["squares-intersect"] = "rbxassetid://120869602570119",
-	["squares-subtract"] = "rbxassetid://131484650948795",
-	["squares-unite"] = "rbxassetid://96673080107843",
-	["squircle-dashed"] = "rbxassetid://129936702532522",
 	["squircle"] = "rbxassetid://82426632573807",
 	["squirrel"] = "rbxassetid://112864252085343",
 	["stamp"] = "rbxassetid://92370779813368",
@@ -1479,10 +1273,7 @@ local IconsDict = {
 	["stethoscope"] = "rbxassetid://122331031702148",
 	["sticker"] = "rbxassetid://79938203791608",
 	["sticky-note"] = "rbxassetid://111894074643919",
-	["stone"] = "rbxassetid://135161057497830",
 	["store"] = "rbxassetid://90338129673705",
-	["stretch-horizontal"] = "rbxassetid://87665042192343",
-	["stretch-vertical"] = "rbxassetid://95265463417122",
 	["strikethrough"] = "rbxassetid://103417324549613",
 	["subscript"] = "rbxassetid://74553514785183",
 	["sun-dim"] = "rbxassetid://129141645592715",
@@ -1500,80 +1291,44 @@ local IconsDict = {
 	["swords"] = "rbxassetid://81872698913435",
 	["syringe"] = "rbxassetid://123891270479254",
 	["table-2"] = "rbxassetid://95751552281545",
-	["table-cells-merge"] = "rbxassetid://95363715175258",
-	["table-cells-split"] = "rbxassetid://114799086088649",
-	["table-columns-split"] = "rbxassetid://111011625447949",
 	["table-of-contents"] = "rbxassetid://135044763275414",
 	["table-properties"] = "rbxassetid://125062886015372",
-	["table-rows-split"] = "rbxassetid://96443733673997",
 	["table"] = "rbxassetid://109109148250737",
 	["tablet-smartphone"] = "rbxassetid://133680859813404",
 	["tablet"] = "rbxassetid://128403991264386",
-	["tablets"] = "rbxassetid://80835787970735",
 	["tag"] = "rbxassetid://129104970103940",
 	["tags"] = "rbxassetid://107179263080798",
-	["tally-1"] = "rbxassetid://115301298241643",
-	["tally-2"] = "rbxassetid://110363186864027",
-	["tally-3"] = "rbxassetid://97655344572540",
-	["tally-4"] = "rbxassetid://102633494371890",
-	["tally-5"] = "rbxassetid://88031817475886",
-	["tangent"] = "rbxassetid://123263132981724",
 	["target"] = "rbxassetid://87563802520297",
 	["telescope"] = "rbxassetid://91755049143647",
 	["tent-tree"] = "rbxassetid://76698322463977",
 	["tent"] = "rbxassetid://109779587826330",
 	["terminal"] = "rbxassetid://106783148545356",
-	["test-tube-diagonal"] = "rbxassetid://75662704378840",
 	["test-tube"] = "rbxassetid://98801015650164",
-	["test-tubes"] = "rbxassetid://92555361447433",
-	["text-align-center"] = "rbxassetid://84051028246390",
-	["text-align-end"] = "rbxassetid://130041738343555",
-	["text-align-justify"] = "rbxassetid://80279880143030",
-	["text-align-start"] = "rbxassetid://134489585487649",
-	["text-cursor-input"] = "rbxassetid://107551944047171",
-	["text-cursor"] = "rbxassetid://115984654447300",
-	["text-initial"] = "rbxassetid://129458097472087",
-	["text-quote"] = "rbxassetid://139278366448736",
-	["text-search"] = "rbxassetid://92345384671606",
-	["text-select"] = "rbxassetid://117087320884956",
-	["text-wrap"] = "rbxassetid://114804318314018",
-	["theater"] = "rbxassetid://108558145549163",
 	["thermometer-snowflake"] = "rbxassetid://121876188028425",
 	["thermometer-sun"] = "rbxassetid://106693240074310",
 	["thermometer"] = "rbxassetid://106546011492311",
 	["thumbs-down"] = "rbxassetid://87794009914015",
 	["thumbs-up"] = "rbxassetid://111137070767020",
 	["ticket-check"] = "rbxassetid://105428777212507",
-	["ticket-minus"] = "rbxassetid://78966299769328",
 	["ticket-percent"] = "rbxassetid://80834774406405",
 	["ticket-plus"] = "rbxassetid://110086734392189",
-	["ticket-slash"] = "rbxassetid://89045681172265",
-	["ticket-x"] = "rbxassetid://88674114109926",
 	["ticket"] = "rbxassetid://126527071492145",
-	["tickets-plane"] = "rbxassetid://100367018248695",
-	["tickets"] = "rbxassetid://135268612687833",
 	["timer-off"] = "rbxassetid://110916370767271",
 	["timer-reset"] = "rbxassetid://110052125369932",
 	["timer"] = "rbxassetid://85473888890506",
 	["toggle-left"] = "rbxassetid://85887872573050",
 	["toggle-right"] = "rbxassetid://90411952142550",
 	["toilet"] = "rbxassetid://80930782432931",
-	["tool-case"] = "rbxassetid://87533537832522",
 	["toolbox"] = "rbxassetid://85341033903792",
 	["tornado"] = "rbxassetid://88358291515768",
-	["torus"] = "rbxassetid://70855707283051",
 	["touchpad-off"] = "rbxassetid://78784008075456",
 	["touchpad"] = "rbxassetid://74882354908014",
 	["tower-control"] = "rbxassetid://95937619060532",
-	["towel-rack"] = "rbxassetid://125223915620991",
 	["toy-brick"] = "rbxassetid://86293483924633",
 	["tractor"] = "rbxassetid://103376704722051",
 	["traffic-cone"] = "rbxassetid://74110220470369",
-	["train-front-tunnel"] = "rbxassetid://105194827005114",
 	["train-front"] = "rbxassetid://125237934215370",
 	["train-track"] = "rbxassetid://77451032453723",
-	["tram-front"] = "rbxassetid://93315182364998",
-	["transgender"] = "rbxassetid://135530817673639",
 	["trash-2"] = "rbxassetid://109843431391323",
 	["trash"] = "rbxassetid://106723740584310",
 	["tree-deciduous"] = "rbxassetid://123124389219004",
@@ -1585,8 +1340,6 @@ local IconsDict = {
 	["trending-up-down"] = "rbxassetid://85083293981691",
 	["trending-up"] = "rbxassetid://81819858538839",
 	["triangle-alert"] = "rbxassetid://125920361880643",
-	["triangle-dashed"] = "rbxassetid://124324079103935",
-	["triangle-right"] = "rbxassetid://116930791412791",
 	["triangle"] = "rbxassetid://126330486745540",
 	["trophy"] = "rbxassetid://131545003268773",
 	["truck-electric"] = "rbxassetid://111873446387359",
@@ -1599,13 +1352,11 @@ local IconsDict = {
 	["tv"] = "rbxassetid://135687724791776",
 	["twitch"] = "rbxassetid://71383308134888",
 	["twitter"] = "rbxassetid://88791703276842",
-	["type-outline"] = "rbxassetid://80108627791690",
 	["type"] = "rbxassetid://133543553793564",
 	["umbrella-off"] = "rbxassetid://72395143739955",
 	["umbrella"] = "rbxassetid://127502210274589",
 	["underline"] = "rbxassetid://123709229216544",
 	["undo-2"] = "rbxassetid://113885292059932",
-	["undo-dot"] = "rbxassetid://132055277744844",
 	["undo"] = "rbxassetid://111258459077271",
 	["unfold-horizontal"] = "rbxassetid://117128358526398",
 	["unfold-vertical"] = "rbxassetid://116593025265499",
@@ -1618,14 +1369,11 @@ local IconsDict = {
 	["usb"] = "rbxassetid://117230058949613",
 	["user-check"] = "rbxassetid://81775205032725",
 	["user-cog"] = "rbxassetid://92795491530865",
-	["user-key"] = "rbxassetid://105403041782190",
-	["user-lock"] = "rbxassetid://78892639693821",
 	["user-minus"] = "rbxassetid://126976941957511",
 	["user-pen"] = "rbxassetid://87445472574836",
 	["user-plus"] = "rbxassetid://118514469915884",
 	["user-round-check"] = "rbxassetid://118794737621941",
 	["user-round-cog"] = "rbxassetid://78239503290053",
-	["user-round-key"] = "rbxassetid://124547549008939",
 	["user-round-minus"] = "rbxassetid://98944176636447",
 	["user-round-pen"] = "rbxassetid://108155244324878",
 	["user-round-plus"] = "rbxassetid://113301899567470",
@@ -1633,27 +1381,20 @@ local IconsDict = {
 	["user-round-x"] = "rbxassetid://122367980560930",
 	["user-round"] = "rbxassetid://136485052187963",
 	["user-search"] = "rbxassetid://101335649828115",
-	["user-star"] = "rbxassetid://98777846316000",
 	["user-x"] = "rbxassetid://139748155894754",
 	["user"] = "rbxassetid://81589895647169",
 	["users-round"] = "rbxassetid://103005444008339",
 	["users"] = "rbxassetid://115398113982385",
 	["utensils-crossed"] = "rbxassetid://109520762270383",
 	["utensils"] = "rbxassetid://139952569804235",
-	["utility-pole"] = "rbxassetid://101965541238242",
 	["van"] = "rbxassetid://122066377022942",
 	["variable"] = "rbxassetid://104743088438151",
 	["vault"] = "rbxassetid://108049164599845",
-	["vector-square"] = "rbxassetid://86713728565344",
 	["vegan"] = "rbxassetid://119489190688082",
-	["venetian-mask"] = "rbxassetid://102636443033920",
-	["venus-and-mars"] = "rbxassetid://120227752103771",
 	["venus"] = "rbxassetid://82891342220859",
-	["vibrate-off"] = "rbxassetid://113446447326246",
 	["vibrate"] = "rbxassetid://108330910738733",
 	["video-off"] = "rbxassetid://132239189859305",
 	["video"] = "rbxassetid://107587444636945",
-	["videotape"] = "rbxassetid://114816894323398",
 	["view"] = "rbxassetid://118717253976805",
 	["voicemail"] = "rbxassetid://134313454010227",
 	["volleyball"] = "rbxassetid://83889351124153",
@@ -1666,21 +1407,15 @@ local IconsDict = {
 	["wallet-cards"] = "rbxassetid://129728715308337",
 	["wallet-minimal"] = "rbxassetid://137800448816116",
 	["wallet"] = "rbxassetid://132331555762628",
-	["wallpaper"] = "rbxassetid://74682121235494",
 	["wand-sparkles"] = "rbxassetid://82546429942392",
 	["wand"] = "rbxassetid://114580617777835",
 	["warehouse"] = "rbxassetid://78388887451080",
 	["washing-machine"] = "rbxassetid://104194127573858",
 	["watch"] = "rbxassetid://130544621618405",
-	["waves-arrow-down"] = "rbxassetid://129215220911792",
-	["waves-arrow-up"] = "rbxassetid://102314705716217",
-	["waves-ladder"] = "rbxassetid://101808619355514",
 	["waves"] = "rbxassetid://96340135183647",
 	["waypoints"] = "rbxassetid://102450133666017",
 	["webcam"] = "rbxassetid://104148487911129",
-	["webhook-off"] = "rbxassetid://96370548093471",
 	["webhook"] = "rbxassetid://112812457747322",
-	["weight-tilde"] = "rbxassetid://112081212176951",
 	["weight"] = "rbxassetid://103860559844854",
 	["wheat-off"] = "rbxassetid://133294844612307",
 	["wheat"] = "rbxassetid://85261952080359",
@@ -1689,18 +1424,13 @@ local IconsDict = {
 	["wifi-high"] = "rbxassetid://81954601342139",
 	["wifi-low"] = "rbxassetid://138217335635913",
 	["wifi-off"] = "rbxassetid://74113634330106",
-	["wifi-pen"] = "rbxassetid://91290205064712",
-	["wifi-sync"] = "rbxassetid://84043971055177",
 	["wifi-zero"] = "rbxassetid://124286465246123",
 	["wifi"] = "rbxassetid://104669375183960",
-	["wind-arrow-down"] = "rbxassetid://127753987414870",
 	["wind"] = "rbxassetid://114551690399915",
 	["wine-off"] = "rbxassetid://108294164302317",
 	["wine"] = "rbxassetid://115743721332829",
 	["workflow"] = "rbxassetid://99186544029189",
-	["worm"] = "rbxassetid://115752311548091",
 	["wrench"] = "rbxassetid://112148279212860",
-	["x-line-top"] = "rbxassetid://140592656289509",
 	["x"] = "rbxassetid://110786993356448",
 	["youtube"] = "rbxassetid://123663668456341",
 	["zap-off"] = "rbxassetid://81385483183652",
@@ -1722,6 +1452,99 @@ local IconsDict = {
 	["zoom-out"] = "rbxassetid://108334162607319",
 }
 
+-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+--  THEMES DICTIONARY
+--  Each theme: WindowBg, TitleBarBg, SidebarBg, ElementBg,
+--              PrimaryText, SecondaryText, AccentColor,
+--              TabActiveColor, TabInactiveColor, SearchBarBg
+-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+local ThemesDict = {
+	["Default"] = {
+		WindowBg       = Color3.fromRGB(8, 8, 8),
+		TitleBarBg     = Color3.fromRGB(12, 12, 12),
+		SidebarBg      = Color3.fromRGB(0, 0, 0),
+		ElementBg      = Color3.fromRGB(18, 18, 18),
+		PrimaryText    = Color3.fromRGB(240, 240, 240),
+		SecondaryText  = Color3.fromRGB(165, 165, 165),
+		AccentColor    = Color3.fromRGB(0, 170, 255),
+		TabActive      = Color3.fromRGB(35, 35, 35),
+		TabInactive    = Color3.fromRGB(18, 18, 18),
+		SearchBarBg    = Color3.fromRGB(22, 22, 22),
+	},
+	["Darker"] = {
+		WindowBg       = Color3.fromRGB(3, 3, 3),
+		TitleBarBg     = Color3.fromRGB(5, 5, 5),
+		SidebarBg      = Color3.fromRGB(3, 3, 3),
+		ElementBg      = Color3.fromRGB(10, 10, 10),
+		PrimaryText    = Color3.fromRGB(210, 210, 210),
+		SecondaryText  = Color3.fromRGB(130, 130, 130),
+		AccentColor    = Color3.fromRGB(0, 140, 220),
+		TabActive      = Color3.fromRGB(18, 18, 18),
+		TabInactive    = Color3.fromRGB(8, 8, 8),
+		SearchBarBg    = Color3.fromRGB(12, 12, 12),
+	},
+	["Fire"] = {
+		WindowBg       = Color3.fromRGB(18, 5, 2),
+		TitleBarBg     = Color3.fromRGB(30, 8, 2),
+		SidebarBg      = Color3.fromRGB(20, 5, 2),
+		ElementBg      = Color3.fromRGB(35, 12, 4),
+		PrimaryText    = Color3.fromRGB(255, 230, 210),
+		SecondaryText  = Color3.fromRGB(210, 140, 100),
+		AccentColor    = Color3.fromRGB(255, 90, 20),
+		TabActive      = Color3.fromRGB(60, 18, 5),
+		TabInactive    = Color3.fromRGB(35, 10, 3),
+		SearchBarBg    = Color3.fromRGB(40, 12, 4),
+	},
+	["Blossom"] = {
+		WindowBg       = Color3.fromRGB(20, 8, 14),
+		TitleBarBg     = Color3.fromRGB(28, 10, 20),
+		SidebarBg      = Color3.fromRGB(22, 8, 15),
+		ElementBg      = Color3.fromRGB(35, 14, 25),
+		PrimaryText    = Color3.fromRGB(255, 225, 240),
+		SecondaryText  = Color3.fromRGB(210, 160, 185),
+		AccentColor    = Color3.fromRGB(240, 90, 160),
+		TabActive      = Color3.fromRGB(55, 20, 38),
+		TabInactive    = Color3.fromRGB(32, 12, 22),
+		SearchBarBg    = Color3.fromRGB(38, 14, 26),
+	},
+	["Snow"] = {
+		WindowBg       = Color3.fromRGB(225, 232, 240),
+		TitleBarBg     = Color3.fromRGB(210, 220, 232),
+		SidebarBg      = Color3.fromRGB(215, 224, 235),
+		ElementBg      = Color3.fromRGB(200, 212, 226),
+		PrimaryText    = Color3.fromRGB(25, 35, 55),
+		SecondaryText  = Color3.fromRGB(70, 90, 120),
+		AccentColor    = Color3.fromRGB(45, 110, 210),
+		TabActive      = Color3.fromRGB(185, 200, 220),
+		TabInactive    = Color3.fromRGB(205, 215, 228),
+		SearchBarBg    = Color3.fromRGB(195, 208, 224),
+	},
+	["Spring"] = {
+		WindowBg       = Color3.fromRGB(12, 22, 10),
+		TitleBarBg     = Color3.fromRGB(16, 30, 13),
+		SidebarBg      = Color3.fromRGB(12, 22, 10),
+		ElementBg      = Color3.fromRGB(20, 36, 16),
+		PrimaryText    = Color3.fromRGB(220, 255, 215),
+		SecondaryText  = Color3.fromRGB(140, 210, 130),
+		AccentColor    = Color3.fromRGB(60, 210, 80),
+		TabActive      = Color3.fromRGB(30, 55, 24),
+		TabInactive    = Color3.fromRGB(18, 32, 14),
+		SearchBarBg    = Color3.fromRGB(22, 38, 18),
+	},
+	["Cloudy"] = {
+		WindowBg       = Color3.fromRGB(55, 62, 75),
+		TitleBarBg     = Color3.fromRGB(65, 73, 88),
+		SidebarBg      = Color3.fromRGB(58, 65, 78),
+		ElementBg      = Color3.fromRGB(72, 80, 96),
+		PrimaryText    = Color3.fromRGB(230, 235, 245),
+		SecondaryText  = Color3.fromRGB(170, 178, 198),
+		AccentColor    = Color3.fromRGB(130, 170, 230),
+		TabActive      = Color3.fromRGB(90, 100, 120),
+		TabInactive    = Color3.fromRGB(68, 76, 92),
+		SearchBarBg    = Color3.fromRGB(75, 84, 100),
+	},
+}
+
 local function RunSearch(query, ElementRegistry)
 	local q = query:lower():gsub("^%s+", ""):gsub("%s+$", "")
 	for _, entry in ipairs(ElementRegistry) do
@@ -1733,11 +1556,12 @@ local function RunSearch(query, ElementRegistry)
 	end
 end
 
-
 function LuaLandLibrary:CreateWindow(WindowConfig)
 	local TitleString     = WindowConfig.Title     or "Lua Land Ui Library"
 	local SubtitleString  = WindowConfig.Subtitle  or "Lua Land Dev"
-	local TitleIconString = WindowConfig.TitleIcon or "script"
+	local TitleIconString = WindowConfig.TitleIcon or "book-open-text"
+	local ThemeName       = WindowConfig.Theme      or "Default"
+	local T               = ThemesDict[ThemeName] or ThemesDict["Default"]
 
 	local ScreenGui = Instance.new("ScreenGui")
 	ScreenGui.Name = "LuaLandGui"
@@ -1749,7 +1573,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	MainFrame.Name = "MainFrame"
 	MainFrame.Size = UDim2.new(0, 500, 0, 350)
 	MainFrame.Position = UDim2.new(0.5, -250, 0.5, -175)
-	MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	MainFrame.BackgroundColor3 = T.WindowBg
 	MainFrame.BorderSizePixel = 0
 	MainFrame.ClipsDescendants = true
 	MainFrame.Parent = ScreenGui
@@ -1761,7 +1585,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local TitleBar = Instance.new("Frame")
 	TitleBar.Name = "TitleBar"
 	TitleBar.Size = UDim2.new(1, 0, 0, 50)
-	TitleBar.BackgroundTransparency = 1
+	TitleBar.BackgroundColor3 = T.TitleBarBg
+	TitleBar.BorderSizePixel = 0
 	TitleBar.ZIndex = 10
 	TitleBar.Parent = MainFrame
 
@@ -1770,49 +1595,51 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	TitleIcon.Position = UDim2.new(0, 10, 0, 13)
 	TitleIcon.BackgroundTransparency = 1
 	TitleIcon.Image = IconsDict[TitleIconString] or IconsDict["book-open-text"]
-	TitleIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
+	TitleIcon.ImageColor3 = T.PrimaryText
 	TitleIcon.ZIndex = 10
 	TitleIcon.Parent = TitleBar
 
 	local TitleText = Instance.new("TextLabel")
-	TitleText.Size = UDim2.new(0, 200, 0, 20)
+	TitleText.Size = UDim2.new(0, 250, 0, 20)
 	TitleText.Position = UDim2.new(0, 44, 0, 8)
 	TitleText.BackgroundTransparency = 1
 	TitleText.Text = TitleString
-	TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+	TitleText.TextColor3 = T.PrimaryText
 	TitleText.TextSize = 16
 	TitleText.Font = Enum.Font.GothamBold
 	TitleText.TextXAlignment = Enum.TextXAlignment.Left
+	TitleText.TextWrapped = true
 	TitleText.ZIndex = 10
 	TitleText.Parent = TitleBar
 
 	local SubtitleText = Instance.new("TextLabel")
-	SubtitleText.Size = UDim2.new(0, 200, 0, 15)
+	SubtitleText.Size = UDim2.new(0, 250, 0, 15)
 	SubtitleText.Position = UDim2.new(0, 44, 0, 28)
 	SubtitleText.BackgroundTransparency = 1
 	SubtitleText.Text = SubtitleString
-	SubtitleText.TextColor3 = Color3.fromRGB(180, 180, 180)
+	SubtitleText.TextColor3 = T.SecondaryText
 	SubtitleText.TextSize = 12
 	SubtitleText.Font = Enum.Font.Gotham
 	SubtitleText.TextXAlignment = Enum.TextXAlignment.Left
+	SubtitleText.TextWrapped = true
 	SubtitleText.ZIndex = 10
 	SubtitleText.Parent = TitleBar
 
-    local CloseBtn = Instance.new("ImageButton")
+	local CloseBtn = Instance.new("ImageButton")
 	CloseBtn.Name = "CloseButton"
 	CloseBtn.Size = UDim2.new(0, 20, 0, 20)
 	CloseBtn.Position = UDim2.new(1, -30, 0, 15)
 	CloseBtn.BackgroundTransparency = 1
 	CloseBtn.Image = "rbxassetid://130629964514885"
-	CloseBtn.ImageColor3 = Color3.fromRGB(255, 255, 255)
+	CloseBtn.ImageColor3 = T.PrimaryText
 	CloseBtn.ZIndex = 10
 	CloseBtn.Parent = TitleBar
 
 	CloseBtn.MouseEnter:Connect(function()
-		TweenService:Create(CloseBtn, TweenInfo.new(0.15), {ImageColor3 = Color3.fromRGB(200, 200, 200)}):Play()
+		TweenService:Create(CloseBtn, TweenInfo.new(0.15), {ImageColor3 = T.SecondaryText}):Play()
 	end)
 	CloseBtn.MouseLeave:Connect(function()
-		TweenService:Create(CloseBtn, TweenInfo.new(0.15), {ImageColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+		TweenService:Create(CloseBtn, TweenInfo.new(0.15), {ImageColor3 = T.PrimaryText}):Play()
 	end)
 	CloseBtn.MouseButton1Click:Connect(function()
 		TweenService:Create(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
@@ -1835,7 +1662,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local MinimizeLine = Instance.new("Frame")
 	MinimizeLine.Size = UDim2.new(1, 0, 0, 2)
 	MinimizeLine.Position = UDim2.new(0, 0, 0.65, 0)
-	MinimizeLine.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+	MinimizeLine.BackgroundColor3 = T.PrimaryText
 	MinimizeLine.BorderSizePixel = 0
 	MinimizeLine.ZIndex = 10
 	MinimizeLine.Parent = MinimizeBtn
@@ -1849,10 +1676,10 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local MinimizedSize = UDim2.new(0, 500, 0, 50)
 
 	MinimizeBtn.MouseEnter:Connect(function()
-		TweenService:Create(MinimizeLine, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+		TweenService:Create(MinimizeLine, TweenInfo.new(0.15), {BackgroundColor3 = T.AccentColor}):Play()
 	end)
 	MinimizeBtn.MouseLeave:Connect(function()
-		TweenService:Create(MinimizeLine, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(200, 200, 200)}):Play()
+		TweenService:Create(MinimizeLine, TweenInfo.new(0.15), {BackgroundColor3 = T.PrimaryText}):Play()
 	end)
 
 	local Dragging, DragInput, DragStart, StartPos = false, nil, nil, nil
@@ -1877,7 +1704,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 	end)
 
-    local Body = Instance.new("Frame")
+	local Body = Instance.new("Frame")
 	Body.Name = "Body"
 	Body.Size = UDim2.new(1, 0, 1, -50)
 	Body.Position = UDim2.new(0, 0, 0, 50)
@@ -1899,7 +1726,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local Sidebar = Instance.new("ScrollingFrame")
 	Sidebar.Name = "Sidebar"
 	Sidebar.Size = UDim2.new(0, 130, 1, 0)
-	Sidebar.BackgroundTransparency = 1
+	Sidebar.BackgroundColor3 = T.SidebarBg
+	Sidebar.BackgroundTransparency = 0
 	Sidebar.ScrollBarThickness = 2
 	Sidebar.BorderSizePixel = 0
 	Sidebar.Parent = Body
@@ -1919,36 +1747,65 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		Sidebar.CanvasSize = UDim2.new(0, 0, 0, SidebarLayout.AbsoluteContentSize.Y + 10)
 	end)
 
-    local ContentContainer = Instance.new("Frame")
+	local ContentContainer = Instance.new("Frame")
 	ContentContainer.Name = "ContentContainer"
 	ContentContainer.Size = UDim2.new(1, -130, 1, 0)
 	ContentContainer.Position = UDim2.new(0, 130, 0, 0)
 	ContentContainer.BackgroundTransparency = 1
 	ContentContainer.Parent = Body
 
-    local WindowHandling = {}
+	local WindowHandling = {}
 	local TabsCollection  = {}
+
+	-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+	--  Settings API  (call after CreateWindow, before CreateTab)
+	-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+	local SettingsHandling = {}
+
+	function SettingsHandling:SetTitle(NewTitle)
+		TitleText.Text = NewTitle
+	end
+
+	function SettingsHandling:SetSubtitle(NewSubtitle)
+		SubtitleText.Text = NewSubtitle
+	end
+
+	function SettingsHandling:SetTitleIcon(IconName)
+		TitleIcon.Image = IconsDict[IconName] or IconsDict["book-open-text"]
+	end
+
+	function SettingsHandling:SetTheme(NewThemeName)
+		local NT = ThemesDict[NewThemeName] or ThemesDict["Default"]
+		MainFrame.BackgroundColor3  = NT.WindowBg
+		TitleBar.BackgroundColor3   = NT.TitleBarBg
+		Sidebar.BackgroundColor3    = NT.SidebarBg
+		TitleText.TextColor3        = NT.PrimaryText
+		SubtitleText.TextColor3     = NT.SecondaryText
+		TitleIcon.ImageColor3       = NT.PrimaryText
+		CloseBtn.ImageColor3        = NT.PrimaryText
+		MinimizeLine.BackgroundColor3 = NT.PrimaryText
+		for _, tabData in ipairs(TabsCollection) do
+			local isActive = tabData.Wrapper.Visible
+			tabData.Button.BackgroundColor3 = isActive and NT.TabActive or NT.TabInactive
+		end
+	end
+
+	WindowHandling.Settings = SettingsHandling
 
 	function WindowHandling:CreateTab(TabConfig)
 		local TabName       = TabConfig.Name or "Tab"
 		local TabIconString = TabConfig.Icon or "book"
 
-		-- Search bar options:
-		--   SearchBar          = true/false  (default true)
-		--   SearchPlaceholder  = string
-		--   SearchBarColor     = Color3
-		--   SearchTextColor    = Color3
-		--   SearchIconColor    = Color3
 		local ShowSearch        = TabConfig.SearchBar         ~= false
 		local SearchPlaceholder = TabConfig.SearchPlaceholder or "Search From This Page..."
-		local SearchBarColor    = TabConfig.SearchBarColor    or Color3.fromRGB(20, 20, 20)
-		local SearchTextColor   = TabConfig.SearchTextColor   or Color3.fromRGB(255, 255, 255)
-		local SearchIconColor   = TabConfig.SearchIconColor   or Color3.fromRGB(255, 255, 255)
+		local SearchBarColor    = TabConfig.SearchBarColor    or T.SearchBarBg
+		local SearchTextColor   = TabConfig.SearchTextColor   or T.PrimaryText
+		local SearchIconColor   = TabConfig.SearchIconColor   or T.SecondaryText
 
 		local TabButton = Instance.new("TextButton")
 		TabButton.Name = TabName .. "Tab"
 		TabButton.Size = UDim2.new(1, 0, 0, 30)
-		TabButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+		TabButton.BackgroundColor3 = T.TabInactive
 		TabButton.BorderSizePixel  = 0
 		TabButton.Text = ""
 		TabButton.Parent = Sidebar
@@ -1962,7 +1819,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		TabIcon.Position = UDim2.new(0, 8, 0.5, -8)
 		TabIcon.BackgroundTransparency = 1
 		TabIcon.Image = IconsDict[TabIconString] or IconsDict["book"]
-		TabIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
+		TabIcon.ImageColor3 = T.PrimaryText
 		TabIcon.Parent = TabButton
 
 		local TabText = Instance.new("TextLabel")
@@ -1970,10 +1827,11 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		TabText.Position = UDim2.new(0, 30, 0, 0)
 		TabText.BackgroundTransparency = 1
 		TabText.Text = TabName
-		TabText.TextColor3 = Color3.fromRGB(255, 255, 255)
-		TabText.TextSize = 13
+		TabText.TextColor3 = T.PrimaryText
+		TabText.TextSize = 12
 		TabText.Font = Enum.Font.GothamMedium
 		TabText.TextXAlignment = Enum.TextXAlignment.Left
+		TabText.TextWrapped = true
 		TabText.Parent = TabButton
 
 		local TabWrapper = Instance.new("Frame")
@@ -1983,7 +1841,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		TabWrapper.Visible = false
 		TabWrapper.Parent = ContentContainer
 
-		-- â”€â”€ Search Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		local SearchBarHeight = ShowSearch and 34 or 0
 		local ElementRegistry = {}
 
@@ -2016,11 +1873,12 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			SearchBox.PlaceholderText = SearchPlaceholder
 			SearchBox.Text = ""
 			SearchBox.TextColor3 = SearchTextColor
-			SearchBox.PlaceholderColor3 = Color3.fromRGB(110, 110, 110)
+			SearchBox.PlaceholderColor3 = T.SecondaryText
 			SearchBox.TextSize = 12
 			SearchBox.Font = Enum.Font.Gotham
 			SearchBox.TextXAlignment = Enum.TextXAlignment.Left
 			SearchBox.ClearTextOnFocus = false
+			SearchBox.TextWrapped = true
 			SearchBox.Parent = SearchBarFrame
 
 			local ClearBtn = Instance.new("ImageButton")
@@ -2028,7 +1886,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			ClearBtn.Position = UDim2.new(1, -20, 0.5, -7)
 			ClearBtn.BackgroundTransparency = 1
 			ClearBtn.Image = "rbxassetid://130629964514885"
-			ClearBtn.ImageColor3 = Color3.fromRGB(255, 255, 255)
+			ClearBtn.ImageColor3 = T.PrimaryText
 			ClearBtn.Visible = false
 			ClearBtn.Parent = SearchBarFrame
 
@@ -2078,18 +1936,18 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		TabButton.MouseButton1Click:Connect(function()
 			for _, t in ipairs(TabsCollection) do
 				t.Wrapper.Visible = false
-				t.Button.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+				t.Button.BackgroundColor3 = T.TabInactive
 			end
 			TabWrapper.Visible = true
-			TabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+			TabButton.BackgroundColor3 = T.TabActive
 		end)
 
 		if #TabsCollection == 1 then
 			TabWrapper.Visible = true
-			TabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+			TabButton.BackgroundColor3 = T.TabActive
 		end
 
-	   local TabHandling = {}
+		local TabHandling = {}
 
 		local function Reg(frame, label)
 			if ShowSearch then
@@ -2097,52 +1955,68 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			end
 		end
 
+		-- â”€â”€ Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateSection(SectionText)
 			local SectionLabel = Instance.new("TextLabel")
-			SectionLabel.Size = UDim2.new(1, 0, 0, 20)
+			SectionLabel.Size = UDim2.new(1, 0, 0, 0)
+			SectionLabel.AutomaticSize = Enum.AutomaticSize.Y
 			SectionLabel.BackgroundTransparency = 1
 			SectionLabel.Text = SectionText
-			SectionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+			SectionLabel.TextColor3 = T.PrimaryText
 			SectionLabel.TextSize = 14
 			SectionLabel.Font = Enum.Font.GothamBold
 			SectionLabel.TextXAlignment = Enum.TextXAlignment.Left
+			SectionLabel.TextWrapped = true
 			SectionLabel.Parent = TabContent
 			Reg(SectionLabel, SectionText)
 		end
 
-		-- â”€â”€ Label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+		-- â”€â”€ Label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateLabel(LabelText)
 			local TxtLabel = Instance.new("TextLabel")
-			TxtLabel.Size = UDim2.new(1, 0, 0, 25)
+			TxtLabel.Size = UDim2.new(1, 0, 0, 0)
+			TxtLabel.AutomaticSize = Enum.AutomaticSize.Y
 			TxtLabel.BackgroundTransparency = 1
 			TxtLabel.Text = LabelText
-			TxtLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+			TxtLabel.TextColor3 = T.SecondaryText
 			TxtLabel.TextSize = 13
 			TxtLabel.Font = Enum.Font.Gotham
 			TxtLabel.TextXAlignment = Enum.TextXAlignment.Left
+			TxtLabel.TextWrapped = true
 			TxtLabel.Parent = TabContent
 			Reg(TxtLabel, LabelText)
+			return TxtLabel
 		end
 
+		-- â”€â”€ Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateToggle(ToggleText, Callback)
 			local ToggleFrame = Instance.new("Frame")
-			ToggleFrame.Size = UDim2.new(1, 0, 0, 35)
-			ToggleFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+			ToggleFrame.Size = UDim2.new(1, 0, 0, 0)
+			ToggleFrame.AutomaticSize = Enum.AutomaticSize.Y
+			ToggleFrame.BackgroundColor3 = T.ElementBg
 			ToggleFrame.Parent = TabContent
 
 			local TCorner = Instance.new("UICorner")
 			TCorner.CornerRadius = UDim.new(0, 6)
 			TCorner.Parent = ToggleFrame
 
+			local InnerPad = Instance.new("UIPadding")
+			InnerPad.PaddingLeft   = UDim.new(0, 10)
+			InnerPad.PaddingRight  = UDim.new(0, 55)
+			InnerPad.PaddingTop    = UDim.new(0, 9)
+			InnerPad.PaddingBottom = UDim.new(0, 9)
+			InnerPad.Parent = ToggleFrame
+
 			local TText = Instance.new("TextLabel")
-			TText.Size = UDim2.new(1, -60, 1, 0)
-			TText.Position = UDim2.new(0, 10, 0, 0)
+			TText.Size = UDim2.new(1, 0, 0, 0)
+			TText.AutomaticSize = Enum.AutomaticSize.Y
 			TText.BackgroundTransparency = 1
 			TText.Text = ToggleText
-			TText.TextColor3 = Color3.fromRGB(255, 255, 255)
+			TText.TextColor3 = T.PrimaryText
 			TText.TextSize = 13
 			TText.Font = Enum.Font.GothamMedium
 			TText.TextXAlignment = Enum.TextXAlignment.Left
+			TText.TextWrapped = true
 			TText.Parent = ToggleFrame
 
 			local ToggleOuter = Instance.new("Frame")
@@ -2178,18 +2052,21 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 					Position = Toggled and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)
 				}):Play()
 				TweenService:Create(ToggleOuter, TweenInfo.new(0.2), {
-					BackgroundColor3 = Toggled and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(50, 50, 50)
+					BackgroundColor3 = Toggled and T.AccentColor or Color3.fromRGB(50, 50, 50)
 				}):Play()
 				Callback(Toggled)
 			end)
+
 			Reg(ToggleFrame, ToggleText)
 		end
 
+		-- â”€â”€ Button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateButton(ButtonText, Callback)
 			local ButtonFrame = Instance.new("TextButton")
 			ButtonFrame.Name = "Button_" .. ButtonText
-			ButtonFrame.Size = UDim2.new(1, 0, 0, 35)
-			ButtonFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+			ButtonFrame.Size = UDim2.new(1, 0, 0, 0)
+			ButtonFrame.AutomaticSize = Enum.AutomaticSize.Y
+			ButtonFrame.BackgroundColor3 = T.ElementBg
 			ButtonFrame.AutoButtonColor = false
 			ButtonFrame.Text = ""
 			ButtonFrame.Parent = TabContent
@@ -2198,31 +2075,42 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			BCorner.CornerRadius = UDim.new(0, 6)
 			BCorner.Parent = ButtonFrame
 
+			local BPad = Instance.new("UIPadding")
+			BPad.PaddingTop    = UDim.new(0, 9)
+			BPad.PaddingBottom = UDim.new(0, 9)
+			BPad.PaddingLeft   = UDim.new(0, 0)
+			BPad.PaddingRight  = UDim.new(0, 0)
+			BPad.Parent = ButtonFrame
+
 			local BLabel = Instance.new("TextLabel")
-			BLabel.Size = UDim2.new(1, 0, 1, 0)
+			BLabel.Size = UDim2.new(1, 0, 0, 0)
+			BLabel.AutomaticSize = Enum.AutomaticSize.Y
 			BLabel.BackgroundTransparency = 1
 			BLabel.Text = ButtonText
-			BLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+			BLabel.TextColor3 = T.PrimaryText
 			BLabel.TextSize = 13
 			BLabel.Font = Enum.Font.GothamMedium
+			BLabel.TextWrapped = true
 			BLabel.Parent = ButtonFrame
 
 			ButtonFrame.MouseEnter:Connect(function()
-				TweenService:Create(ButtonFrame, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(38, 38, 38)}):Play()
+				TweenService:Create(ButtonFrame, TweenInfo.new(0.15), {BackgroundColor3 = T.TabActive}):Play()
 			end)
 			ButtonFrame.MouseLeave:Connect(function()
-				TweenService:Create(ButtonFrame, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(25, 25, 25)}):Play()
+				TweenService:Create(ButtonFrame, TweenInfo.new(0.15), {BackgroundColor3 = T.ElementBg}):Play()
 			end)
 			ButtonFrame.MouseButton1Down:Connect(function()
-				TweenService:Create(ButtonFrame, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(15, 15, 15)}):Play()
+				TweenService:Create(ButtonFrame, TweenInfo.new(0.1), {BackgroundColor3 = T.SidebarBg}):Play()
 			end)
 			ButtonFrame.MouseButton1Up:Connect(function()
-				TweenService:Create(ButtonFrame, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(38, 38, 38)}):Play()
+				TweenService:Create(ButtonFrame, TweenInfo.new(0.1), {BackgroundColor3 = T.TabActive}):Play()
 			end)
 			ButtonFrame.MouseButton1Click:Connect(function() Callback() end)
+
 			Reg(ButtonFrame, ButtonText)
 		end
 
+		-- â”€â”€ Textbox â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateTextbox(TextboxConfig, Callback)
 			local PlaceholderStr = TextboxConfig.Placeholder or "Type here..."
 			local DefaultText    = TextboxConfig.Text        or ""
@@ -2234,13 +2122,14 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 			local TBox = Instance.new("TextBox")
 			TBox.Size = UDim2.new(1, 0, 1, 0)
-			TBox.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
+			TBox.BackgroundColor3 = T.ElementBg
 			TBox.PlaceholderText = PlaceholderStr
 			TBox.Text = DefaultText
-			TBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-			TBox.PlaceholderColor3 = Color3.fromRGB(200, 200, 200)
+			TBox.TextColor3 = T.PrimaryText
+			TBox.PlaceholderColor3 = T.SecondaryText
 			TBox.TextSize = 13
 			TBox.Font = Enum.Font.GothamMedium
+			TBox.TextWrapped = true
 			TBox.Parent = TextboxFrame
 
 			local BoxCorner = Instance.new("UICorner")
@@ -2251,44 +2140,60 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(TextboxFrame, PlaceholderStr)
 		end
 
+		-- â”€â”€ Slider â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateSlider(SliderText, MinValue, MaxValue, Callback)
 			local SliderFrame = Instance.new("Frame")
-			SliderFrame.Size = UDim2.new(1, 0, 0, 50)
-			SliderFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+			SliderFrame.Size = UDim2.new(1, 0, 0, 0)
+			SliderFrame.AutomaticSize = Enum.AutomaticSize.Y
+			SliderFrame.BackgroundColor3 = T.ElementBg
 			SliderFrame.Parent = TabContent
 
 			local SCorner = Instance.new("UICorner")
 			SCorner.CornerRadius = UDim.new(0, 6)
 			SCorner.Parent = SliderFrame
 
+			local SPad = Instance.new("UIPadding")
+			SPad.PaddingLeft   = UDim.new(0, 10)
+			SPad.PaddingRight  = UDim.new(0, 10)
+			SPad.PaddingTop    = UDim.new(0, 6)
+			SPad.PaddingBottom = UDim.new(0, 14)
+			SPad.Parent = SliderFrame
+
+			local SInner = Instance.new("Frame")
+			SInner.Size = UDim2.new(1, 0, 0, 0)
+			SInner.AutomaticSize = Enum.AutomaticSize.Y
+			SInner.BackgroundTransparency = 1
+			SInner.Parent = SliderFrame
+
 			local SText = Instance.new("TextLabel")
-			SText.Size = UDim2.new(1, -20, 0, 20)
-			SText.Position = UDim2.new(0, 10, 0, 5)
+			SText.Size = UDim2.new(1, -60, 0, 0)
+			SText.AutomaticSize = Enum.AutomaticSize.Y
 			SText.BackgroundTransparency = 1
 			SText.Text = SliderText
-			SText.TextColor3 = Color3.fromRGB(255, 255, 255)
+			SText.TextColor3 = T.PrimaryText
 			SText.TextSize = 13
 			SText.Font = Enum.Font.GothamMedium
 			SText.TextXAlignment = Enum.TextXAlignment.Left
-			SText.Parent = SliderFrame
+			SText.TextWrapped = true
+			SText.Parent = SInner
 
 			local SValueText = Instance.new("TextLabel")
-			SValueText.Size = UDim2.new(0, 50, 0, 20)
-			SValueText.Position = UDim2.new(1, -60, 0, 5)
+			SValueText.Size = UDim2.new(0, 55, 0, 18)
+			SValueText.Position = UDim2.new(1, -55, 0, 0)
 			SValueText.BackgroundTransparency = 1
 			SValueText.Text = tostring(MinValue)
-			SValueText.TextColor3 = Color3.fromRGB(255, 255, 255)
+			SValueText.TextColor3 = T.AccentColor
 			SValueText.TextSize = 13
 			SValueText.Font = Enum.Font.GothamBold
 			SValueText.TextXAlignment = Enum.TextXAlignment.Right
-			SValueText.Parent = SliderFrame
+			SValueText.Parent = SInner
 
 			local SliderBg = Instance.new("Frame")
-			SliderBg.Size = UDim2.new(1, -20, 0, 4)
-			SliderBg.Position = UDim2.new(0, 10, 0, 37)
+			SliderBg.Size = UDim2.new(1, 0, 0, 4)
+			SliderBg.Position = UDim2.new(0, 0, 1, 6)
 			SliderBg.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 			SliderBg.ClipsDescendants = false
-			SliderBg.Parent = SliderFrame
+			SliderBg.Parent = SInner
 
 			local BgCorner = Instance.new("UICorner")
 			BgCorner.CornerRadius = UDim.new(1, 0)
@@ -2296,7 +2201,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 			local SliderFill = Instance.new("Frame")
 			SliderFill.Size = UDim2.new(0, 0, 1, 0)
-			SliderFill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+			SliderFill.BackgroundColor3 = T.AccentColor
 			SliderFill.ZIndex = 2
 			SliderFill.Parent = SliderBg
 
@@ -2354,18 +2259,28 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 					UpdateSlider(UserInputService:GetMouseLocation().X)
 				end
 			end)
+
 			Reg(SliderFrame, SliderText)
 		end
 
+		-- â”€â”€ Checkbox â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateCheckbox(CheckboxText, Callback)
 			local CheckboxFrame = Instance.new("Frame")
-			CheckboxFrame.Size = UDim2.new(1, 0, 0, 35)
-			CheckboxFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+			CheckboxFrame.Size = UDim2.new(1, 0, 0, 0)
+			CheckboxFrame.AutomaticSize = Enum.AutomaticSize.Y
+			CheckboxFrame.BackgroundColor3 = T.ElementBg
 			CheckboxFrame.Parent = TabContent
 
 			local CCorner = Instance.new("UICorner")
 			CCorner.CornerRadius = UDim.new(0, 6)
 			CCorner.Parent = CheckboxFrame
+
+			local CPad = Instance.new("UIPadding")
+			CPad.PaddingTop    = UDim.new(0, 9)
+			CPad.PaddingBottom = UDim.new(0, 9)
+			CPad.PaddingLeft   = UDim.new(0, 35)
+			CPad.PaddingRight  = UDim.new(0, 10)
+			CPad.Parent = CheckboxFrame
 
 			local BoxVisual = Instance.new("Frame")
 			BoxVisual.Size = UDim2.new(0, 16, 0, 16)
@@ -2379,7 +2294,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 			local BoxFill = Instance.new("Frame")
 			BoxFill.Size = UDim2.new(1, 0, 1, 0)
-			BoxFill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+			BoxFill.BackgroundColor3 = T.AccentColor
 			BoxFill.Visible = false
 			BoxFill.Parent = BoxVisual
 
@@ -2399,14 +2314,15 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			CheckIcon.Parent = BoxVisual
 
 			local CText = Instance.new("TextLabel")
-			CText.Size = UDim2.new(1, -40, 1, 0)
-			CText.Position = UDim2.new(0, 35, 0, 0)
+			CText.Size = UDim2.new(1, 0, 0, 0)
+			CText.AutomaticSize = Enum.AutomaticSize.Y
 			CText.BackgroundTransparency = 1
 			CText.Text = CheckboxText
-			CText.TextColor3 = Color3.fromRGB(255, 255, 255)
+			CText.TextColor3 = T.PrimaryText
 			CText.TextSize = 13
 			CText.Font = Enum.Font.GothamMedium
 			CText.TextXAlignment = Enum.TextXAlignment.Left
+			CText.TextWrapped = true
 			CText.Parent = CheckboxFrame
 
 			local CheckboxBtn = Instance.new("TextButton")
@@ -2421,11 +2337,237 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				BoxFill.Visible   = Checked
 				CheckIcon.Visible = Checked
 				TweenService:Create(BoxVisual, TweenInfo.new(0.15), {
-					BackgroundColor3 = Checked and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(40, 40, 40)
+					BackgroundColor3 = Checked and T.AccentColor or Color3.fromRGB(40, 40, 40)
 				}):Play()
 				Callback(Checked)
 			end)
 			Reg(CheckboxFrame, CheckboxText)
+		end
+
+		-- â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+		-- â•‘               DROPDOWN  (NEW)                        â•‘
+		-- â•‘  Options: list of strings                            â•‘
+		-- â•‘  ShowSearch: bool (default true)                     â•‘
+		-- â•‘  Placeholder: string                                 â•‘
+		-- â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+		function TabHandling:CreateDropdown(DropdownConfig, Callback)
+			local DropLabel       = DropdownConfig.Label       or "Dropdown"
+			local DropOptions     = DropdownConfig.Options     or {}
+			local DropShowSearch  = DropdownConfig.ShowSearch  ~= false
+			local DropPlaceholder = DropdownConfig.Placeholder or "Select an option..."
+			local DropDefault     = DropdownConfig.Default     or nil
+
+			local IsOpen      = false
+			local Selected    = DropDefault
+			local ItemHeight  = 28
+			local MaxVisible  = 5
+
+			local DropFrame = Instance.new("Frame")
+			DropFrame.Name = "Dropdown_" .. DropLabel
+			DropFrame.Size = UDim2.new(1, 0, 0, 35)
+			DropFrame.BackgroundColor3 = T.ElementBg
+			DropFrame.ClipsDescendants = false
+			DropFrame.Parent = TabContent
+
+			local DCorner = Instance.new("UICorner")
+			DCorner.CornerRadius = UDim.new(0, 6)
+			DCorner.Parent = DropFrame
+
+			local DLabelTxt = Instance.new("TextLabel")
+			DLabelTxt.Size = UDim2.new(1, -40, 0, 35)
+			DLabelTxt.Position = UDim2.new(0, 10, 0, 0)
+			DLabelTxt.BackgroundTransparency = 1
+			DLabelTxt.Text = DropLabel
+			DLabelTxt.TextColor3 = T.PrimaryText
+			DLabelTxt.TextSize = 13
+			DLabelTxt.Font = Enum.Font.GothamMedium
+			DLabelTxt.TextXAlignment = Enum.TextXAlignment.Left
+			DLabelTxt.TextWrapped = true
+			DLabelTxt.Parent = DropFrame
+
+			local DSelectedTxt = Instance.new("TextLabel")
+			DSelectedTxt.Size = UDim2.new(0.5, -25, 0, 35)
+			DSelectedTxt.Position = UDim2.new(0.5, 0, 0, 0)
+			DSelectedTxt.BackgroundTransparency = 1
+			DSelectedTxt.Text = Selected or DropPlaceholder
+			DSelectedTxt.TextColor3 = Selected and T.PrimaryText or T.SecondaryText
+			DSelectedTxt.TextSize = 12
+			DSelectedTxt.Font = Enum.Font.Gotham
+			DSelectedTxt.TextXAlignment = Enum.TextXAlignment.Right
+			DSelectedTxt.TextWrapped = true
+			DSelectedTxt.Parent = DropFrame
+
+			local DChevron = Instance.new("ImageLabel")
+			DChevron.Size = UDim2.new(0, 14, 0, 14)
+			DChevron.Position = UDim2.new(1, -24, 0.5, -7)
+			DChevron.BackgroundTransparency = 1
+			DChevron.Image = IconsDict["chevron-down"]
+			DChevron.ImageColor3 = T.SecondaryText
+			DChevron.Parent = DropFrame
+
+			local DBtn = Instance.new("TextButton")
+			DBtn.Size = UDim2.new(1, 0, 0, 35)
+			DBtn.BackgroundTransparency = 1
+			DBtn.Text = ""
+			DBtn.Parent = DropFrame
+
+			-- â”€â”€ Popup panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+			local SearchH    = DropShowSearch and 28 or 0
+			local MaxH       = SearchH + math.min(#DropOptions, MaxVisible) * ItemHeight + 6
+			local DropPopup  = Instance.new("Frame")
+			DropPopup.Name   = "DropPopup"
+			DropPopup.Size   = UDim2.new(1, 0, 0, MaxH)
+			DropPopup.Position = UDim2.new(0, 0, 0, 38)
+			DropPopup.BackgroundColor3 = T.ElementBg
+			DropPopup.ClipsDescendants = true
+			DropPopup.Visible = false
+			DropPopup.ZIndex  = 20
+			DropPopup.Parent  = DropFrame
+
+			local DPopCorner = Instance.new("UICorner")
+			DPopCorner.CornerRadius = UDim.new(0, 6)
+			DPopCorner.Parent = DropPopup
+
+			local FilterQuery = ""
+
+			-- â”€â”€ Dropdown search bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+			local DropSearchBox
+			if DropShowSearch then
+				local DSearchFrame = Instance.new("Frame")
+				DSearchFrame.Size = UDim2.new(1, -10, 0, 22)
+				DSearchFrame.Position = UDim2.new(0, 5, 0, 3)
+				DSearchFrame.BackgroundColor3 = T.SearchBarBg
+				DSearchFrame.BorderSizePixel = 0
+				DSearchFrame.ZIndex = 21
+				DSearchFrame.Parent = DropPopup
+
+				local DSFCorner = Instance.new("UICorner")
+				DSFCorner.CornerRadius = UDim.new(0, 5)
+				DSFCorner.Parent = DSearchFrame
+
+				local DSearchIcon = Instance.new("ImageLabel")
+				DSearchIcon.Size = UDim2.new(0, 12, 0, 12)
+				DSearchIcon.Position = UDim2.new(0, 5, 0.5, -6)
+				DSearchIcon.BackgroundTransparency = 1
+				DSearchIcon.Image = "rbxassetid://118685771787843"
+				DSearchIcon.ImageColor3 = T.SecondaryText
+				DSearchIcon.ZIndex = 22
+				DSearchIcon.Parent = DSearchFrame
+
+				DropSearchBox = Instance.new("TextBox")
+				DropSearchBox.Size = UDim2.new(1, -22, 1, 0)
+				DropSearchBox.Position = UDim2.new(0, 20, 0, 0)
+				DropSearchBox.BackgroundTransparency = 1
+				DropSearchBox.PlaceholderText = "Search content..."
+				DropSearchBox.Text = ""
+				DropSearchBox.TextColor3 = T.PrimaryText
+				DropSearchBox.PlaceholderColor3 = T.SecondaryText
+				DropSearchBox.TextSize = 11
+				DropSearchBox.Font = Enum.Font.Gotham
+				DropSearchBox.TextXAlignment = Enum.TextXAlignment.Left
+				DropSearchBox.ClearTextOnFocus = false
+				DropSearchBox.ZIndex = 22
+				DropSearchBox.Parent = DSearchFrame
+			end
+
+			-- â”€â”€ Scrollable list â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+			local ListFrame = Instance.new("ScrollingFrame")
+			ListFrame.Size = UDim2.new(1, 0, 1, -SearchH)
+			ListFrame.Position = UDim2.new(0, 0, 0, SearchH)
+			ListFrame.BackgroundTransparency = 1
+			ListFrame.ScrollBarThickness = 2
+			ListFrame.BorderSizePixel = 0
+			ListFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+			ListFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+			ListFrame.ZIndex = 21
+			ListFrame.Parent = DropPopup
+
+			local ListLayout = Instance.new("UIListLayout")
+			ListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+			ListLayout.Parent = ListFrame
+
+			local ListPad = Instance.new("UIPadding")
+			ListPad.PaddingLeft   = UDim.new(0, 4)
+			ListPad.PaddingRight  = UDim.new(0, 4)
+			ListPad.PaddingTop    = UDim.new(0, 3)
+			ListPad.PaddingBottom = UDim.new(0, 3)
+			ListPad.Parent = ListFrame
+
+			local ItemButtons = {}
+
+			local function BuildItems()
+				for _, child in ipairs(ListFrame:GetChildren()) do
+					if child:IsA("TextButton") then child:Destroy() end
+				end
+				ItemButtons = {}
+
+				for _, optionText in ipairs(DropOptions) do
+					local lq = FilterQuery:lower()
+					if lq ~= "" and not optionText:lower():find(lq, 1, true) then
+						continue
+					end
+
+					local ItemBtn = Instance.new("TextButton")
+					ItemBtn.Size = UDim2.new(1, 0, 0, ItemHeight)
+					ItemBtn.BackgroundColor3 = T.TabInactive
+					ItemBtn.BorderSizePixel = 0
+					ItemBtn.Text = ""
+					ItemBtn.ZIndex = 22
+					ItemBtn.Parent = ListFrame
+
+					local IBCorner = Instance.new("UICorner")
+					IBCorner.CornerRadius = UDim.new(0, 5)
+					IBCorner.Parent = ItemBtn
+
+					local IBLabel = Instance.new("TextLabel")
+					IBLabel.Size = UDim2.new(1, -10, 1, 0)
+					IBLabel.Position = UDim2.new(0, 8, 0, 0)
+					IBLabel.BackgroundTransparency = 1
+					IBLabel.Text = optionText
+					IBLabel.TextColor3 = optionText == Selected and T.AccentColor or T.PrimaryText
+					IBLabel.TextSize = 12
+					IBLabel.Font = Enum.Font.Gotham
+					IBLabel.TextXAlignment = Enum.TextXAlignment.Left
+					IBLabel.TextWrapped = true
+					IBLabel.ZIndex = 23
+					IBLabel.Parent = ItemBtn
+
+					ItemBtn.MouseButton1Click:Connect(function()
+						Selected = optionText
+						DSelectedTxt.Text = optionText
+						DSelectedTxt.TextColor3 = T.PrimaryText
+						IsOpen = false
+						DropPopup.Visible = false
+						TweenService:Create(DChevron, TweenInfo.new(0.15), {Rotation = 0}):Play()
+						BuildItems()
+						Callback(optionText)
+					end)
+
+					table.insert(ItemButtons, {Btn = ItemBtn, Label = IBLabel})
+				end
+			end
+
+			BuildItems()
+
+			if DropShowSearch and DropSearchBox then
+				DropSearchBox:GetPropertyChangedSignal("Text"):Connect(function()
+					FilterQuery = DropSearchBox.Text
+					BuildItems()
+				end)
+			end
+
+			DBtn.MouseButton1Click:Connect(function()
+				IsOpen = not IsOpen
+				DropPopup.Visible = IsOpen
+				TweenService:Create(DChevron, TweenInfo.new(0.15), {Rotation = IsOpen and 180 or 0}):Play()
+				if IsOpen and DropShowSearch and DropSearchBox then
+					DropSearchBox.Text = ""
+					FilterQuery = ""
+					BuildItems()
+				end
+			end)
+
+			Reg(DropFrame, DropLabel)
 		end
 
 		return TabHandling
