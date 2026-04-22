@@ -1979,25 +1979,18 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 		function TabHandling:CreateToggle(ToggleText, Callback)
 			local ToggleFrame = Instance.new("Frame")
-			ToggleFrame.Size = UDim2.new(1, 0, 0, 0)
-			ToggleFrame.AutomaticSize = Enum.AutomaticSize.Y
+			ToggleFrame.Size = UDim2.new(1, 0, 0, 38)
 			ToggleFrame.BackgroundColor3 = T.ElementBg
+			ToggleFrame.ClipsDescendants = false
 			ToggleFrame.Parent = TabContent
 
 			local TCorner = Instance.new("UICorner")
 			TCorner.CornerRadius = UDim.new(0, 6)
 			TCorner.Parent = ToggleFrame
 
-			local InnerPad = Instance.new("UIPadding")
-			InnerPad.PaddingLeft   = UDim.new(0, 10)
-			InnerPad.PaddingRight  = UDim.new(0, 55)
-			InnerPad.PaddingTop    = UDim.new(0, 9)
-			InnerPad.PaddingBottom = UDim.new(0, 9)
-			InnerPad.Parent = ToggleFrame
-
 			local TText = Instance.new("TextLabel")
-			TText.Size = UDim2.new(1, 0, 0, 0)
-			TText.AutomaticSize = Enum.AutomaticSize.Y
+			TText.Size = UDim2.new(1, -58, 1, 0)
+			TText.Position = UDim2.new(0, 12, 0, 0)
 			TText.BackgroundTransparency = 1
 			TText.Text = ToggleText
 			TText.TextColor3 = T.PrimaryText
@@ -2009,7 +2002,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 			local ToggleOuter = Instance.new("Frame")
 			ToggleOuter.Size = UDim2.new(0, 40, 0, 20)
-			ToggleOuter.Position = UDim2.new(1, -50, 0.5, -10)
+			ToggleOuter.Position = UDim2.new(1, -48, 0.5, -10)
 			ToggleOuter.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 			ToggleOuter.Parent = ToggleFrame
 
@@ -2250,25 +2243,18 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 		function TabHandling:CreateCheckbox(CheckboxText, Callback)
 			local CheckboxFrame = Instance.new("Frame")
-			CheckboxFrame.Size = UDim2.new(1, 0, 0, 0)
-			CheckboxFrame.AutomaticSize = Enum.AutomaticSize.Y
+			CheckboxFrame.Size = UDim2.new(1, 0, 0, 38)
 			CheckboxFrame.BackgroundColor3 = T.ElementBg
+			CheckboxFrame.ClipsDescendants = false
 			CheckboxFrame.Parent = TabContent
 
 			local CCorner = Instance.new("UICorner")
 			CCorner.CornerRadius = UDim.new(0, 6)
 			CCorner.Parent = CheckboxFrame
 
-			local CPad = Instance.new("UIPadding")
-			CPad.PaddingTop    = UDim.new(0, 9)
-			CPad.PaddingBottom = UDim.new(0, 9)
-			CPad.PaddingLeft   = UDim.new(0, 35)
-			CPad.PaddingRight  = UDim.new(0, 10)
-			CPad.Parent = CheckboxFrame
-
 			local BoxVisual = Instance.new("Frame")
-			BoxVisual.Size = UDim2.new(0, 16, 0, 16)
-			BoxVisual.Position = UDim2.new(0, 10, 0.5, -8)
+			BoxVisual.Size = UDim2.new(0, 18, 0, 18)
+			BoxVisual.Position = UDim2.new(0, 10, 0.5, -9)
 			BoxVisual.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 			BoxVisual.Parent = CheckboxFrame
 
@@ -2287,7 +2273,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			FillCorner.Parent = BoxFill
 
 			local CheckIcon = Instance.new("ImageLabel")
-			CheckIcon.Size = UDim2.new(0, 12, 0, 12)
+			CheckIcon.Size = UDim2.new(0, 13, 0, 13)
 			CheckIcon.AnchorPoint = Vector2.new(0.5, 0.5)
 			CheckIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
 			CheckIcon.BackgroundTransparency = 1
@@ -2298,8 +2284,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			CheckIcon.Parent = BoxVisual
 
 			local CText = Instance.new("TextLabel")
-			CText.Size = UDim2.new(1, 0, 0, 0)
-			CText.AutomaticSize = Enum.AutomaticSize.Y
+			CText.Size = UDim2.new(1, -36, 1, 0)
+			CText.Position = UDim2.new(0, 34, 0, 0)
 			CText.BackgroundTransparency = 1
 			CText.Text = CheckboxText
 			CText.TextColor3 = T.PrimaryText
