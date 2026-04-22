@@ -1452,12 +1452,6 @@ local IconsDict = {
 	["zoom-out"] = "rbxassetid://108334162607319",
 }
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  THEMES DICTIONARY
---  Each theme: WindowBg, TitleBarBg, SidebarBg, ElementBg,
---              PrimaryText, SecondaryText, AccentColor,
---              TabActiveColor, TabInactiveColor, SearchBarBg
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 local ThemesDict = {
 	["Default"] = {
 		WindowBg       = Color3.fromRGB(8, 8, 8),
@@ -1757,9 +1751,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local WindowHandling = {}
 	local TabsCollection  = {}
 
-	-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-	--  Settings API  (call after CreateWindow, before CreateTab)
-	-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 	local SettingsHandling = {}
 
 	function SettingsHandling:SetTitle(NewTitle)
@@ -1955,7 +1946,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			end
 		end
 
-		-- â”€â”€ Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateSection(SectionText)
 			local SectionLabel = Instance.new("TextLabel")
 			SectionLabel.Size = UDim2.new(1, 0, 0, 0)
@@ -1971,7 +1961,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(SectionLabel, SectionText)
 		end
 
-		-- â”€â”€ Label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateLabel(LabelText)
 			local TxtLabel = Instance.new("TextLabel")
 			TxtLabel.Size = UDim2.new(1, 0, 0, 0)
@@ -1988,7 +1977,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			return TxtLabel
 		end
 
-		-- â”€â”€ Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateToggle(ToggleText, Callback)
 			local ToggleFrame = Instance.new("Frame")
 			ToggleFrame.Size = UDim2.new(1, 0, 0, 0)
@@ -2060,7 +2048,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(ToggleFrame, ToggleText)
 		end
 
-		-- â”€â”€ Button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateButton(ButtonText, Callback)
 			local ButtonFrame = Instance.new("TextButton")
 			ButtonFrame.Name = "Button_" .. ButtonText
@@ -2110,7 +2097,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(ButtonFrame, ButtonText)
 		end
 
-		-- â”€â”€ Textbox â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateTextbox(TextboxConfig, Callback)
 			local PlaceholderStr = TextboxConfig.Placeholder or "Type here..."
 			local DefaultText    = TextboxConfig.Text        or ""
@@ -2140,7 +2126,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(TextboxFrame, PlaceholderStr)
 		end
 
-		-- â”€â”€ Slider â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateSlider(SliderText, MinValue, MaxValue, Callback)
 			local SliderFrame = Instance.new("Frame")
 			SliderFrame.Size = UDim2.new(1, 0, 0, 0)
@@ -2263,7 +2248,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(SliderFrame, SliderText)
 		end
 
-		-- â”€â”€ Checkbox â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 		function TabHandling:CreateCheckbox(CheckboxText, Callback)
 			local CheckboxFrame = Instance.new("Frame")
 			CheckboxFrame.Size = UDim2.new(1, 0, 0, 0)
@@ -2344,12 +2328,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Reg(CheckboxFrame, CheckboxText)
 		end
 
-		-- â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
-		-- â•‘               DROPDOWN  (NEW)                        â•‘
-		-- â•‘  Options: list of strings                            â•‘
-		-- â•‘  ShowSearch: bool (default true)                     â•‘
-		-- â•‘  Placeholder: string                                 â•‘
-		-- â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 		function TabHandling:CreateDropdown(DropdownConfig, Callback)
 			local DropLabel       = DropdownConfig.Label       or "Dropdown"
 			local DropOptions     = DropdownConfig.Options     or {}
@@ -2411,7 +2389,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			DBtn.Text = ""
 			DBtn.Parent = DropFrame
 
-			-- â”€â”€ Popup panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 			local SearchH    = DropShowSearch and 28 or 0
 			local MaxH       = SearchH + math.min(#DropOptions, MaxVisible) * ItemHeight + 6
 			local DropPopup  = Instance.new("Frame")
@@ -2430,7 +2407,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 			local FilterQuery = ""
 
-			-- â”€â”€ Dropdown search bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 			local DropSearchBox
 			if DropShowSearch then
 				local DSearchFrame = Instance.new("Frame")
@@ -2470,7 +2446,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				DropSearchBox.Parent = DSearchFrame
 			end
 
-			-- â”€â”€ Scrollable list â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 			local ListFrame = Instance.new("ScrollingFrame")
 			ListFrame.Size = UDim2.new(1, 0, 1, -SearchH)
 			ListFrame.Position = UDim2.new(0, 0, 0, SearchH)
