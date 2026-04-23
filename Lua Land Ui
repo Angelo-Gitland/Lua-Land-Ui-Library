@@ -1557,6 +1557,13 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local ThemeName       = WindowConfig.Theme      or "Default"
 	local T               = ThemesDict[ThemeName] or ThemesDict["Default"]
 
+	local IntroConfig     = WindowConfig.Intro
+	local ShowIntro       = IntroConfig ~= nil
+
+	local IntroTitle    = ShowIntro and (IntroConfig.Title    or "Lua Land Ui Library") or ""
+	local IntroSubtitle = ShowIntro and (IntroConfig.Subtitle or "Developed By LLH Lua Land") or ""
+	local IntroIcon     = ShowIntro and (IntroConfig.Icon     or "home") or "home"
+
 	local ScreenGui = Instance.new("ScreenGui")
 	ScreenGui.Name = "LuaLandGui"
 	ScreenGui.ResetOnSpawn = false
@@ -1570,7 +1577,129 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	MainFrame.BackgroundColor3 = T.WindowBg
 	MainFrame.BorderSizePixel = 0
 	MainFrame.ClipsDescendants = true
+	MainFrame.Visible = false
 	MainFrame.Parent = ScreenGui
+
+	if ShowIntro then
+		local IntroFrame = Instance.new("Frame")
+		IntroFrame.Name = "IntroFrame"
+		IntroFrame.Size = UDim2.new(0, 320, 0, 120)
+		IntroFrame.Position = UDim2.new(0.5, -160, 0.5, -60)
+		IntroFrame.BackgroundColor3 = T.TitleBarBg
+		IntroFrame.BackgroundTransparency = 1
+		IntroFrame.BorderSizePixel = 0
+		IntroFrame.Parent = ScreenGui
+
+		local IFCorner = Instance.new("UICorner")
+		IFCorner.CornerRadius = UDim.new(0, 12)
+		IFCorner.Parent = IntroFrame
+
+		local IIconFrame = Instance.new("Frame")
+		IIconFrame.Size = UDim2.new(0, 48, 0, 48)
+		IIconFrame.Position = UDim2.new(0.5, -24, 0, 18)
+		IIconFrame.BackgroundTransparency = 1
+		IIconFrame.Parent = IntroFrame
+
+		local IIcon = Instance.new("ImageLabel")
+		IIcon.Size = UDim2.new(1, 0, 1, 0)
+		IIcon.BackgroundTransparency = 1
+		IIcon.Image = IconsDict[IntroIcon] or IconsDict["home"]
+		IIcon.ImageColor3 = T.AccentColor
+		IIcon.ImageTransparency = 1
+		IIcon.Parent = IIconFrame
+
+		local ITitleLbl = Instance.new("TextLabel")
+		ITitleLbl.Size = UDim2.new(1, -20, 0, 0)
+		ITitleLbl.AutomaticSize = Enum.AutomaticSize.Y
+		ITitleLbl.Position = UDim2.new(0, 10, 0, 72)
+		ITitleLbl.BackgroundTransparency = 1
+		ITitleLbl.Text = IntroTitle
+		ITitleLbl.TextColor3 = T.PrimaryText
+		ITitleLbl.TextTransparency = 1
+		ITitleLbl.TextSize = 18
+		ITitleLbl.Font = Enum.Font.GothamBold
+		ITitleLbl.TextXAlignment = Enum.TextXAlignment.Center
+		ITitleLbl.TextWrapped = true
+		ITitleLbl.Parent = IntroFrame
+
+		local ISubLbl = Instance.new("TextLabel")
+		ISubLbl.Size = UDim2.new(1, -20, 0, 0)
+		ISubLbl.AutomaticSize = Enum.AutomaticSize.Y
+		ISubLbl.Position = UDim2.new(0, 10, 0, 96)
+		ISubLbl.BackgroundTransparency = 1
+		ISubLbl.Text = IntroSubtitle
+		ISubLbl.TextColor3 = T.SecondaryText
+		ISubLbl.TextTransparency = 1
+		ISubLbl.TextSize = 12
+		ISubLbl.Font = Enum.Font.Gotham
+		ISubLbl.TextXAlignment = Enum.TextXAlignment.Center
+		ISubLbl.TextWrapped = true
+		ISubLbl.Parent = IntroFrame
+
+		local ILine = Instance.new("Frame")
+		ILine.Size = UDim2.new(0, 0, 0, 2)
+		ILine.Position = UDim2.new(0.5, 0, 1, -10)
+		ILine.AnchorPoint = Vector2.new(0.5, 0)
+		ILine.BackgroundColor3 = T.AccentColor
+		ILine.BorderSizePixel = 0
+		ILine.Parent = IntroFrame
+
+		local ILineCor = Instance.new("UICorner")
+		ILineCor.CornerRadius = UDim.new(1, 0)
+		ILineCor.Parent = ILine
+
+		local tw = TweenInfo.new
+		local fast  = tw(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+		local med   = tw(0.5,  Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+		local slow  = tw(0.8,  Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+		local exit  = tw(0.4,  Enum.EasingStyle.Quart, Enum.EasingDirection.In)
+
+		local function tween(obj, info, props)
+			TweenService:Create(obj, info, props):Play()
+		end
+
+		task.spawn(function()
+			task.wait(0.05)
+
+			tween(IntroFrame, fast, {BackgroundTransparency = 0})
+			tween(IIcon, fast, {ImageTransparency = 0})
+			task.wait(0.3)
+
+			tween(ITitleLbl, med, {TextTransparency = 0})
+			task.wait(0.25)
+
+			tween(ISubLbl, med, {TextTransparency = 0})
+			task.wait(0.2)
+
+			tween(ILine, slow, {Size = UDim2.new(0.7, 0, 0, 2)})
+			task.wait(1.2)
+
+			tween(ILine,     exit, {Size = UDim2.new(0, 0, 0, 2)})
+			tween(ISubLbl,   exit, {TextTransparency = 1})
+			task.wait(0.15)
+			tween(ITitleLbl, exit, {TextTransparency = 1})
+			task.wait(0.1)
+			tween(IIcon,     exit, {ImageTransparency = 1})
+			task.wait(0.15)
+			tween(IntroFrame, exit, {
+				BackgroundTransparency = 1,
+				Position = UDim2.new(0.5, -160, 0.5, -80),
+			})
+			task.wait(0.45)
+
+			IntroFrame:Destroy()
+			MainFrame.Visible = true
+
+			MainFrame.Position = UDim2.new(0.5, -250, 0.6, -175)
+			MainFrame.BackgroundTransparency = 1
+			tween(MainFrame, fast, {
+				Position = UDim2.new(0.5, -250, 0.5, -175),
+				BackgroundTransparency = 0,
+			})
+		end)
+	else
+		MainFrame.Visible = true
+	end
 
 	local UICorner = Instance.new("UICorner")
 	UICorner.CornerRadius = UDim.new(0, 8)
@@ -1962,14 +2091,9 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 
 		function TabHandling:CreateLabel(LabelText)
-			local LabelFrame = Instance.new("Frame")
-			LabelFrame.Size = UDim2.new(1, 0, 0, 30)
-			LabelFrame.BackgroundTransparency = 1
-			LabelFrame.Parent = TabContent
-
 			local TxtLabel = Instance.new("TextLabel")
-			TxtLabel.Size = UDim2.new(1, -30, 1, 0)
-			TxtLabel.Position = UDim2.new(0, 0, 0, 0)
+			TxtLabel.Size = UDim2.new(1, 0, 0, 0)
+			TxtLabel.AutomaticSize = Enum.AutomaticSize.Y
 			TxtLabel.BackgroundTransparency = 1
 			TxtLabel.Text = LabelText
 			TxtLabel.TextColor3 = T.SecondaryText
@@ -1977,17 +2101,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			TxtLabel.Font = Enum.Font.Gotham
 			TxtLabel.TextXAlignment = Enum.TextXAlignment.Left
 			TxtLabel.TextWrapped = true
-			TxtLabel.Parent = LabelFrame
-
-			local LIcon = Instance.new("ImageLabel")
-			LIcon.Size = UDim2.new(0, 16, 0, 16)
-			LIcon.Position = UDim2.new(1, -20, 0.5, -8)
-			LIcon.BackgroundTransparency = 1
-			LIcon.Image = "rbxassetid://9728118892"
-			LIcon.ImageColor3 = T.SecondaryText
-			LIcon.Parent = LabelFrame
-
-			Reg(LabelFrame, LabelText)
+			TxtLabel.Parent = TabContent
+			Reg(TxtLabel, LabelText)
 			return TxtLabel
 		end
 
