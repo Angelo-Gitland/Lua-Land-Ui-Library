@@ -806,6 +806,7 @@ local IconsDict = {
 	["house-plus"] = "rbxassetid://118495165208309",
 	["house-wifi"] = "rbxassetid://126495519725698",
 	["house"] = "rbxassetid://98755624629571",
+	["home"]  = "rbxassetid://98755624629571",
 	["ice-cream-bowl"] = "rbxassetid://124867218454386",
 	["ice-cream-cone"] = "rbxassetid://90751397288639",
 	["id-card"] = "rbxassetid://75354294622640",
@@ -1562,7 +1563,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 	local IntroTitle    = ShowIntro and (IntroConfig.Title    or "Lua Land Ui Library") or ""
 	local IntroSubtitle = ShowIntro and (IntroConfig.Subtitle or "Developed By LLH Lua Land") or ""
-	local IntroIcon     = ShowIntro and (IntroConfig.Icon     or "home") or "home"
+	local IntroIcon     = ShowIntro and (IntroConfig.Icon     or "house") or "house"
 
 	local ScreenGui = Instance.new("ScreenGui")
 	ScreenGui.Name = "LuaLandGui"
@@ -1603,7 +1604,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		local IIcon = Instance.new("ImageLabel")
 		IIcon.Size = UDim2.new(1, 0, 1, 0)
 		IIcon.BackgroundTransparency = 1
-		IIcon.Image = IconsDict[IntroIcon] or IconsDict["home"]
+		IIcon.Image = IconsDict[IntroIcon] or IconsDict["house"] or ""
 		IIcon.ImageColor3 = T.AccentColor
 		IIcon.ImageTransparency = 1
 		IIcon.Parent = IIconFrame
