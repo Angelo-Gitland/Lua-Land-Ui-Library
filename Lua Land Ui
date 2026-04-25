@@ -5,9 +5,9 @@ local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
 
 local IconsDict = {
-	["arrow-down"] = "rbxassetid://92867583610071",
-	["arrow-up"] = "rbxassetid://132318504999733",
-	["large-small"] = "rbxassetid://111491496660216",
+	["a-arrow-down"] = "rbxassetid://92867583610071",
+	["a-arrow-up"] = "rbxassetid://132318504999733",
+	["a-large-small"] = "rbxassetid://111491496660216",
 	["accessibility"] = "rbxassetid://114029945302017",
 	["activity"] = "rbxassetid://94212016861936",
 	["air-vent"] = "rbxassetid://81517226012329",
@@ -1432,7 +1432,7 @@ local IconsDict = {
 	["wine"] = "rbxassetid://115743721332829",
 	["workflow"] = "rbxassetid://99186544029189",
 	["wrench"] = "rbxassetid://112148279212860",
-	["close"] = "rbxassetid://110786993356448",
+	["x"] = "rbxassetid://110786993356448",
 	["youtube"] = "rbxassetid://123663668456341",
 	["zap-off"] = "rbxassetid://81385483183652",
 	["zap"] = "rbxassetid://130551565616516",
@@ -1565,6 +1565,20 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local IntroSubtitle = ShowIntro and (IntroConfig.Subtitle or "Developed By LLH Lua Land") or ""
 	local IntroIcon     = ShowIntro and (IntroConfig.Icon     or "house") or "house"
 
+	local KeyConfig      = WindowConfig.KeySystem
+	local ShowKey        = KeyConfig ~= nil
+	local KeyTitle       = ShowKey and (KeyConfig.Title     or "Lua Land Ui Key System")    or ""
+	local KeySubtitle    = ShowKey and (KeyConfig.Subtitle  or "Developed By LLH Lua Land") or ""
+	local KeyTitleIcon   = ShowKey and (KeyConfig.TitleIcon or "key-round")                 or "key-round"
+	local KeyThemeName   = ShowKey and (KeyConfig.Theme     or "Fire")                      or "Fire"
+	local KeyT           = ThemesDict[KeyThemeName] or ThemesDict["Fire"]
+	local KeyCorrect     = ShowKey and (KeyConfig.Key       or "LuaLand")                   or "LuaLand"
+	local KeyGetLink     = ShowKey and (KeyConfig.GetLink   or "https://linkvertise.com")   or ""
+	local KeyScript      = ShowKey and KeyConfig.Script                                     or nil
+	local KeyNotifTitle  = ShowKey and (KeyConfig.NotifTitle or "Lua Land Ui Library")      or ""
+	local KeyNotifIcon   = ShowKey and (KeyConfig.NotifIcon  or "key")                      or "key"
+	local KeyNotifDesc   = ShowKey and (KeyConfig.NotifDesc  or "Link copied to clipboard!") or ""
+
 	local ScreenGui = Instance.new("ScreenGui")
 	ScreenGui.Name = "LuaLandGui"
 	ScreenGui.ResetOnSpawn = false
@@ -1687,16 +1701,378 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				Position = UDim2.new(0.5, -160, 0.5, -80),
 			})
 			task.wait(0.45)
-
 			IntroFrame:Destroy()
-			MainFrame.Visible = true
 
-			MainFrame.Position = UDim2.new(0.5, -250, 0.6, -175)
-			MainFrame.BackgroundTransparency = 1
-			tween(MainFrame, fast, {
-				Position = UDim2.new(0.5, -250, 0.5, -175),
-				BackgroundTransparency = 0,
-			})
+			local function ShowNotification(ntTitle, ntIcon, ntDesc)
+				local NGui = Instance.new("ScreenGui")
+				NGui.Name = "LLNotif"
+				NGui.ResetOnSpawn = false
+				NGui.Parent = RunService:IsStudio()
+					and game.Players.LocalPlayer:WaitForChild("PlayerGui") or CoreGui
+
+				local NFrame = Instance.new("Frame")
+				NFrame.Size = UDim2.new(0, 260, 0, 64)
+				NFrame.Position = UDim2.new(0, -270, 1, -80)
+				NFrame.BackgroundColor3 = T.TitleBarBg
+				NFrame.BorderSizePixel = 0
+				NFrame.Parent = NGui
+
+				local NFCorner = Instance.new("UICorner")
+				NFCorner.CornerRadius = UDim.new(0, 10)
+				NFCorner.Parent = NFrame
+
+				local NAccentBar = Instance.new("Frame")
+				NAccentBar.Size = UDim2.new(0, 4, 1, 0)
+				NAccentBar.BackgroundColor3 = T.AccentColor
+				NAccentBar.BorderSizePixel = 0
+				NAccentBar.Parent = NFrame
+
+				local NAccentCorner = Instance.new("UICorner")
+				NAccentCorner.CornerRadius = UDim.new(0, 10)
+				NAccentCorner.Parent = NAccentBar
+
+				local NIco = Instance.new("ImageLabel")
+				NIco.Size = UDim2.new(0, 20, 0, 20)
+				NIco.Position = UDim2.new(0, 12, 0, 12)
+				NIco.BackgroundTransparency = 1
+				NIco.Image = IconsDict[ntIcon] or IconsDict["key"] or ""
+				NIco.ImageColor3 = T.AccentColor
+				NIco.Parent = NFrame
+
+				local NTitle = Instance.new("TextLabel")
+				NTitle.Size = UDim2.new(1, -42, 0, 18)
+				NTitle.Position = UDim2.new(0, 38, 0, 10)
+				NTitle.BackgroundTransparency = 1
+				NTitle.Text = ntTitle
+				NTitle.TextColor3 = T.PrimaryText
+				NTitle.TextSize = 13
+				NTitle.Font = Enum.Font.GothamBold
+				NTitle.TextXAlignment = Enum.TextXAlignment.Left
+				NTitle.TextWrapped = true
+				NTitle.Parent = NFrame
+
+				local NDesc = Instance.new("TextLabel")
+				NDesc.Size = UDim2.new(1, -42, 0, 16)
+				NDesc.Position = UDim2.new(0, 38, 0, 30)
+				NDesc.BackgroundTransparency = 1
+				NDesc.Text = ntDesc
+				NDesc.TextColor3 = T.SecondaryText
+				NDesc.TextSize = 11
+				NDesc.Font = Enum.Font.Gotham
+				NDesc.TextXAlignment = Enum.TextXAlignment.Left
+				NDesc.TextWrapped = true
+				NDesc.Parent = NFrame
+
+				local NProgress = Instance.new("Frame")
+				NProgress.Size = UDim2.new(1, 0, 0, 2)
+				NProgress.Position = UDim2.new(0, 0, 1, -2)
+				NProgress.BackgroundColor3 = T.AccentColor
+				NProgress.BorderSizePixel = 0
+				NProgress.Parent = NFrame
+
+				local NProgCorner = Instance.new("UICorner")
+				NProgCorner.CornerRadius = UDim.new(1, 0)
+				NProgCorner.Parent = NProgress
+
+				local nfast = TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+				local nslow = TweenInfo.new(5, Enum.EasingStyle.Linear)
+				local nexit = TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In)
+
+				TweenService:Create(NFrame, nfast, {Position = UDim2.new(0, 12, 1, -80)}):Play()
+				task.wait(0.4)
+				TweenService:Create(NProgress, nslow, {Size = UDim2.new(0, 0, 0, 2)}):Play()
+				task.wait(5)
+				TweenService:Create(NFrame, nexit, {Position = UDim2.new(0, -270, 1, -80)}):Play()
+				task.wait(0.35)
+				NGui:Destroy()
+			end
+
+			if ShowKey then
+				local KeyPassed = false
+
+				local KGui = Instance.new("ScreenGui")
+				KGui.Name = "LLKeySystem"
+				KGui.ResetOnSpawn = false
+				KGui.Parent = RunService:IsStudio()
+					and game.Players.LocalPlayer:WaitForChild("PlayerGui") or CoreGui
+
+				local KFrame = Instance.new("Frame")
+				KFrame.Name = "KeyFrame"
+				KFrame.Size = UDim2.new(0, 340, 0, 200)
+				KFrame.Position = UDim2.new(0.5, -170, 0.5, -100)
+				KFrame.BackgroundColor3 = KeyT.WindowBg
+				KFrame.BorderSizePixel = 0
+				KFrame.ClipsDescendants = false
+				KFrame.Parent = KGui
+
+				local KCorner = Instance.new("UICorner")
+				KCorner.CornerRadius = UDim.new(0, 10)
+				KCorner.Parent = KFrame
+
+				local KTitleBar = Instance.new("Frame")
+				KTitleBar.Name = "KTitleBar"
+				KTitleBar.Size = UDim2.new(1, 0, 0, 48)
+				KTitleBar.BackgroundColor3 = KeyT.TitleBarBg
+				KTitleBar.BorderSizePixel = 0
+				KTitleBar.ZIndex = 5
+				KTitleBar.Parent = KFrame
+
+				local KTBCorner = Instance.new("UICorner")
+				KTBCorner.CornerRadius = UDim.new(0, 10)
+				KTBCorner.Parent = KTitleBar
+
+				local KTBFill = Instance.new("Frame")
+				KTBFill.Size = UDim2.new(1, 0, 0, 10)
+				KTBFill.Position = UDim2.new(0, 0, 1, -10)
+				KTBFill.BackgroundColor3 = KeyT.TitleBarBg
+				KTBFill.BorderSizePixel = 0
+				KTBFill.ZIndex = 5
+				KTBFill.Parent = KTitleBar
+
+				local KTIcon = Instance.new("ImageLabel")
+				KTIcon.Size = UDim2.new(0, 20, 0, 20)
+				KTIcon.Position = UDim2.new(0, 10, 0.5, -10)
+				KTIcon.BackgroundTransparency = 1
+				KTIcon.Image = IconsDict[KeyTitleIcon] or IconsDict["key-round"] or ""
+				KTIcon.ImageColor3 = KeyT.PrimaryText
+				KTIcon.ZIndex = 6
+				KTIcon.Parent = KTitleBar
+
+				local KTTitle = Instance.new("TextLabel")
+				KTTitle.Size = UDim2.new(1, -40, 0, 18)
+				KTTitle.Position = UDim2.new(0, 36, 0, 6)
+				KTTitle.BackgroundTransparency = 1
+				KTTitle.Text = KeyTitle
+				KTTitle.TextColor3 = KeyT.PrimaryText
+				KTTitle.TextSize = 14
+				KTTitle.Font = Enum.Font.GothamBold
+				KTTitle.TextXAlignment = Enum.TextXAlignment.Left
+				KTTitle.TextWrapped = true
+				KTTitle.ZIndex = 6
+				KTTitle.Parent = KTitleBar
+
+				local KTSub = Instance.new("TextLabel")
+				KTSub.Size = UDim2.new(1, -40, 0, 13)
+				KTSub.Position = UDim2.new(0, 36, 0, 26)
+				KTSub.BackgroundTransparency = 1
+				KTSub.Text = KeySubtitle
+				KTSub.TextColor3 = KeyT.SecondaryText
+				KTSub.TextSize = 11
+				KTSub.Font = Enum.Font.Gotham
+				KTSub.TextXAlignment = Enum.TextXAlignment.Left
+				KTSub.TextWrapped = true
+				KTSub.ZIndex = 6
+				KTSub.Parent = KTitleBar
+
+				local KDivider = Instance.new("Frame")
+				KDivider.Size = UDim2.new(1, -24, 0, 1)
+				KDivider.Position = UDim2.new(0, 12, 0, 48)
+				KDivider.BackgroundColor3 = KeyT.TabActive
+				KDivider.BorderSizePixel = 0
+				KDivider.Parent = KFrame
+
+				local KTextboxFrame = Instance.new("Frame")
+				KTextboxFrame.Size = UDim2.new(1, -24, 0, 36)
+				KTextboxFrame.Position = UDim2.new(0, 12, 0, 60)
+				KTextboxFrame.BackgroundColor3 = KeyT.ElementBg
+				KTextboxFrame.BorderSizePixel = 0
+				KTextboxFrame.Parent = KFrame
+
+				local KTBxCorner = Instance.new("UICorner")
+				KTBxCorner.CornerRadius = UDim.new(0, 7)
+				KTBxCorner.Parent = KTextboxFrame
+
+				local KTBxStroke = Instance.new("UIStroke")
+				KTBxStroke.Color = Color3.fromRGB(255, 255, 255)
+				KTBxStroke.Thickness = 1
+				KTBxStroke.Parent = KTextboxFrame
+
+				local KTextbox = Instance.new("TextBox")
+				KTextbox.Size = UDim2.new(1, -16, 1, 0)
+				KTextbox.Position = UDim2.new(0, 8, 0, 0)
+				KTextbox.BackgroundTransparency = 1
+				KTextbox.PlaceholderText = "Place your key..."
+				KTextbox.Text = ""
+				KTextbox.TextColor3 = Color3.fromRGB(255, 255, 255)
+				KTextbox.PlaceholderColor3 = KeyT.SecondaryText
+				KTextbox.TextSize = 13
+				KTextbox.Font = Enum.Font.Gotham
+				KTextbox.TextXAlignment = Enum.TextXAlignment.Left
+				KTextbox.ClearTextOnFocus = false
+				KTextbox.MaxVisibleGraphemes = 50
+				KTextbox.Parent = KTextboxFrame
+
+				KTextbox:GetPropertyChangedSignal("Text"):Connect(function()
+					if #KTextbox.Text > 50 then
+						KTextbox.Text = KTextbox.Text:sub(1, 50)
+					end
+				end)
+
+				local KStatusLabel = Instance.new("TextLabel")
+				KStatusLabel.Size = UDim2.new(1, -24, 0, 14)
+				KStatusLabel.Position = UDim2.new(0, 12, 0, 100)
+				KStatusLabel.BackgroundTransparency = 1
+				KStatusLabel.Text = ""
+				KStatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+				KStatusLabel.TextSize = 11
+				KStatusLabel.Font = Enum.Font.Gotham
+				KStatusLabel.TextXAlignment = Enum.TextXAlignment.Left
+				KStatusLabel.TextWrapped = true
+				KStatusLabel.Parent = KFrame
+
+				local KBtnRow = Instance.new("Frame")
+				KBtnRow.Size = UDim2.new(1, -24, 0, 34)
+				KBtnRow.Position = UDim2.new(0, 12, 0, 148)
+				KBtnRow.BackgroundTransparency = 1
+				KBtnRow.Parent = KFrame
+
+				local KBtnLayout = Instance.new("UIListLayout")
+				KBtnLayout.FillDirection = Enum.FillDirection.Horizontal
+				KBtnLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+				KBtnLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+				KBtnLayout.Padding = UDim.new(0, 8)
+				KBtnLayout.Parent = KBtnRow
+
+				local function MakeKeyBtn(labelTxt, iconKey, bgColor, w)
+					local Btn = Instance.new("TextButton")
+					Btn.Size = UDim2.new(0, w, 1, 0)
+					Btn.BackgroundColor3 = bgColor
+					Btn.Text = ""
+					Btn.AutoButtonColor = false
+					Btn.Parent = KBtnRow
+
+					local BCorner = Instance.new("UICorner")
+					BCorner.CornerRadius = UDim.new(0, 6)
+					BCorner.Parent = Btn
+
+					local BIcon = Instance.new("ImageLabel")
+					BIcon.Size = UDim2.new(0, 14, 0, 14)
+					BIcon.Position = UDim2.new(0, 6, 0.5, -7)
+					BIcon.BackgroundTransparency = 1
+					BIcon.Image = IconsDict[iconKey] or ""
+					BIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
+					BIcon.Parent = Btn
+
+					local BLabel = Instance.new("TextLabel")
+					BLabel.Size = UDim2.new(1, -24, 1, 0)
+					BLabel.Position = UDim2.new(0, 24, 0, 0)
+					BLabel.BackgroundTransparency = 1
+					BLabel.Text = labelTxt
+					BLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+					BLabel.TextSize = 12
+					BLabel.Font = Enum.Font.GothamMedium
+					BLabel.TextXAlignment = Enum.TextXAlignment.Left
+					BLabel.Parent = Btn
+
+					return Btn
+				end
+
+				local CheckBtn  = MakeKeyBtn("Check Key", "key",       KeyT.AccentColor,           100)
+				local ClearBtn2 = MakeKeyBtn("Clear",     "trash",      Color3.fromRGB(60, 25, 25), 72)
+				local GetBtn    = MakeKeyBtn("Get Key",   "hand-grab",  Color3.fromRGB(30, 55, 30), 80)
+
+				CheckBtn.MouseButton1Click:Connect(function()
+					local input = KTextbox.Text
+					if input == KeyCorrect then
+						KStatusLabel.TextColor3 = Color3.fromRGB(60, 220, 100)
+						KStatusLabel.Text = "Key accepted! Loading..."
+						task.wait(0.8)
+						TweenService:Create(KFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+							Size = UDim2.new(0, 340, 0, 0),
+							Position = UDim2.new(0.5, -170, 0.5, -100),
+						}):Play()
+						task.wait(0.35)
+						KGui:Destroy()
+						KeyPassed = true
+						MainFrame.Visible = true
+						MainFrame.Position = UDim2.new(0.5, -250, 0.6, -175)
+						MainFrame.BackgroundTransparency = 1
+						TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+							Position = UDim2.new(0.5, -250, 0.5, -175),
+							BackgroundTransparency = 0,
+						}):Play()
+						if KeyScript then
+							task.wait(0.4)
+							task.spawn(KeyScript)
+						end
+					else
+						KStatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+						KStatusLabel.Text = "Invalid key. Try again."
+						TweenService:Create(KTextboxFrame, TweenInfo.new(0.05), {BackgroundColor3 = Color3.fromRGB(80, 20, 20)}):Play()
+						task.wait(0.3)
+						TweenService:Create(KTextboxFrame, TweenInfo.new(0.15), {BackgroundColor3 = KeyT.ElementBg}):Play()
+					end
+				end)
+
+				ClearBtn2.MouseButton1Click:Connect(function()
+					KTextbox.Text = ""
+					KStatusLabel.Text = ""
+				end)
+
+				GetBtn.MouseButton1Click:Connect(function()
+					if setclipboard then
+						setclipboard(KeyGetLink)
+					end
+					task.spawn(ShowNotification, KeyNotifTitle, KeyNotifIcon, KeyNotifDesc)
+				end)
+
+				local KDragging, KDragInput, KDragStart, KStartPos = false, nil, nil, nil
+				KTitleBar.InputBegan:Connect(function(input)
+					if input.UserInputType == Enum.UserInputType.MouseButton1
+						or input.UserInputType == Enum.UserInputType.Touch then
+						KDragging = true
+						KDragStart = input.Position
+						KStartPos  = KFrame.Position
+						input.Changed:Connect(function()
+							if input.UserInputState == Enum.UserInputState.End then KDragging = false end
+						end)
+					end
+				end)
+				KTitleBar.InputChanged:Connect(function(input)
+					if input.UserInputType == Enum.UserInputType.MouseMovement
+						or input.UserInputType == Enum.UserInputType.Touch then
+						KDragInput = input
+					end
+				end)
+				game:GetService("UserInputService").InputChanged:Connect(function(input)
+					if input == KDragInput and KDragging then
+						local d = input.Position - KDragStart
+						KFrame.Position = UDim2.new(KStartPos.X.Scale, KStartPos.X.Offset + d.X,
+						                            KStartPos.Y.Scale, KStartPos.Y.Offset + d.Y)
+					end
+				end)
+
+				KFrame.BackgroundTransparency = 1
+				for _, v in pairs(KFrame:GetDescendants()) do
+					if v:IsA("TextLabel") then v.TextTransparency = 1
+					elseif v:IsA("ImageLabel") then v.ImageTransparency = 1
+					elseif v:IsA("Frame") then v.BackgroundTransparency = 1 end
+				end
+				KTBxStroke.Transparency = 1
+
+				task.wait(0.05)
+				TweenService:Create(KFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundTransparency = 0}):Play()
+				task.wait(0.05)
+				for _, v in pairs(KFrame:GetDescendants()) do
+					if v:IsA("TextLabel") then
+						TweenService:Create(v, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
+					elseif v:IsA("ImageLabel") then
+						TweenService:Create(v, TweenInfo.new(0.3), {ImageTransparency = 0}):Play()
+					elseif v:IsA("Frame") and v.Name ~= "KTBFill" then
+						TweenService:Create(v, TweenInfo.new(0.3), {BackgroundTransparency = 0}):Play()
+					end
+				end
+				TweenService:Create(KTBxStroke, TweenInfo.new(0.3), {Transparency = 0}):Play()
+
+			else
+				MainFrame.Visible = true
+				MainFrame.Position = UDim2.new(0.5, -250, 0.6, -175)
+				MainFrame.BackgroundTransparency = 1
+				TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+					Position = UDim2.new(0.5, -250, 0.5, -175),
+					BackgroundTransparency = 0,
+				}):Play()
+			end
 		end)
 	else
 		MainFrame.Visible = true
