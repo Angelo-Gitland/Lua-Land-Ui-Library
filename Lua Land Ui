@@ -1798,171 +1798,58 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 				local KFrame = Instance.new("Frame")
 				KFrame.Name = "KeyFrame"
-				KFrame.Size = UDim2.new(0, 360, 0, 220) 
-KFrame.Position = UDim2.new(0.5, -180, 0.5, -110)
-KFrame.BackgroundColor3 = KeyT.WindowBg
-KFrame.BorderSizePixel = 0
-KFrame.ClipsDescendants = true
-KFrame.Parent = KGui
+				KFrame.Size = UDim2.new(0, 440, 0, 240)
+				KFrame.Position = UDim2.new(0.5, -220, 0.5, -120)
+				KFrame.BackgroundColor3 = KeyT.WindowBg
+				KFrame.BorderSizePixel = 0
+				KFrame.ClipsDescendants = false
+				KFrame.Parent = KGui
 
-local KCorner = Instance.new("UICorner")
-KCorner.CornerRadius = UDim.new(0, 10)
-KCorner.Parent = KFrame
+				local KCorner = Instance.new("UICorner")
+				KCorner.CornerRadius = UDim.new(0, 10)
+				KCorner.Parent = KFrame
 
-local KTitleBar = Instance.new("Frame")
-KTitleBar.Name = "KTitleBar"
-KTitleBar.Size = UDim2.new(1, 0, 0, 48)
-KTitleBar.BackgroundColor3 = KeyT.TitleBarBg
-KTitleBar.BorderSizePixel = 0
-KTitleBar.ZIndex = 5
-KTitleBar.Parent = KFrame
+				local KTitleBar = Instance.new("Frame")
+				KTitleBar.Name = "KTitleBar"
+				KTitleBar.Size = UDim2.new(1, 0, 0, 48)
+				KTitleBar.BackgroundColor3 = KeyT.TitleBarBg
+				KTitleBar.BorderSizePixel = 0
+				KTitleBar.ZIndex = 5
+				KTitleBar.Parent = KFrame
 
-local KTBCorner = Instance.new("UICorner")
-KTBCorner.CornerRadius = UDim.new(0, 10)
-KTBCorner.Parent = KTitleBar
+				local KTBCorner = Instance.new("UICorner")
+				KTBCorner.CornerRadius = UDim.new(0, 10)
+				KTBCorner.Parent = KTitleBar
 
-local KTBFill = Instance.new("Frame")
-KTBFill.Size = UDim2.new(1, 0, 0, 10)
-KTBFill.Position = UDim2.new(0, 0, 1, -10)
-KTBFill.BackgroundColor3 = KeyT.TitleBarBg
-KTBFill.BorderSizePixel = 0
-KTBFill.ZIndex = 5
-KTBFill.Parent = KTitleBar
+				local KTBFill = Instance.new("Frame")
+				KTBFill.Size = UDim2.new(1, 0, 0, 10)
+				KTBFill.Position = UDim2.new(0, 0, 1, -10)
+				KTBFill.BackgroundColor3 = KeyT.TitleBarBg
+				KTBFill.BorderSizePixel = 0
+				KTBFill.ZIndex = 5
+				KTBFill.Parent = KTitleBar
 
-local KTIcon = Instance.new("ImageLabel")
-KTIcon.Size = UDim2.new(0, 20, 0, 20)
-KTIcon.Position = UDim2.new(0, 10, 0.5, -10)
-KTIcon.BackgroundTransparency = 1
-KTIcon.Image = IconsDict[KeyTitleIcon] or IconsDict["key-round"] or ""
-KTIcon.ImageColor3 = KeyT.PrimaryText
-KTIcon.ZIndex = 6
-KTIcon.Parent = KTitleBar
+				local KTIcon = Instance.new("ImageLabel")
+				KTIcon.Size = UDim2.new(0, 20, 0, 20)
+				KTIcon.Position = UDim2.new(0, 10, 0.5, -10)
+				KTIcon.BackgroundTransparency = 1
+				KTIcon.Image = IconsDict[KeyTitleIcon] or IconsDict["key-round"] or ""
+				KTIcon.ImageColor3 = KeyT.PrimaryText
+				KTIcon.ZIndex = 6
+				KTIcon.Parent = KTitleBar
 
-local KTTitle = Instance.new("TextLabel")
-KTTitle.Size = UDim2.new(1, -40, 0, 18)
-KTTitle.Position = UDim2.new(0, 36, 0, 6)
-KTTitle.BackgroundTransparency = 1
-KTTitle.Text = KeyTitle
-KTTitle.TextColor3 = KeyT.PrimaryText
-KTTitle.TextSize = 14
-KTTitle.Font = Enum.Font.GothamBold
-KTTitle.TextXAlignment = Enum.TextXAlignment.Left
-KTTitle.TextWrapped = true
-KTTitle.ZIndex = 6
-KTTitle.Parent = KTitleBar
-
-local KTSub = Instance.new("TextLabel")
-KTSub.Size = UDim2.new(1, -40, 0, 13)
-KTSub.Position = UDim2.new(0, 36, 0, 26)
-KTSub.BackgroundTransparency = 1
-KTSub.Text = KeySubtitle
-KTSub.TextColor3 = KeyT.SecondaryText
-KTSub.TextSize = 11
-KTSub.Font = Enum.Font.Gotham
-KTSub.TextXAlignment = Enum.TextXAlignment.Left
-KTSub.TextWrapped = true
-KTSub.ZIndex = 6
-KTSub.Parent = KTitleBar
-
-local KDivider = Instance.new("Frame")
-KDivider.Size = UDim2.new(1, -24, 0, 1)
-KDivider.Position = UDim2.new(0, 12, 0, 48)
-KDivider.BackgroundColor3 = KeyT.TabActive
-KDivider.BorderSizePixel = 0
-KDivider.Parent = KFrame
-
-local KTextboxFrame = Instance.new("Frame")
-KTextboxFrame.Size = UDim2.new(1, -24, 0, 38)
-KTextboxFrame.Position = UDim2.new(0, 12, 0, 62)
-KTextboxFrame.BackgroundColor3 = KeyT.ElementBg
-KTextboxFrame.BorderSizePixel = 0
-KTextboxFrame.Parent = KFrame
-
-local KTBxCorner = Instance.new("UICorner")
-KTBxCorner.CornerRadius = UDim.new(0, 7)
-KTBxCorner.Parent = KTextboxFrame
-
-local KTBxStroke = Instance.new("UIStroke")
-KTBxStroke.Color = Color3.fromRGB(255, 255, 255)
-KTBxStroke.Thickness = 1
-KTBxStroke.Parent = KTextboxFrame
-
-local KTextbox = Instance.new("TextBox")
-KTextbox.Size = UDim2.new(1, -16, 1, 0)
-KTextbox.Position = UDim2.new(0, 8, 0, 0)
-KTextbox.BackgroundTransparency = 1
-KTextbox.PlaceholderText = "Place your key..."
-KTextbox.Text = ""
-KTextbox.TextColor3 = Color3.fromRGB(255, 255, 255)
-KTextbox.PlaceholderColor3 = KeyT.SecondaryText
-KTextbox.TextSize = 13
-KTextbox.Font = Enum.Font.Gotham
-KTextbox.TextXAlignment = Enum.TextXAlignment.Left
-KTextbox.ClearTextOnFocus = false
-KTextbox.MaxVisibleGraphemes = 50
-KTextbox.Parent = KTextboxFrame
-
-local KStatusLabel = Instance.new("TextLabel")
-KStatusLabel.Size = UDim2.new(1, -24, 0, 14)
-KStatusLabel.Position = UDim2.new(0, 12, 0, 108)
-KStatusLabel.BackgroundTransparency = 1
-KStatusLabel.Text = ""
-KStatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-KStatusLabel.TextSize = 11
-KStatusLabel.Font = Enum.Font.Gotham
-KStatusLabel.TextXAlignment = Enum.TextXAlignment.Left
-KStatusLabel.Parent = KFrame
-
-local KBtnRow = Instance.new("Frame")
-KBtnRow.Size = UDim2.new(1, -24, 0, 34)
-KBtnRow.Position = UDim2.new(0, 12, 1, -46)
-KBtnRow.BackgroundTransparency = 1
-KBtnRow.Parent = KFrame
-
-local KBtnLayout = Instance.new("UIListLayout")
-KBtnLayout.FillDirection = Enum.FillDirection.Horizontal
-KBtnLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-KBtnLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-KBtnLayout.Padding = UDim.new(0, 8)
-KBtnLayout.Parent = KBtnRow
-
-local function MakeKeyBtn(labelTxt, iconKey, bgColor, w)
-	local Btn = Instance.new("TextButton")
-	Btn.Size = UDim2.new(0, w, 1, 0)
-	Btn.BackgroundColor3 = bgColor
-	Btn.Text = ""
-	Btn.AutoButtonColor = false
-	Btn.Parent = KBtnRow
-
-	local BCorner = Instance.new("UICorner")
-	BCorner.CornerRadius = UDim.new(0, 6)
-	BCorner.Parent = Btn
-
-	local BIcon = Instance.new("ImageLabel")
-	BIcon.Size = UDim2.new(0, 14, 0, 14)
-	BIcon.Position = UDim2.new(0, 6, 0.5, -7)
-	BIcon.BackgroundTransparency = 1
-	BIcon.Image = IconsDict[iconKey] or ""
-	BIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
-	BIcon.Parent = Btn
-
-	local BLabel = Instance.new("TextLabel")
-	BLabel.Size = UDim2.new(1, -24, 1, 0)
-	BLabel.Position = UDim2.new(0, 24, 0, 0)
-	BLabel.BackgroundTransparency = 1
-	BLabel.Text = labelTxt
-	BLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-	BLabel.TextSize = 12
-	BLabel.Font = Enum.Font.GothamMedium
-	BLabel.TextXAlignment = Enum.TextXAlignment.Left
-	BLabel.Parent = Btn
-
-	return Btn
-end
-
-local CheckBtn  = MakeKeyBtn("Check Key", "key",      KeyT.AccentColor,           106)
-local ClearBtn2 = MakeKeyBtn("Clear",     "trash",    Color3.fromRGB(60, 25, 25), 74)
-local GetBtn    = MakeKeyBtn("Get Key",   "hand-grab", Color3.fromRGB(30, 55, 30), 86)
+				local KTTitle = Instance.new("TextLabel")
+				KTTitle.Size = UDim2.new(1, -40, 0, 18)
+				KTTitle.Position = UDim2.new(0, 36, 0, 6)
+				KTTitle.BackgroundTransparency = 1
+				KTTitle.Text = KeyTitle
+				KTTitle.TextColor3 = KeyT.PrimaryText
+				KTTitle.TextSize = 14
+				KTTitle.Font = Enum.Font.GothamBold
+				KTTitle.TextXAlignment = Enum.TextXAlignment.Left
+				KTTitle.TextWrapped = true
+				KTTitle.ZIndex = 6
+				KTTitle.Parent = KTitleBar
 
 				local KTSub = Instance.new("TextLabel")
 				KTSub.Size = UDim2.new(1, -40, 0, 13)
@@ -1985,8 +1872,8 @@ local GetBtn    = MakeKeyBtn("Get Key",   "hand-grab", Color3.fromRGB(30, 55, 30
 				KDivider.Parent = KFrame
 
 				local KTextboxFrame = Instance.new("Frame")
-				KTextboxFrame.Size = UDim2.new(1, -24, 0, 36)
-				KTextboxFrame.Position = UDim2.new(0, 12, 0, 60)
+				KTextboxFrame.Size = UDim2.new(1, -28, 0, 44)
+				KTextboxFrame.Position = UDim2.new(0, 14, 0, 62)
 				KTextboxFrame.BackgroundColor3 = KeyT.ElementBg
 				KTextboxFrame.BorderSizePixel = 0
 				KTextboxFrame.Parent = KFrame
@@ -2005,7 +1892,84 @@ local GetBtn    = MakeKeyBtn("Get Key",   "hand-grab", Color3.fromRGB(30, 55, 30
 				KTextbox.Position = UDim2.new(0, 8, 0, 0)
 				KTextbox.BackgroundTransparency = 1
 				KTextbox.PlaceholderText = "Place your key..."
- 80)
+				KTextbox.Text = ""
+				KTextbox.TextColor3 = Color3.fromRGB(255, 255, 255)
+				KTextbox.PlaceholderColor3 = KeyT.SecondaryText
+				KTextbox.TextSize = 13
+				KTextbox.Font = Enum.Font.Gotham
+				KTextbox.TextXAlignment = Enum.TextXAlignment.Left
+				KTextbox.ClearTextOnFocus = false
+				KTextbox.MaxVisibleGraphemes = 50
+				KTextbox.Parent = KTextboxFrame
+
+				KTextbox:GetPropertyChangedSignal("Text"):Connect(function()
+					if #KTextbox.Text > 50 then
+						KTextbox.Text = KTextbox.Text:sub(1, 50)
+					end
+				end)
+
+				local KStatusLabel = Instance.new("TextLabel")
+				KStatusLabel.Size = UDim2.new(1, -28, 0, 16)
+				KStatusLabel.Position = UDim2.new(0, 14, 0, 114)
+				KStatusLabel.BackgroundTransparency = 1
+				KStatusLabel.Text = ""
+				KStatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+				KStatusLabel.TextSize = 11
+				KStatusLabel.Font = Enum.Font.Gotham
+				KStatusLabel.TextXAlignment = Enum.TextXAlignment.Left
+				KStatusLabel.TextWrapped = true
+				KStatusLabel.Parent = KFrame
+
+				local KBtnRow = Instance.new("Frame")
+				KBtnRow.Size = UDim2.new(1, -28, 0, 38)
+				KBtnRow.Position = UDim2.new(0, 14, 0, 184)
+				KBtnRow.BackgroundTransparency = 1
+				KBtnRow.Parent = KFrame
+
+				local KBtnLayout = Instance.new("UIListLayout")
+				KBtnLayout.FillDirection = Enum.FillDirection.Horizontal
+				KBtnLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+				KBtnLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+				KBtnLayout.Padding = UDim.new(0, 8)
+				KBtnLayout.Parent = KBtnRow
+
+				local function MakeKeyBtn(labelTxt, iconKey, bgColor, w)
+					local Btn = Instance.new("TextButton")
+					Btn.Size = UDim2.new(0, w, 1, 0)
+					Btn.BackgroundColor3 = bgColor
+					Btn.Text = ""
+					Btn.AutoButtonColor = false
+					Btn.Parent = KBtnRow
+
+					local BCorner = Instance.new("UICorner")
+					BCorner.CornerRadius = UDim.new(0, 6)
+					BCorner.Parent = Btn
+
+					local BIcon = Instance.new("ImageLabel")
+					BIcon.Size = UDim2.new(0, 14, 0, 14)
+					BIcon.Position = UDim2.new(0, 8, 0.5, -7)
+					BIcon.BackgroundTransparency = 1
+					BIcon.Image = IconsDict[iconKey] or ""
+					BIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
+					BIcon.Parent = Btn
+
+					local BLabel = Instance.new("TextLabel")
+					BLabel.Size = UDim2.new(1, -26, 1, 0)
+					BLabel.Position = UDim2.new(0, 26, 0, 0)
+					BLabel.BackgroundTransparency = 1
+					BLabel.Text = labelTxt
+					BLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+					BLabel.TextSize = 13
+					BLabel.Font = Enum.Font.GothamMedium
+					BLabel.TextXAlignment = Enum.TextXAlignment.Left
+					BLabel.Parent = Btn
+
+					return Btn
+				end
+
+				local CheckBtn  = MakeKeyBtn("Check Key", "key",      KeyT.AccentColor,           128)
+				local ClearBtn2 = MakeKeyBtn("Clear",     "trash",    Color3.fromRGB(60, 25, 25),  90)
+				local GetBtn    = MakeKeyBtn("Get Key",   "hand-grab",Color3.fromRGB(30, 55, 30), 108)
 
 				CheckBtn.MouseButton1Click:Connect(function()
 					local input = KTextbox.Text
