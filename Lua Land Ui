@@ -1540,6 +1540,26 @@ local ThemesDict = {
 	},
 }
 
+-- Resolves an icon: accepts a Lucide icon name from IconsDict OR a raw
+-- custom asset ("rbxassetid://123", an asset URL, or a numeric id).
+local function ResolveIcon(icon, fallback)
+	if typeof(icon) == "number" then
+		return "rbxassetid://" .. tostring(icon)
+	end
+	if type(icon) == "string" then
+		if icon:match("^rbxassetid://") or icon:match("^rbxasset://") or icon:match("^http") then
+			return icon
+		end
+		if icon:match("^%d+$") then
+			return "rbxassetid://" .. icon
+		end
+		if IconsDict[icon] then
+			return IconsDict[icon]
+		end
+	end
+	return IconsDict[fallback] or ""
+end
+
 local function RunSearch(query, ElementRegistry)
 	local q = query:lower():gsub("^%s+", ""):gsub("%s+$", "")
 	for _, entry in ipairs(ElementRegistry) do
@@ -1578,6 +1598,9 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local KeyNotifTitle  = ShowKey and (KeyConfig.NotifTitle or "Lua Land Ui Library")      or ""
 	local KeyNotifIcon   = ShowKey and (KeyConfig.NotifIcon  or "key")                      or "key"
 	local KeyNotifDesc   = ShowKey and (KeyConfig.NotifDesc  or "Link copied to clipboard!") or ""
+	local KeyPlaceholder = ShowKey and (KeyConfig.Placeholder or "Enter your key...")        or ""
+	local KeyLimit       = ShowKey and (tonumber(KeyConfig.Limit) or 20)                     or 20
+	local KeyScale       = ShowKey and (tonumber(KeyConfig.Scale) or 1)                      or 1
 
 	local ScreenGui = Instance.new("ScreenGui")
 	ScreenGui.Name = "LuaLandGui"
@@ -1618,7 +1641,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		local IIcon = Instance.new("ImageLabel")
 		IIcon.Size = UDim2.new(1, 0, 1, 0)
 		IIcon.BackgroundTransparency = 1
-		IIcon.Image = IconsDict[IntroIcon] or IconsDict["house"] or ""
+		IIcon.Image = ResolveIcon(IntroIcon, "house")
 		IIcon.ImageColor3 = T.AccentColor
 		IIcon.ImageTransparency = 1
 		IIcon.Parent = IIconFrame
@@ -1735,7 +1758,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				NIco.Size = UDim2.new(0, 20, 0, 20)
 				NIco.Position = UDim2.new(0, 12, 0, 12)
 				NIco.BackgroundTransparency = 1
-				NIco.Image = IconsDict[ntIcon] or IconsDict["key"] or ""
+				NIco.Image = ResolveIcon(ntIcon, "key")
 				NIco.ImageColor3 = T.AccentColor
 				NIco.Parent = NFrame
 
@@ -1798,20 +1821,25 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 				local KFrame = Instance.new("Frame")
 				KFrame.Name = "KeyFrame"
-				KFrame.Size = UDim2.new(0, 440, 0, 240)
-				KFrame.Position = UDim2.new(0.5, -220, 0.5, -120)
+				KFrame.Size = UDim2.new(0, 460, 0, 250)
+				KFrame.Position = UDim2.new(0.5, -230, 0.5, -125)
 				KFrame.BackgroundColor3 = KeyT.WindowBg
 				KFrame.BorderSizePixel = 0
 				KFrame.ClipsDescendants = false
 				KFrame.Parent = KGui
 
+				local KScale = Instance.new("UIScale")
+				KScale.Scale = KeyScale
+				KScale.Parent = KFrame
+
 				local KCorner = Instance.new("UICorner")
 				KCorner.CornerRadius = UDim.new(0, 10)
 				KCorner.Parent = KFrame
 
+				-- ===== Title bar : title (top + left), icon left of title, subtitle below =====
 				local KTitleBar = Instance.new("Frame")
 				KTitleBar.Name = "KTitleBar"
-				KTitleBar.Size = UDim2.new(1, 0, 0, 48)
+				KTitleBar.Size = UDim2.new(1, 0, 0, 52)
 				KTitleBar.BackgroundColor3 = KeyT.TitleBarBg
 				KTitleBar.BorderSizePixel = 0
 				KTitleBar.ZIndex = 5
@@ -1822,6 +1850,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				KTBCorner.Parent = KTitleBar
 
 				local KTBFill = Instance.new("Frame")
+				KTBFill.Name = "KTBFill"
 				KTBFill.Size = UDim2.new(1, 0, 0, 10)
 				KTBFill.Position = UDim2.new(0, 0, 1, -10)
 				KTBFill.BackgroundColor3 = KeyT.TitleBarBg
@@ -1830,30 +1859,31 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				KTBFill.Parent = KTitleBar
 
 				local KTIcon = Instance.new("ImageLabel")
-				KTIcon.Size = UDim2.new(0, 20, 0, 20)
-				KTIcon.Position = UDim2.new(0, 10, 0.5, -10)
+				KTIcon.Size = UDim2.new(0, 22, 0, 22)
+				KTIcon.Position = UDim2.new(0, 12, 0, 8)
 				KTIcon.BackgroundTransparency = 1
-				KTIcon.Image = IconsDict[KeyTitleIcon] or IconsDict["key-round"] or ""
+				KTIcon.Image = ResolveIcon(KeyTitleIcon, "key-round")
 				KTIcon.ImageColor3 = KeyT.PrimaryText
 				KTIcon.ZIndex = 6
 				KTIcon.Parent = KTitleBar
 
 				local KTTitle = Instance.new("TextLabel")
-				KTTitle.Size = UDim2.new(1, -40, 0, 18)
-				KTTitle.Position = UDim2.new(0, 36, 0, 6)
+				KTTitle.Size = UDim2.new(1, -60, 0, 20)
+				KTTitle.Position = UDim2.new(0, 40, 0, 8)
 				KTTitle.BackgroundTransparency = 1
 				KTTitle.Text = KeyTitle
 				KTTitle.TextColor3 = KeyT.PrimaryText
-				KTTitle.TextSize = 14
+				KTTitle.TextSize = 15
 				KTTitle.Font = Enum.Font.GothamBold
 				KTTitle.TextXAlignment = Enum.TextXAlignment.Left
+				KTTitle.TextYAlignment = Enum.TextYAlignment.Center
 				KTTitle.TextWrapped = true
 				KTTitle.ZIndex = 6
 				KTTitle.Parent = KTitleBar
 
 				local KTSub = Instance.new("TextLabel")
-				KTSub.Size = UDim2.new(1, -40, 0, 13)
-				KTSub.Position = UDim2.new(0, 36, 0, 26)
+				KTSub.Size = UDim2.new(1, -60, 0, 14)
+				KTSub.Position = UDim2.new(0, 40, 0, 30)
 				KTSub.BackgroundTransparency = 1
 				KTSub.Text = KeySubtitle
 				KTSub.TextColor3 = KeyT.SecondaryText
@@ -1866,14 +1896,15 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 				local KDivider = Instance.new("Frame")
 				KDivider.Size = UDim2.new(1, -24, 0, 1)
-				KDivider.Position = UDim2.new(0, 12, 0, 48)
+				KDivider.Position = UDim2.new(0, 12, 0, 52)
 				KDivider.BackgroundColor3 = KeyT.TabActive
 				KDivider.BorderSizePixel = 0
 				KDivider.Parent = KFrame
 
+				-- ===== Input key textbox : below the subtitle, left side =====
 				local KTextboxFrame = Instance.new("Frame")
-				KTextboxFrame.Size = UDim2.new(1, -28, 0, 44)
-				KTextboxFrame.Position = UDim2.new(0, 14, 0, 62)
+				KTextboxFrame.Size = UDim2.new(0, 262, 0, 40)
+				KTextboxFrame.Position = UDim2.new(0, 14, 0, 70)
 				KTextboxFrame.BackgroundColor3 = KeyT.ElementBg
 				KTextboxFrame.BorderSizePixel = 0
 				KTextboxFrame.Parent = KFrame
@@ -1883,7 +1914,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				KTBxCorner.Parent = KTextboxFrame
 
 				local KTBxStroke = Instance.new("UIStroke")
-				KTBxStroke.Color = Color3.fromRGB(255, 255, 255)
+				KTBxStroke.Color = KeyT.AccentColor
 				KTBxStroke.Thickness = 1
 				KTBxStroke.Parent = KTextboxFrame
 
@@ -1891,55 +1922,44 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				KTextbox.Size = UDim2.new(1, -16, 1, 0)
 				KTextbox.Position = UDim2.new(0, 8, 0, 0)
 				KTextbox.BackgroundTransparency = 1
-				KTextbox.PlaceholderText = "Place your key..."
+				KTextbox.PlaceholderText = KeyPlaceholder
 				KTextbox.Text = ""
-				KTextbox.TextColor3 = Color3.fromRGB(255, 255, 255)
+				KTextbox.TextColor3 = KeyT.PrimaryText
 				KTextbox.PlaceholderColor3 = KeyT.SecondaryText
 				KTextbox.TextSize = 13
 				KTextbox.Font = Enum.Font.Gotham
 				KTextbox.TextXAlignment = Enum.TextXAlignment.Left
+				KTextbox.TextYAlignment = Enum.TextYAlignment.Center
 				KTextbox.ClearTextOnFocus = false
-				KTextbox.MaxVisibleGraphemes = 50
+				KTextbox.TextTruncate = Enum.TextTruncate.None
 				KTextbox.Parent = KTextboxFrame
 
 				KTextbox:GetPropertyChangedSignal("Text"):Connect(function()
-					if #KTextbox.Text > 50 then
-						KTextbox.Text = KTextbox.Text:sub(1, 50)
+					if #KTextbox.Text > KeyLimit then
+						KTextbox.Text = KTextbox.Text:sub(1, KeyLimit)
 					end
 				end)
 
 				local KStatusLabel = Instance.new("TextLabel")
-				KStatusLabel.Size = UDim2.new(1, -28, 0, 16)
+				KStatusLabel.Size = UDim2.new(0, 262, 0, 16)
 				KStatusLabel.Position = UDim2.new(0, 14, 0, 114)
 				KStatusLabel.BackgroundTransparency = 1
 				KStatusLabel.Text = ""
 				KStatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-				KStatusLabel.TextSize = 11
-				KStatusLabel.Font = Enum.Font.Gotham
+				KStatusLabel.TextSize = 12
+				KStatusLabel.Font = Enum.Font.GothamMedium
 				KStatusLabel.TextXAlignment = Enum.TextXAlignment.Left
 				KStatusLabel.TextWrapped = true
 				KStatusLabel.Parent = KFrame
 
-				local KBtnRow = Instance.new("Frame")
-				KBtnRow.Size = UDim2.new(1, -28, 0, 38)
-				KBtnRow.Position = UDim2.new(0, 14, 0, 184)
-				KBtnRow.BackgroundTransparency = 1
-				KBtnRow.Parent = KFrame
-
-				local KBtnLayout = Instance.new("UIListLayout")
-				KBtnLayout.FillDirection = Enum.FillDirection.Horizontal
-				KBtnLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
-				KBtnLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-				KBtnLayout.Padding = UDim.new(0, 8)
-				KBtnLayout.Parent = KBtnRow
-
-				local function MakeKeyBtn(labelTxt, iconKey, bgColor, w)
+				local function MakeKeyBtn(labelTxt, iconKey, bgColor, pos, size)
 					local Btn = Instance.new("TextButton")
-					Btn.Size = UDim2.new(0, w, 1, 0)
+					Btn.Size = size
+					Btn.Position = pos
 					Btn.BackgroundColor3 = bgColor
 					Btn.Text = ""
 					Btn.AutoButtonColor = false
-					Btn.Parent = KBtnRow
+					Btn.Parent = KFrame
 
 					local BCorner = Instance.new("UICorner")
 					BCorner.CornerRadius = UDim.new(0, 6)
@@ -1947,15 +1967,15 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 					local BIcon = Instance.new("ImageLabel")
 					BIcon.Size = UDim2.new(0, 14, 0, 14)
-					BIcon.Position = UDim2.new(0, 8, 0.5, -7)
+					BIcon.Position = UDim2.new(0, 10, 0.5, -7)
 					BIcon.BackgroundTransparency = 1
-					BIcon.Image = IconsDict[iconKey] or ""
+					BIcon.Image = ResolveIcon(iconKey, "key")
 					BIcon.ImageColor3 = Color3.fromRGB(255, 255, 255)
 					BIcon.Parent = Btn
 
 					local BLabel = Instance.new("TextLabel")
-					BLabel.Size = UDim2.new(1, -26, 1, 0)
-					BLabel.Position = UDim2.new(0, 26, 0, 0)
+					BLabel.Size = UDim2.new(1, -30, 1, 0)
+					BLabel.Position = UDim2.new(0, 30, 0, 0)
 					BLabel.BackgroundTransparency = 1
 					BLabel.Text = labelTxt
 					BLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -1964,19 +1984,192 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 					BLabel.TextXAlignment = Enum.TextXAlignment.Left
 					BLabel.Parent = Btn
 
-					return Btn
+					return Btn, BIcon, BLabel
 				end
 
-				local CheckBtn  = MakeKeyBtn("Check Key", "key",      KeyT.AccentColor,           128)
-				local ClearBtn2 = MakeKeyBtn("Clear",     "trash",    Color3.fromRGB(60, 25, 25),  90)
-				local GetBtn    = MakeKeyBtn("Get Key",   "hand-grab",Color3.fromRGB(30, 55, 30), 108)
+				-- Submit : below the input textbox, left side
+				local SubmitBtn = MakeKeyBtn("Submit", "check", KeyT.AccentColor,
+					UDim2.new(0, 14, 0, 138), UDim2.new(0, 130, 0, 38))
+				local ClearBtn2 = MakeKeyBtn("Clear", "trash", KeyT.TabActive,
+					UDim2.new(0, 152, 0, 138), UDim2.new(0, 110, 0, 38))
+				-- Get Key : right side, top (aligned with the input textbox)
+				local GetBtn = MakeKeyBtn("Get Key", "hand-grab", KeyT.TabActive,
+					UDim2.new(0, 290, 0, 70), UDim2.new(0, 156, 0, 40))
 
-				CheckBtn.MouseButton1Click:Connect(function()
+				-- ===== Theme selector (slide-open list) : below the Get Key button =====
+				local ThemeOrder = {"Default", "Darker", "Fire", "Blossom", "Snow", "Cloudy", "Spring"}
+
+				local ThemeBtn = Instance.new("TextButton")
+				ThemeBtn.Size = UDim2.new(0, 156, 0, 34)
+				ThemeBtn.Position = UDim2.new(0, 290, 0, 120)
+				ThemeBtn.BackgroundColor3 = KeyT.ElementBg
+				ThemeBtn.AutoButtonColor = false
+				ThemeBtn.Text = ""
+				ThemeBtn.ZIndex = 8
+				ThemeBtn.Parent = KFrame
+
+				local ThBCorner = Instance.new("UICorner")
+				ThBCorner.CornerRadius = UDim.new(0, 6)
+				ThBCorner.Parent = ThemeBtn
+
+				local ThemeLabel = Instance.new("TextLabel")
+				ThemeLabel.Size = UDim2.new(1, -34, 1, 0)
+				ThemeLabel.Position = UDim2.new(0, 10, 0, 0)
+				ThemeLabel.BackgroundTransparency = 1
+				ThemeLabel.Text = "Theme: " .. KeyThemeName
+				ThemeLabel.TextColor3 = KeyT.PrimaryText
+				ThemeLabel.TextSize = 12
+				ThemeLabel.Font = Enum.Font.GothamMedium
+				ThemeLabel.TextXAlignment = Enum.TextXAlignment.Left
+				ThemeLabel.ZIndex = 9
+				ThemeLabel.Parent = ThemeBtn
+
+				local ThemeChevron = Instance.new("ImageLabel")
+				ThemeChevron.Size = UDim2.new(0, 14, 0, 14)
+				ThemeChevron.Position = UDim2.new(1, -22, 0.5, -7)
+				ThemeChevron.BackgroundTransparency = 1
+				ThemeChevron.Image = ResolveIcon("chevron-down", "chevron-down")
+				ThemeChevron.ImageColor3 = KeyT.SecondaryText
+				ThemeChevron.ZIndex = 9
+				ThemeChevron.Parent = ThemeBtn
+
+				local ThemePopup = Instance.new("Frame")
+				ThemePopup.Name = "ThemePopup"
+				ThemePopup.Size = UDim2.new(0, 156, 0, 0)
+				ThemePopup.Position = UDim2.new(0, 290, 0, 156)
+				ThemePopup.BackgroundColor3 = KeyT.ElementBg
+				ThemePopup.BorderSizePixel = 0
+				ThemePopup.ClipsDescendants = true
+				ThemePopup.ZIndex = 20
+				ThemePopup.Parent = KFrame
+
+				local ThPopCorner = Instance.new("UICorner")
+				ThPopCorner.CornerRadius = UDim.new(0, 6)
+				ThPopCorner.Parent = ThemePopup
+
+				local ThemeList = Instance.new("ScrollingFrame")
+				ThemeList.Size = UDim2.new(1, 0, 1, 0)
+				ThemeList.BackgroundTransparency = 1
+				ThemeList.BorderSizePixel = 0
+				ThemeList.ScrollBarThickness = 2
+				ThemeList.ScrollBarImageColor3 = KeyT.AccentColor
+				ThemeList.CanvasSize = UDim2.new(0, 0, 0, 0)
+				ThemeList.AutomaticCanvasSize = Enum.AutomaticSize.Y
+				ThemeList.ZIndex = 21
+				ThemeList.Parent = ThemePopup
+
+				local ThListLayout = Instance.new("UIListLayout")
+				ThListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+				ThListLayout.Padding = UDim.new(0, 2)
+				ThListLayout.Parent = ThemeList
+
+				local ThListPad = Instance.new("UIPadding")
+				ThListPad.PaddingLeft   = UDim.new(0, 4)
+				ThListPad.PaddingRight  = UDim.new(0, 4)
+				ThListPad.PaddingTop    = UDim.new(0, 4)
+				ThListPad.PaddingBottom = UDim.new(0, 4)
+				ThListPad.Parent = ThemeList
+
+				local ThemeItems = {}
+
+				-- Repaint every part of the key window with the newly picked theme
+				local function ApplyKeyTheme(newName)
+					local NT = ThemesDict[newName] or ThemesDict["Default"]
+					KeyT = NT
+					KeyThemeName = newName
+					ThemeLabel.Text = "Theme: " .. newName
+
+					local ti = TweenInfo.new(0.2)
+					TweenService:Create(KFrame,        ti, {BackgroundColor3 = NT.WindowBg}):Play()
+					TweenService:Create(KTitleBar,     ti, {BackgroundColor3 = NT.TitleBarBg}):Play()
+					TweenService:Create(KTBFill,       ti, {BackgroundColor3 = NT.TitleBarBg}):Play()
+					TweenService:Create(KDivider,      ti, {BackgroundColor3 = NT.TabActive}):Play()
+					TweenService:Create(KTextboxFrame, ti, {BackgroundColor3 = NT.ElementBg}):Play()
+					TweenService:Create(KTBxStroke,    ti, {Color = NT.AccentColor}):Play()
+					TweenService:Create(ThemeBtn,      ti, {BackgroundColor3 = NT.ElementBg}):Play()
+					TweenService:Create(ThemePopup,    ti, {BackgroundColor3 = NT.ElementBg}):Play()
+					TweenService:Create(SubmitBtn,     ti, {BackgroundColor3 = NT.AccentColor}):Play()
+					TweenService:Create(ClearBtn2,     ti, {BackgroundColor3 = NT.TabActive}):Play()
+					TweenService:Create(GetBtn,        ti, {BackgroundColor3 = NT.TabActive}):Play()
+
+					KTIcon.ImageColor3      = NT.PrimaryText
+					KTTitle.TextColor3      = NT.PrimaryText
+					KTSub.TextColor3        = NT.SecondaryText
+					KTextbox.TextColor3     = NT.PrimaryText
+					KTextbox.PlaceholderColor3 = NT.SecondaryText
+					ThemeLabel.TextColor3   = NT.PrimaryText
+					ThemeChevron.ImageColor3 = NT.SecondaryText
+					ThemeList.ScrollBarImageColor3 = NT.AccentColor
+
+					for _, item in ipairs(ThemeItems) do
+						local isSel = item.Name == newName
+						item.Btn.BackgroundColor3 = isSel and NT.TabActive or NT.TabInactive
+						item.Label.TextColor3 = isSel and NT.AccentColor or NT.PrimaryText
+					end
+				end
+
+				local ThemeOpen = false
+				local function SetThemeOpen(open)
+					ThemeOpen = open
+					local target = open and UDim2.new(0, 156, 0, 118) or UDim2.new(0, 156, 0, 0)
+					TweenService:Create(ThemePopup, TweenInfo.new(0.22, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = target}):Play()
+					TweenService:Create(ThemeChevron, TweenInfo.new(0.18), {Rotation = open and 180 or 0}):Play()
+				end
+
+				for _, themeName in ipairs(ThemeOrder) do
+					local ItemBtn = Instance.new("TextButton")
+					ItemBtn.Size = UDim2.new(1, 0, 0, 26)
+					ItemBtn.BackgroundColor3 = themeName == KeyThemeName and KeyT.TabActive or KeyT.TabInactive
+					ItemBtn.BorderSizePixel = 0
+					ItemBtn.AutoButtonColor = false
+					ItemBtn.Text = ""
+					ItemBtn.ZIndex = 22
+					ItemBtn.Parent = ThemeList
+
+					local IBCorner = Instance.new("UICorner")
+					IBCorner.CornerRadius = UDim.new(0, 5)
+					IBCorner.Parent = ItemBtn
+
+					local IBLabel = Instance.new("TextLabel")
+					IBLabel.Size = UDim2.new(1, -14, 1, 0)
+					IBLabel.Position = UDim2.new(0, 8, 0, 0)
+					IBLabel.BackgroundTransparency = 1
+					IBLabel.Text = themeName
+					IBLabel.TextColor3 = themeName == KeyThemeName and KeyT.AccentColor or KeyT.PrimaryText
+					IBLabel.TextSize = 12
+					IBLabel.Font = Enum.Font.Gotham
+					IBLabel.TextXAlignment = Enum.TextXAlignment.Left
+					IBLabel.ZIndex = 23
+					IBLabel.Parent = ItemBtn
+
+					table.insert(ThemeItems, {Name = themeName, Btn = ItemBtn, Label = IBLabel})
+
+					ItemBtn.MouseButton1Click:Connect(function()
+						ApplyKeyTheme(themeName)
+						SetThemeOpen(false)
+					end)
+				end
+
+				ThemeBtn.MouseButton1Click:Connect(function()
+					SetThemeOpen(not ThemeOpen)
+				end)
+
+				local function ShowMainWindow()
+					MainFrame.Visible = true
+					MainFrame.Position = UDim2.new(0.5, -250, 0.6, -175)
+					MainFrame.BackgroundTransparency = 1
+					TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+						Position = UDim2.new(0.5, -250, 0.5, -175),
+						BackgroundTransparency = 0,
+					}):Play()
+				end
+
+				local function SubmitKey()
 					local input = KTextbox.Text
 					if input == KeyCorrect then
 						KStatusLabel.TextColor3 = Color3.fromRGB(60, 220, 100)
 						KStatusLabel.Text = "Key accepted! Loading..."
-						task.wait(0.8)
+						task.wait(0.7)
 						TweenService:Create(KFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
 							Size = UDim2.new(0, 340, 0, 0),
 							Position = UDim2.new(0.5, -170, 0.5, -100),
@@ -1984,24 +2177,23 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 						task.wait(0.35)
 						KGui:Destroy()
 						KeyPassed = true
-						MainFrame.Visible = true
-						MainFrame.Position = UDim2.new(0.5, -250, 0.6, -175)
-						MainFrame.BackgroundTransparency = 1
-						TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-							Position = UDim2.new(0.5, -250, 0.5, -175),
-							BackgroundTransparency = 0,
-						}):Play()
+						ShowMainWindow()
 						if KeyScript then
 							task.wait(0.4)
 							task.spawn(KeyScript)
 						end
 					else
 						KStatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-						KStatusLabel.Text = "Invalid key. Try again."
+						KStatusLabel.Text = "Invalid Key!"
 						TweenService:Create(KTextboxFrame, TweenInfo.new(0.05), {BackgroundColor3 = Color3.fromRGB(80, 20, 20)}):Play()
 						task.wait(0.3)
 						TweenService:Create(KTextboxFrame, TweenInfo.new(0.15), {BackgroundColor3 = KeyT.ElementBg}):Play()
 					end
+				end
+
+				SubmitBtn.MouseButton1Click:Connect(function() task.spawn(SubmitKey) end)
+				KTextbox.FocusLost:Connect(function(enterPressed)
+					if enterPressed then task.spawn(SubmitKey) end
 				end)
 
 				ClearBtn2.MouseButton1Click:Connect(function()
@@ -2024,7 +2216,9 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 						KDragStart = input.Position
 						KStartPos  = KFrame.Position
 						input.Changed:Connect(function()
-							if input.UserInputState == Enum.UserInputState.End then KDragging = false end
+							if input.UserInputState == Enum.UserInputState.End then
+								KDragging = false
+							end
 						end)
 					end
 				end)
@@ -2034,7 +2228,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 						KDragInput = input
 					end
 				end)
-				game:GetService("UserInputService").InputChanged:Connect(function(input)
+				UserInputService.InputChanged:Connect(function(input)
 					if input == KDragInput and KDragging then
 						local d = input.Position - KDragStart
 						KFrame.Position = UDim2.new(KStartPos.X.Scale, KStartPos.X.Offset + d.X,
@@ -2046,7 +2240,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				for _, v in pairs(KFrame:GetDescendants()) do
 					if v:IsA("TextLabel") then v.TextTransparency = 1
 					elseif v:IsA("ImageLabel") then v.ImageTransparency = 1
-					elseif v:IsA("Frame") then v.BackgroundTransparency = 1 end
+					elseif v:IsA("Frame") and v.Name ~= "ThemePopup" then v.BackgroundTransparency = 1 end
 				end
 				KTBxStroke.Transparency = 1
 
@@ -2058,12 +2252,11 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 						TweenService:Create(v, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
 					elseif v:IsA("ImageLabel") then
 						TweenService:Create(v, TweenInfo.new(0.3), {ImageTransparency = 0}):Play()
-					elseif v:IsA("Frame") and v.Name ~= "KTBFill" then
+					elseif v:IsA("Frame") and v.Name ~= "KTBFill" and v.Name ~= "ThemePopup" then
 						TweenService:Create(v, TweenInfo.new(0.3), {BackgroundTransparency = 0}):Play()
 					end
 				end
 				TweenService:Create(KTBxStroke, TweenInfo.new(0.3), {Transparency = 0}):Play()
-
 			else
 				MainFrame.Visible = true
 				MainFrame.Position = UDim2.new(0.5, -250, 0.6, -175)
@@ -2094,7 +2287,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	TitleIcon.Size = UDim2.new(0, 24, 0, 24)
 	TitleIcon.Position = UDim2.new(0, 10, 0, 13)
 	TitleIcon.BackgroundTransparency = 1
-	TitleIcon.Image = IconsDict[TitleIconString] or IconsDict["book-open-text"]
+	TitleIcon.Image = ResolveIcon(TitleIconString, "book-open-text")
 	TitleIcon.ImageColor3 = T.PrimaryText
 	TitleIcon.ZIndex = 10
 	TitleIcon.Parent = TitleBar
@@ -2268,7 +2461,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	end
 
 	function SettingsHandling:SetTitleIcon(IconName)
-		TitleIcon.Image = IconsDict[IconName] or IconsDict["book-open-text"]
+		TitleIcon.Image = ResolveIcon(IconName, "book-open-text")
 	end
 
 	function SettingsHandling:SetTheme(NewThemeName)
@@ -2315,7 +2508,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		TabIcon.Size = UDim2.new(0, 16, 0, 16)
 		TabIcon.Position = UDim2.new(0, 8, 0.5, -8)
 		TabIcon.BackgroundTransparency = 1
-		TabIcon.Image = IconsDict[TabIconString] or IconsDict["book"]
+		TabIcon.Image = ResolveIcon(TabIconString, "book")
 		TabIcon.ImageColor3 = T.PrimaryText
 		TabIcon.Parent = TabButton
 
@@ -2600,32 +2793,118 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 
 		function TabHandling:CreateTextbox(TextboxConfig, Callback)
+			TextboxConfig = TextboxConfig or {}
+			local TitleStr       = TextboxConfig.Title or TextboxConfig.Name
 			local PlaceholderStr = TextboxConfig.Placeholder or "Type here..."
-			local DefaultText    = TextboxConfig.Text        or ""
+			local DefaultText    = TextboxConfig.Text or ""
+			local CharLimit      = tonumber(TextboxConfig.Limit) or 100
+			local ClearOnFocus   = TextboxConfig.ClearOnFocus == true
+			Callback = Callback or TextboxConfig.Callback or function() end
+
+			local HasTitle = TitleStr ~= nil and TitleStr ~= ""
+			local FrameH   = HasTitle and 60 or 38
 
 			local TextboxFrame = Instance.new("Frame")
-			TextboxFrame.Size = UDim2.new(1, 0, 0, 35)
-			TextboxFrame.BackgroundTransparency = 1
+			TextboxFrame.Name = "Textbox_" .. tostring(TitleStr or PlaceholderStr)
+			TextboxFrame.Size = UDim2.new(1, 0, 0, FrameH)
+			TextboxFrame.BackgroundColor3 = T.ElementBg
+			TextboxFrame.BorderSizePixel = 0
 			TextboxFrame.Parent = TabContent
 
+			local TFCorner = Instance.new("UICorner")
+			TFCorner.CornerRadius = UDim.new(0, 6)
+			TFCorner.Parent = TextboxFrame
+
+			if HasTitle then
+				local TTitle = Instance.new("TextLabel")
+				TTitle.Size = UDim2.new(1, -24, 0, 16)
+				TTitle.Position = UDim2.new(0, 12, 0, 6)
+				TTitle.BackgroundTransparency = 1
+				TTitle.Text = TitleStr
+				TTitle.TextColor3 = T.PrimaryText
+				TTitle.TextSize = 13
+				TTitle.Font = Enum.Font.GothamMedium
+				TTitle.TextXAlignment = Enum.TextXAlignment.Left
+				TTitle.Parent = TextboxFrame
+			end
+
+			local BoxHolder = Instance.new("Frame")
+			BoxHolder.Size = UDim2.new(1, -20, 0, 28)
+			BoxHolder.Position = UDim2.new(0, 10, 0, HasTitle and 26 or 5)
+			BoxHolder.BackgroundColor3 = T.SearchBarBg
+			BoxHolder.BorderSizePixel = 0
+			BoxHolder.Parent = TextboxFrame
+
+			local BHCorner = Instance.new("UICorner")
+			BHCorner.CornerRadius = UDim.new(0, 5)
+			BHCorner.Parent = BoxHolder
+
+			local BHStroke = Instance.new("UIStroke")
+			BHStroke.Color = T.TabActive
+			BHStroke.Thickness = 1
+			BHStroke.Parent = BoxHolder
+
 			local TBox = Instance.new("TextBox")
-			TBox.Size = UDim2.new(1, 0, 1, 0)
-			TBox.BackgroundColor3 = T.ElementBg
+			TBox.Size = UDim2.new(1, -16, 1, 0)
+			TBox.Position = UDim2.new(0, 8, 0, 0)
+			TBox.BackgroundTransparency = 1
 			TBox.PlaceholderText = PlaceholderStr
 			TBox.Text = DefaultText
 			TBox.TextColor3 = T.PrimaryText
 			TBox.PlaceholderColor3 = T.SecondaryText
 			TBox.TextSize = 13
-			TBox.Font = Enum.Font.GothamMedium
-			TBox.TextWrapped = true
-			TBox.Parent = TextboxFrame
+			TBox.Font = Enum.Font.Gotham
+			TBox.TextXAlignment = Enum.TextXAlignment.Left
+			TBox.TextYAlignment = Enum.TextYAlignment.Center
+			TBox.ClearTextOnFocus = ClearOnFocus
+			TBox.TextTruncate = Enum.TextTruncate.None
+			TBox.Parent = BoxHolder
 
-			local BoxCorner = Instance.new("UICorner")
-			BoxCorner.CornerRadius = UDim.new(0, 6)
-			BoxCorner.Parent = TBox
+			local CounterLabel = Instance.new("TextLabel")
+			CounterLabel.Size = UDim2.new(0, 44, 0, 14)
+			CounterLabel.Position = UDim2.new(1, -50, 0.5, -7)
+			CounterLabel.BackgroundTransparency = 1
+			CounterLabel.Text = #DefaultText .. "/" .. CharLimit
+			CounterLabel.TextColor3 = T.SecondaryText
+			CounterLabel.TextSize = 10
+			CounterLabel.Font = Enum.Font.Gotham
+			CounterLabel.TextXAlignment = Enum.TextXAlignment.Right
+			CounterLabel.Visible = false
+			CounterLabel.Parent = BoxHolder
 
-			TBox.FocusLost:Connect(function() Callback(TBox.Text) end)
-			Reg(TextboxFrame, PlaceholderStr)
+			TBox:GetPropertyChangedSignal("Text"):Connect(function()
+				if #TBox.Text > CharLimit then
+					TBox.Text = TBox.Text:sub(1, CharLimit)
+				end
+				CounterLabel.Text = #TBox.Text .. "/" .. CharLimit
+			end)
+
+			TBox.Focused:Connect(function()
+				CounterLabel.Visible = true
+				TweenService:Create(BHStroke, TweenInfo.new(0.15), {Color = T.AccentColor}):Play()
+			end)
+
+			TBox.FocusLost:Connect(function(enterPressed)
+				CounterLabel.Visible = false
+				TweenService:Create(BHStroke, TweenInfo.new(0.15), {Color = T.TabActive}):Play()
+				Callback(TBox.Text, enterPressed)
+			end)
+
+			Reg(TextboxFrame, TitleStr or PlaceholderStr)
+
+			local TextboxHandling = {}
+			function TextboxHandling:Get() return TBox.Text end
+			function TextboxHandling:Set(newText)
+				TBox.Text = tostring(newText):sub(1, CharLimit)
+			end
+			function TextboxHandling:SetPlaceholder(newPlaceholder)
+				TBox.PlaceholderText = tostring(newPlaceholder)
+			end
+			function TextboxHandling:SetLimit(newLimit)
+				CharLimit = tonumber(newLimit) or CharLimit
+				if #TBox.Text > CharLimit then TBox.Text = TBox.Text:sub(1, CharLimit) end
+			end
+			return TextboxHandling
 		end
 
 		function TabHandling:CreateSlider(SliderText, MinValue, MaxValue, Callback)
@@ -2874,7 +3153,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			DChevron.Size = UDim2.new(0, 14, 0, 14)
 			DChevron.Position = UDim2.new(1, -24, 0.5, -7)
 			DChevron.BackgroundTransparency = 1
-			DChevron.Image = IconsDict["chevron-down"]
+			DChevron.Image = ResolveIcon("chevron-down", "chevron-down")
 			DChevron.ImageColor3 = T.SecondaryText
 			DChevron.Parent = DropFrame
 
