@@ -1579,21 +1579,24 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local T               = ThemesDict[ThemeName] or ThemesDict["Default"]
 
 	local IntroConfig     = WindowConfig.Intro
-	local ShowIntro       = IntroConfig ~= nil
+	local KeyConfig       = WindowConfig.KeySystem
+	local ShowKey        = KeyConfig ~= nil
+	-- A key system always boots after an intro. If no intro table was
+	-- supplied, use the library defaults so KeySystem still works by itself.
+	local ShowIntro       = IntroConfig ~= nil or ShowKey
+	IntroConfig            = IntroConfig or {}
 
 	local IntroTitle    = ShowIntro and (IntroConfig.Title    or "Lua Land Ui Library") or ""
 	local IntroSubtitle = ShowIntro and (IntroConfig.Subtitle or "Developed By LLH Lua Land") or ""
 	local IntroIcon     = ShowIntro and (IntroConfig.Icon     or "house") or "house"
 
-	local KeyConfig      = WindowConfig.KeySystem
-	local ShowKey        = KeyConfig ~= nil
 	local KeyTitle       = ShowKey and (KeyConfig.Title     or "Lua Land Ui Key System")    or ""
 	local KeySubtitle    = ShowKey and (KeyConfig.Subtitle  or "Developed By LLH Lua Land") or ""
 	local KeyTitleIcon   = ShowKey and (KeyConfig.TitleIcon or "key-round")                 or "key-round"
 	local KeyThemeName   = ShowKey and (KeyConfig.Theme     or "Fire")                      or "Fire"
 	local KeyT           = ThemesDict[KeyThemeName] or ThemesDict["Fire"]
-	local KeyCorrect     = ShowKey and (KeyConfig.Key       or "LuaLand")                   or "LuaLand"
-	local KeyGetLink     = ShowKey and (KeyConfig.GetLink   or "https://linkvertise.com")   or ""
+	local KeyCorrect     = ShowKey and (KeyConfig.Key or KeyConfig.CorrectKey or "LuaLand") or "LuaLand"
+	local KeyGetLink     = ShowKey and (KeyConfig.GetLink or KeyConfig.GetKeyLink or "https://linkvertise.com") or ""
 	local KeyScript      = ShowKey and KeyConfig.Script                                     or nil
 	local KeyNotifTitle  = ShowKey and (KeyConfig.NotifTitle or "Lua Land Ui Library")      or ""
 	local KeyNotifIcon   = ShowKey and (KeyConfig.NotifIcon  or "key")                      or "key"
@@ -1601,6 +1604,48 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local KeyPlaceholder = ShowKey and (KeyConfig.Placeholder or "Enter your key...")        or ""
 	local KeyLimit       = ShowKey and (tonumber(KeyConfig.Limit) or 20)                     or 20
 	local KeyScale       = ShowKey and (tonumber(KeyConfig.Scale) or 1)                      or 1
+	local KeybindValue   = ShowKey and (KeyConfig.Keybind or KeyConfig.ToggleKeybind
+		or WindowConfig.Keybind or WindowConfig.ToggleKeybind or Enum.KeyCode.RightControl)
+		or Enum.KeyCode.RightControl
+
+	local function ResolveKeybind(value)
+		if typeof(value) == "EnumItem" then
+			return value
+		end
+		if type(value) == "string" then
+			local enumName = value:gsub("^Enum%.KeyCode%.", "")
+			return Enum.KeyCode[enumName] or Enum.KeyCode.RightControl
+		end
+		return Enum.KeyCode.RightControl
+	end
+
+	local ToggleKeybind = ResolveKeybind(KeybindValue)
+	local ToggleImage = ShowKey and (KeyConfig.ToggleImage or KeyConfig.Thumbnail
+		or WindowConfig.ToggleImage or WindowConfig.Thumbnail
+		or "rbxassetid://75306909019995") or "rbxassetid://75306909019995"
+	local ToggleSizeConfig = ShowKey and (KeyConfig.ToggleButtonSize or KeyConfig.ToggleSize
+		or WindowConfig.ToggleButtonSize or WindowConfig.ToggleSize or "Square")
+		or "Square"
+	local ToggleType = ShowKey and (KeyConfig.ToggleButtonType or WindowConfig.ToggleButtonType
+		or "Round Corner") or "Round Corner"
+	local ToggleRadius = ShowKey and (tonumber(KeyConfig.ToggleButtonRoundCornerRadius
+		or KeyConfig.ToggleCornerRadius or WindowConfig.ToggleButtonRoundCornerRadius
+		or WindowConfig.ToggleCornerRadius) or 12) or 12
+
+	local function ResolveToggleSize(value)
+		if type(value) == "number" then
+			return UDim2.new(0, value, 0, value)
+		end
+		if type(value) == "table" then
+			local width = tonumber(value.Width or value.X or value[1]) or 52
+			local height = tonumber(value.Height or value.Y or value[2]) or width
+			return UDim2.new(0, width, 0, height)
+		end
+		return UDim2.new(0, 52, 0, 52)
+	end
+
+	local ToggleSize = ResolveToggleSize(ToggleSizeConfig)
+	local KeyPassed = not ShowKey
 
 	local ScreenGui = Instance.new("ScreenGui")
 	ScreenGui.Name = "LuaLandGui"
@@ -1617,6 +1662,109 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	MainFrame.ClipsDescendants = true
 	MainFrame.Visible = false
 	MainFrame.Parent = ScreenGui
+
+	-- The main window is hidden instead of destroyed so the toggle and hotkey
+	-- can restore it after the user closes it.
+	local NormalSize = UDim2.new(0, 500, 0, 350)
+	local MinimizedSize = UDim2.new(0, 500, 0, 50)
+	local IsMinimized = false
+	local Body
+
+	local ToggleButton = Instance.new("ImageButton")
+	ToggleButton.Name = "ToggleButton"
+	ToggleButton.Size = ToggleSize
+	ToggleButton.Position = UDim2.new(1, -24, 1, -24)
+	ToggleButton.AnchorPoint = Vector2.new(1, 1)
+	ToggleButton.BackgroundColor3 = T.ElementBg
+	ToggleButton.BorderSizePixel = 0
+	ToggleButton.AutoButtonColor = false
+	ToggleButton.Image = ResolveIcon(ToggleImage, "app-window")
+	ToggleButton.ImageColor3 = T.PrimaryText
+	ToggleButton.ScaleType = Enum.ScaleType.Fit
+	ToggleButton.Visible = false
+	ToggleButton.ZIndex = 100
+	ToggleButton.Parent = ScreenGui
+
+	local ToggleCorner = Instance.new("UICorner")
+	ToggleCorner.CornerRadius = ToggleType:lower():find("circle", 1, true)
+		and UDim.new(1, 0) or UDim.new(0, ToggleRadius)
+	ToggleCorner.Parent = ToggleButton
+
+	local ToggleStroke = Instance.new("UIStroke")
+	ToggleStroke.Color = T.AccentColor
+	ToggleStroke.Thickness = 1
+	ToggleStroke.Transparency = 0.15
+	ToggleStroke.Parent = ToggleButton
+
+	local function ShowMainWindow()
+		MainFrame.Visible = true
+		MainFrame.Size = NormalSize
+		MainFrame.Position = UDim2.new(0.5, -250, 0.6, -175)
+		MainFrame.BackgroundTransparency = 1
+		IsMinimized = false
+		if Body then
+			Body.Visible = true
+		end
+		ToggleButton.Visible = false
+		TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+			Position = UDim2.new(0.5, -250, 0.5, -175),
+			BackgroundTransparency = 0,
+		}):Play()
+	end
+
+	local function HideMainWindow()
+		if not MainFrame.Visible then
+			return
+		end
+		ToggleButton.Visible = false
+		TweenService:Create(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+			Size = UDim2.new(0, 500, 0, 0),
+			Position = UDim2.new(MainFrame.Position.X.Scale, MainFrame.Position.X.Offset,
+				MainFrame.Position.Y.Scale, MainFrame.Position.Y.Offset + 175),
+		}):Play()
+		task.delay(0.22, function()
+			if MainFrame.Parent then
+				MainFrame.Visible = false
+				MainFrame.Size = NormalSize
+				ToggleButton.Visible = KeyPassed
+			end
+		end)
+	end
+
+	local function ToggleMainWindow()
+		if MainFrame.Visible then
+			HideMainWindow()
+		else
+			ShowMainWindow()
+		end
+	end
+
+	ToggleButton.MouseEnter:Connect(function()
+		TweenService:Create(ToggleButton, TweenInfo.new(0.15), {
+			BackgroundColor3 = T.TabActive,
+			ImageColor3 = T.AccentColor,
+		}):Play()
+	end)
+	ToggleButton.MouseLeave:Connect(function()
+		TweenService:Create(ToggleButton, TweenInfo.new(0.15), {
+			BackgroundColor3 = T.ElementBg,
+			ImageColor3 = T.PrimaryText,
+		}):Play()
+	end)
+	ToggleButton.MouseButton1Click:Connect(function()
+		if KeyPassed then
+			ToggleMainWindow()
+		end
+	end)
+
+	UserInputService.InputBegan:Connect(function(input, gameProcessed)
+		if gameProcessed or not KeyPassed then
+			return
+		end
+		if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == ToggleKeybind then
+			ToggleMainWindow()
+		end
+	end)
 
 	if ShowIntro then
 		local IntroFrame = Instance.new("Frame")
@@ -1811,8 +1959,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			end
 
 			if ShowKey then
-				local KeyPassed = false
-
 				local KGui = Instance.new("ScreenGui")
 				KGui.Name = "LLKeySystem"
 				KGui.ResetOnSpawn = false
@@ -1821,8 +1967,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 				local KFrame = Instance.new("Frame")
 				KFrame.Name = "KeyFrame"
-				KFrame.Size = UDim2.new(0, 460, 0, 250)
-				KFrame.Position = UDim2.new(0.5, -230, 0.5, -125)
+				KFrame.Size = UDim2.new(0, 460, 0, 300)
+				KFrame.Position = UDim2.new(0.5, -230, 0.5, -150)
 				KFrame.BackgroundColor3 = KeyT.WindowBg
 				KFrame.BorderSizePixel = 0
 				KFrame.ClipsDescendants = false
@@ -1839,7 +1985,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				-- ===== Title bar : title (top + left), icon left of title, subtitle below =====
 				local KTitleBar = Instance.new("Frame")
 				KTitleBar.Name = "KTitleBar"
-				KTitleBar.Size = UDim2.new(1, 0, 0, 52)
+				KTitleBar.Size = UDim2.new(1, 0, 0, 58)
 				KTitleBar.BackgroundColor3 = KeyT.TitleBarBg
 				KTitleBar.BorderSizePixel = 0
 				KTitleBar.ZIndex = 5
@@ -1896,15 +2042,15 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 				local KDivider = Instance.new("Frame")
 				KDivider.Size = UDim2.new(1, -24, 0, 1)
-				KDivider.Position = UDim2.new(0, 12, 0, 52)
+				KDivider.Position = UDim2.new(0, 12, 0, 58)
 				KDivider.BackgroundColor3 = KeyT.TabActive
 				KDivider.BorderSizePixel = 0
 				KDivider.Parent = KFrame
 
-				-- ===== Input key textbox : below the subtitle, left side =====
+				-- ===== Key entry : left column =====
 				local KTextboxFrame = Instance.new("Frame")
-				KTextboxFrame.Size = UDim2.new(0, 262, 0, 40)
-				KTextboxFrame.Position = UDim2.new(0, 14, 0, 70)
+				KTextboxFrame.Size = UDim2.new(0, 270, 0, 42)
+				KTextboxFrame.Position = UDim2.new(0, 14, 0, 78)
 				KTextboxFrame.BackgroundColor3 = KeyT.ElementBg
 				KTextboxFrame.BorderSizePixel = 0
 				KTextboxFrame.Parent = KFrame
@@ -1941,8 +2087,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				end)
 
 				local KStatusLabel = Instance.new("TextLabel")
-				KStatusLabel.Size = UDim2.new(0, 262, 0, 16)
-				KStatusLabel.Position = UDim2.new(0, 14, 0, 114)
+				KStatusLabel.Size = UDim2.new(0, 270, 0, 18)
+				KStatusLabel.Position = UDim2.new(0, 14, 0, 124)
 				KStatusLabel.BackgroundTransparency = 1
 				KStatusLabel.Text = ""
 				KStatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
@@ -1987,21 +2133,21 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 					return Btn, BIcon, BLabel
 				end
 
-				-- Submit : below the input textbox, left side
+				-- Submit and clear stay together beneath the key entry.
 				local SubmitBtn = MakeKeyBtn("Submit", "check", KeyT.AccentColor,
-					UDim2.new(0, 14, 0, 138), UDim2.new(0, 130, 0, 38))
+					UDim2.new(0, 14, 0, 158), UDim2.new(0, 130, 0, 40))
 				local ClearBtn2 = MakeKeyBtn("Clear", "trash", KeyT.TabActive,
-					UDim2.new(0, 152, 0, 138), UDim2.new(0, 110, 0, 38))
-				-- Get Key : right side, top (aligned with the input textbox)
+					UDim2.new(0, 152, 0, 158), UDim2.new(0, 110, 0, 40))
+				-- Get Key starts the right column and remains aligned with the input.
 				local GetBtn = MakeKeyBtn("Get Key", "hand-grab", KeyT.TabActive,
-					UDim2.new(0, 290, 0, 70), UDim2.new(0, 156, 0, 40))
+					UDim2.new(0, 290, 0, 78), UDim2.new(0, 156, 0, 42))
 
-				-- ===== Theme selector (slide-open list) : below the Get Key button =====
+				-- ===== Theme selector (slide-open list) : right column =====
 				local ThemeOrder = {"Default", "Darker", "Fire", "Blossom", "Snow", "Cloudy", "Spring"}
 
 				local ThemeBtn = Instance.new("TextButton")
 				ThemeBtn.Size = UDim2.new(0, 156, 0, 34)
-				ThemeBtn.Position = UDim2.new(0, 290, 0, 120)
+				ThemeBtn.Position = UDim2.new(0, 290, 0, 130)
 				ThemeBtn.BackgroundColor3 = KeyT.ElementBg
 				ThemeBtn.AutoButtonColor = false
 				ThemeBtn.Text = ""
@@ -2036,7 +2182,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				local ThemePopup = Instance.new("Frame")
 				ThemePopup.Name = "ThemePopup"
 				ThemePopup.Size = UDim2.new(0, 156, 0, 0)
-				ThemePopup.Position = UDim2.new(0, 290, 0, 156)
+				ThemePopup.Position = UDim2.new(0, 290, 0, 166)
 				ThemePopup.BackgroundColor3 = KeyT.ElementBg
 				ThemePopup.BorderSizePixel = 0
 				ThemePopup.ClipsDescendants = true
@@ -2154,16 +2300,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 					SetThemeOpen(not ThemeOpen)
 				end)
 
-				local function ShowMainWindow()
-					MainFrame.Visible = true
-					MainFrame.Position = UDim2.new(0.5, -250, 0.6, -175)
-					MainFrame.BackgroundTransparency = 1
-					TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-						Position = UDim2.new(0.5, -250, 0.5, -175),
-						BackgroundTransparency = 0,
-					}):Play()
-				end
-
 				local function SubmitKey()
 					local input = KTextbox.Text
 					if input == KeyCorrect then
@@ -2178,6 +2314,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 						KGui:Destroy()
 						KeyPassed = true
 						ShowMainWindow()
+						ToggleButton.Visible = false
 						if KeyScript then
 							task.wait(0.4)
 							task.spawn(KeyScript)
@@ -2258,17 +2395,11 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				end
 				TweenService:Create(KTBxStroke, TweenInfo.new(0.3), {Transparency = 0}):Play()
 			else
-				MainFrame.Visible = true
-				MainFrame.Position = UDim2.new(0.5, -250, 0.6, -175)
-				MainFrame.BackgroundTransparency = 1
-				TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-					Position = UDim2.new(0.5, -250, 0.5, -175),
-					BackgroundTransparency = 0,
-				}):Play()
+				ShowMainWindow()
 			end
 		end)
 	else
-		MainFrame.Visible = true
+		ShowMainWindow()
 	end
 
 	local UICorner = Instance.new("UICorner")
@@ -2334,14 +2465,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	CloseBtn.MouseLeave:Connect(function()
 		TweenService:Create(CloseBtn, TweenInfo.new(0.15), {ImageColor3 = T.PrimaryText}):Play()
 	end)
-	CloseBtn.MouseButton1Click:Connect(function()
-		TweenService:Create(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-			Size = UDim2.new(0, 500, 0, 0),
-			Position = UDim2.new(MainFrame.Position.X.Scale, MainFrame.Position.X.Offset,
-			                     MainFrame.Position.Y.Scale, MainFrame.Position.Y.Offset + 175)
-		}):Play()
-		task.delay(0.22, function() ScreenGui:Destroy() end)
-	end)
+	CloseBtn.MouseButton1Click:Connect(HideMainWindow)
 
 	local MinimizeBtn = Instance.new("TextButton")
 	MinimizeBtn.Name = "MinimizeButton"
@@ -2363,10 +2487,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local MinLineCorner = Instance.new("UICorner")
 	MinLineCorner.CornerRadius = UDim.new(1, 0)
 	MinLineCorner.Parent = MinimizeLine
-
-	local IsMinimized   = false
-	local NormalSize    = UDim2.new(0, 500, 0, 350)
-	local MinimizedSize = UDim2.new(0, 500, 0, 50)
 
 	MinimizeBtn.MouseEnter:Connect(function()
 		TweenService:Create(MinimizeLine, TweenInfo.new(0.15), {BackgroundColor3 = T.AccentColor}):Play()
@@ -2397,7 +2517,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 	end)
 
-	local Body = Instance.new("Frame")
+	Body = Instance.new("Frame")
 	Body.Name = "Body"
 	Body.Size = UDim2.new(1, 0, 1, -50)
 	Body.Position = UDim2.new(0, 0, 0, 50)
@@ -2451,6 +2571,24 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local TabsCollection  = {}
 
 	local SettingsHandling = {}
+
+	function WindowHandling:Show()
+		if KeyPassed then
+			ShowMainWindow()
+		end
+	end
+
+	function WindowHandling:Hide()
+		if KeyPassed then
+			HideMainWindow()
+		end
+	end
+
+	function WindowHandling:Toggle()
+		if KeyPassed then
+			ToggleMainWindow()
+		end
+	end
 
 	function SettingsHandling:SetTitle(NewTitle)
 		TitleText.Text = NewTitle
