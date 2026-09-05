@@ -1,3 +1,6 @@
+-- Lua Land UI Library - updated build
+-- Includes the top-center clamped toggle, intro/key/intro/main flow,
+-- responsive key-system layout, and key-theme propagation to the main UI.
 local LuaLandLibrary = {}
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -1620,9 +1623,22 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	end
 
 	local ToggleKeybind = ResolveKeybind(KeybindValue)
-	local ToggleImage = ShowKey and (KeyConfig.ToggleImage or KeyConfig.Thumbnail
-		or WindowConfig.ToggleImage or WindowConfig.Thumbnail
-		or "rbxassetid://75306909019995") or "rbxassetid://75306909019995"
+	local ToggleImage = (ShowKey and (KeyConfig.ToggleImage or KeyConfig.Thumbnail)
+		or WindowConfig.ToggleImage or WindowConfig.Thumbnail)
+	local function IsValidToggleAsset(value)
+		if typeof(value) == "number" then
+			return value > 0
+		end
+		if type(value) ~= "string" then
+			return false
+		end
+		local asset = value:gsub("%s+", "")
+		return asset:match("^%d+$") ~= nil
+			or asset:match("^rbxassetid://%d+$") ~= nil
+			or asset:match("^rbxasset://.+") ~= nil
+			or asset:match("^https?://.+") ~= nil
+	end
+	local HasToggleImage = IsValidToggleAsset(ToggleImage)
 	local ToggleSizeConfig = ShowKey and (KeyConfig.ToggleButtonSize or KeyConfig.ToggleSize
 		or WindowConfig.ToggleButtonSize or WindowConfig.ToggleSize or "Square")
 		or "Square"
@@ -1682,7 +1698,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	ToggleButton.BackgroundColor3 = T.ElementBg
 	ToggleButton.BorderSizePixel = 0
 	ToggleButton.AutoButtonColor = false
-	ToggleButton.Image = ResolveIcon(ToggleImage, "app-window")
+	ToggleButton.Image = HasToggleImage and ResolveIcon(ToggleImage) or ""
 	ToggleButton.ImageColor3 = T.PrimaryText
 	ToggleButton.ScaleType = Enum.ScaleType.Fit
 	ToggleButton.Visible = false
@@ -1763,7 +1779,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			if MainFrame.Parent then
 				MainFrame.Visible = false
 				MainFrame.Size = NormalSize
-				ToggleButton.Visible = KeyPassed
+				ToggleButton.Visible = KeyPassed and HasToggleImage
 			end
 		end)
 	end
