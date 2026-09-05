@@ -1,6 +1,3 @@
--- Lua Land UI Library - updated build
--- Includes the top-center clamped toggle, intro/key/intro/main flow,
--- responsive key-system layout, and key-theme propagation to the main UI.
 local LuaLandLibrary = {}
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
