@@ -1,3 +1,6 @@
+-- Lua Land UI Library - updated build
+-- Includes the top-center clamped toggle, intro/key/intro/main flow,
+-- responsive key-system layout, and key-theme propagation to the main UI.
 local LuaLandLibrary = {}
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -2293,7 +2296,9 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				local GetBtn = MakeKeyBtn("Get Key", "hand-grab", KeyT.TabActive,
 					UDim2.new(0, 152, 0, 130), UDim2.new(0, 130, 0, 40))
 				local ClearBtn2 = MakeKeyBtn("Clear", "trash", KeyT.TabActive,
-					UDim2.new(0, 175, 0, 176), UDim2.new(0, 110, 0, 40))
+					-- One wide, left-aligned button: approximately the combined
+					-- width of Check Key and Get Key.
+					UDim2.new(0, 14, 0, 176), UDim2.new(0, 268, 0, 40))
 
 				-- ===== Theme selector (slide-open list) : right column =====
 				local ThemeOrder = {"Default", "Darker", "Fire", "Blossom", "Snow", "Cloudy", "Spring"}
