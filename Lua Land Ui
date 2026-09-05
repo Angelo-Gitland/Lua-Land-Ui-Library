@@ -1646,10 +1646,12 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 	local ToggleSize = ResolveToggleSize(ToggleSizeConfig)
 	local KeyPassed = not ShowKey
+	local ApplyMainTheme
 
 	local ScreenGui = Instance.new("ScreenGui")
 	ScreenGui.Name = "LuaLandGui"
 	ScreenGui.ResetOnSpawn = false
+	ScreenGui.IgnoreGuiInset = true
 	ScreenGui.Parent = RunService:IsStudio()
 		and game.Players.LocalPlayer:WaitForChild("PlayerGui") or CoreGui
 
@@ -1673,8 +1675,10 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local ToggleButton = Instance.new("ImageButton")
 	ToggleButton.Name = "ToggleButton"
 	ToggleButton.Size = ToggleSize
-	ToggleButton.Position = UDim2.new(1, -24, 1, -24)
-	ToggleButton.AnchorPoint = Vector2.new(1, 1)
+	-- The default location is the top-center on every screen size. The
+	-- position is converted to pixel offsets so it can be clamped reliably.
+	ToggleButton.Position = UDim2.new(0.5, -math.floor(ToggleSize.X.Offset / 2), 0, 16)
+	ToggleButton.AnchorPoint = Vector2.new(0, 0)
 	ToggleButton.BackgroundColor3 = T.ElementBg
 	ToggleButton.BorderSizePixel = 0
 	ToggleButton.AutoButtonColor = false
@@ -1695,6 +1699,39 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	ToggleStroke.Thickness = 1
 	ToggleStroke.Transparency = 0.15
 	ToggleStroke.Parent = ToggleButton
+
+	local function GetViewportSize()
+		local camera = workspace.CurrentCamera
+		return camera and camera.ViewportSize or Vector2.new(800, 600)
+	end
+
+	local function ClampTogglePosition(x, y)
+		local viewport = GetViewportSize()
+		local width = ToggleButton.AbsoluteSize.X > 0 and ToggleButton.AbsoluteSize.X or ToggleSize.X.Offset
+		local height = ToggleButton.AbsoluteSize.Y > 0 and ToggleButton.AbsoluteSize.Y or ToggleSize.Y.Offset
+		local maxX = math.max(0, viewport.X - width)
+		local maxY = math.max(0, viewport.Y - height)
+		return math.clamp(x, 0, maxX), math.clamp(y, 0, maxY)
+	end
+
+	local function SetTogglePosition(x, y)
+		local clampedX, clampedY = ClampTogglePosition(x, y)
+		ToggleButton.Position = UDim2.new(0, clampedX, 0, clampedY)
+	end
+
+	local function ResetTogglePosition()
+		local viewport = GetViewportSize()
+		local width = ToggleButton.AbsoluteSize.X > 0 and ToggleButton.AbsoluteSize.X or ToggleSize.X.Offset
+		SetTogglePosition((viewport.X - width) / 2, 16)
+	end
+
+	local function ClampCurrentTogglePosition()
+		local position = ToggleButton.Position
+		SetTogglePosition(position.X.Scale * GetViewportSize().X + position.X.Offset,
+			position.Y.Scale * GetViewportSize().Y + position.Y.Offset)
+	end
+
+	ResetTogglePosition()
 
 	local function ShowMainWindow()
 		MainFrame.Visible = true
@@ -1739,6 +1776,9 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 	end
 
+	local ToggleDragging, ToggleDragInput, ToggleDragStart, ToggleStartPos
+	local ToggleWasDragged = false
+
 	ToggleButton.MouseEnter:Connect(function()
 		TweenService:Create(ToggleButton, TweenInfo.new(0.15), {
 			BackgroundColor3 = T.TabActive,
@@ -1752,9 +1792,53 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		}):Play()
 	end)
 	ToggleButton.MouseButton1Click:Connect(function()
-		if KeyPassed then
+		if KeyPassed and not ToggleWasDragged then
 			ToggleMainWindow()
 		end
+		ToggleWasDragged = false
+	end)
+
+	ToggleButton.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1
+			or input.UserInputType == Enum.UserInputType.Touch then
+			ToggleDragging = true
+			ToggleWasDragged = false
+			ToggleDragStart = input.Position
+			ToggleStartPos = ToggleButton.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					ToggleDragging = false
+				end
+			end)
+		end
+	end)
+
+	ToggleButton.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement
+			or input.UserInputType == Enum.UserInputType.Touch then
+			ToggleDragInput = input
+		end
+	end)
+
+	UserInputService.InputChanged:Connect(function(input)
+		if ToggleDragging and input == ToggleDragInput then
+			local delta = input.Position - ToggleDragStart
+			if math.abs(delta.X) > 4 or math.abs(delta.Y) > 4 then
+				ToggleWasDragged = true
+			end
+			SetTogglePosition(ToggleStartPos.X.Offset + delta.X, ToggleStartPos.Y.Offset + delta.Y)
+		end
+	end)
+
+	local function BindToggleViewport(camera)
+		if camera then
+			camera:GetPropertyChangedSignal("ViewportSize"):Connect(ClampCurrentTogglePosition)
+		end
+	end
+	BindToggleViewport(workspace.CurrentCamera)
+	workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function()
+		BindToggleViewport(workspace.CurrentCamera)
+		ClampCurrentTogglePosition()
 	end)
 
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
@@ -1873,6 +1957,76 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			})
 			task.wait(0.45)
 			IntroFrame:Destroy()
+
+			-- Reuse the intro as the handoff between an accepted key and the
+			-- main window: intro -> key system -> intro -> main window.
+			local function PlayIntroAgain()
+				local HandoffFrame = Instance.new("Frame")
+				HandoffFrame.Name = "IntroHandoff"
+				HandoffFrame.Size = UDim2.new(0, 320, 0, 120)
+				HandoffFrame.Position = UDim2.new(0.5, -160, 0.5, -60)
+				HandoffFrame.BackgroundColor3 = T.TitleBarBg
+				HandoffFrame.BackgroundTransparency = 1
+				HandoffFrame.BorderSizePixel = 0
+				HandoffFrame.Parent = ScreenGui
+
+				local HandoffCorner = Instance.new("UICorner")
+				HandoffCorner.CornerRadius = UDim.new(0, 12)
+				HandoffCorner.Parent = HandoffFrame
+
+				local HandoffIcon = Instance.new("ImageLabel")
+				HandoffIcon.Size = UDim2.new(0, 48, 0, 48)
+				HandoffIcon.Position = UDim2.new(0.5, -24, 0, 18)
+				HandoffIcon.BackgroundTransparency = 1
+				HandoffIcon.Image = ResolveIcon(IntroIcon, "house")
+				HandoffIcon.ImageColor3 = T.AccentColor
+				HandoffIcon.ImageTransparency = 1
+				HandoffIcon.Parent = HandoffFrame
+
+				local HandoffTitle = Instance.new("TextLabel")
+				HandoffTitle.Size = UDim2.new(1, -20, 0, 22)
+				HandoffTitle.Position = UDim2.new(0, 10, 0, 72)
+				HandoffTitle.BackgroundTransparency = 1
+				HandoffTitle.Text = IntroTitle
+				HandoffTitle.TextColor3 = T.PrimaryText
+				HandoffTitle.TextTransparency = 1
+				HandoffTitle.TextSize = 18
+				HandoffTitle.Font = Enum.Font.GothamBold
+				HandoffTitle.TextXAlignment = Enum.TextXAlignment.Center
+				HandoffTitle.TextWrapped = true
+				HandoffTitle.Parent = HandoffFrame
+
+				local HandoffSubtitle = Instance.new("TextLabel")
+				HandoffSubtitle.Size = UDim2.new(1, -20, 0, 16)
+				HandoffSubtitle.Position = UDim2.new(0, 10, 0, 96)
+				HandoffSubtitle.BackgroundTransparency = 1
+				HandoffSubtitle.Text = IntroSubtitle
+				HandoffSubtitle.TextColor3 = T.SecondaryText
+				HandoffSubtitle.TextTransparency = 1
+				HandoffSubtitle.TextSize = 12
+				HandoffSubtitle.Font = Enum.Font.Gotham
+				HandoffSubtitle.TextXAlignment = Enum.TextXAlignment.Center
+				HandoffSubtitle.TextWrapped = true
+				HandoffSubtitle.Parent = HandoffFrame
+
+				TweenService:Create(HandoffFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+					BackgroundTransparency = 0,
+				}):Play()
+				TweenService:Create(HandoffIcon, TweenInfo.new(0.3), {ImageTransparency = 0}):Play()
+				task.wait(0.2)
+				TweenService:Create(HandoffTitle, TweenInfo.new(0.35), {TextTransparency = 0}):Play()
+				task.wait(0.15)
+				TweenService:Create(HandoffSubtitle, TweenInfo.new(0.35), {TextTransparency = 0}):Play()
+				task.wait(1.0)
+				TweenService:Create(HandoffFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+					BackgroundTransparency = 1,
+				}):Play()
+				TweenService:Create(HandoffIcon, TweenInfo.new(0.25), {ImageTransparency = 1}):Play()
+				TweenService:Create(HandoffTitle, TweenInfo.new(0.25), {TextTransparency = 1}):Play()
+				TweenService:Create(HandoffSubtitle, TweenInfo.new(0.25), {TextTransparency = 1}):Play()
+				task.wait(0.4)
+				HandoffFrame:Destroy()
+			end
 
 			local function ShowNotification(ntTitle, ntIcon, ntDesc)
 				local NGui = Instance.new("ScreenGui")
@@ -2049,7 +2203,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 				-- ===== Key entry : left column =====
 				local KTextboxFrame = Instance.new("Frame")
-				KTextboxFrame.Size = UDim2.new(0, 270, 0, 42)
+				KTextboxFrame.Size = UDim2.new(1, -28, 0, 42)
 				KTextboxFrame.Position = UDim2.new(0, 14, 0, 78)
 				KTextboxFrame.BackgroundColor3 = KeyT.ElementBg
 				KTextboxFrame.BorderSizePixel = 0
@@ -2088,7 +2242,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 				local KStatusLabel = Instance.new("TextLabel")
 				KStatusLabel.Size = UDim2.new(0, 270, 0, 18)
-				KStatusLabel.Position = UDim2.new(0, 14, 0, 124)
+				KStatusLabel.Position = UDim2.new(0, 14, 0, 224)
 				KStatusLabel.BackgroundTransparency = 1
 				KStatusLabel.Text = ""
 				KStatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
@@ -2133,20 +2287,19 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 					return Btn, BIcon, BLabel
 				end
 
-				-- Submit and clear stay together beneath the key entry.
-				local SubmitBtn = MakeKeyBtn("Submit", "check", KeyT.AccentColor,
-					UDim2.new(0, 14, 0, 158), UDim2.new(0, 130, 0, 40))
-				local ClearBtn2 = MakeKeyBtn("Clear", "trash", KeyT.TabActive,
-					UDim2.new(0, 152, 0, 158), UDim2.new(0, 110, 0, 40))
-				-- Get Key starts the right column and remains aligned with the input.
+				-- The action row follows the input: check, get, then theme.
+				local SubmitBtn = MakeKeyBtn("Check Key", "check", KeyT.AccentColor,
+					UDim2.new(0, 14, 0, 130), UDim2.new(0, 130, 0, 40))
 				local GetBtn = MakeKeyBtn("Get Key", "hand-grab", KeyT.TabActive,
-					UDim2.new(0, 290, 0, 78), UDim2.new(0, 156, 0, 42))
+					UDim2.new(0, 152, 0, 130), UDim2.new(0, 130, 0, 40))
+				local ClearBtn2 = MakeKeyBtn("Clear", "trash", KeyT.TabActive,
+					UDim2.new(0, 175, 0, 176), UDim2.new(0, 110, 0, 40))
 
 				-- ===== Theme selector (slide-open list) : right column =====
 				local ThemeOrder = {"Default", "Darker", "Fire", "Blossom", "Snow", "Cloudy", "Spring"}
 
 				local ThemeBtn = Instance.new("TextButton")
-				ThemeBtn.Size = UDim2.new(0, 156, 0, 34)
+				ThemeBtn.Size = UDim2.new(0, 156, 0, 40)
 				ThemeBtn.Position = UDim2.new(0, 290, 0, 130)
 				ThemeBtn.BackgroundColor3 = KeyT.ElementBg
 				ThemeBtn.AutoButtonColor = false
@@ -2182,7 +2335,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				local ThemePopup = Instance.new("Frame")
 				ThemePopup.Name = "ThemePopup"
 				ThemePopup.Size = UDim2.new(0, 156, 0, 0)
-				ThemePopup.Position = UDim2.new(0, 290, 0, 166)
+				ThemePopup.Position = UDim2.new(0, 290, 0, 174)
 				ThemePopup.BackgroundColor3 = KeyT.ElementBg
 				ThemePopup.BorderSizePixel = 0
 				ThemePopup.ClipsDescendants = true
@@ -2313,6 +2466,10 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 						task.wait(0.35)
 						KGui:Destroy()
 						KeyPassed = true
+						if ApplyMainTheme then
+							ApplyMainTheme(KeyThemeName)
+						end
+						PlayIntroAgain()
 						ShowMainWindow()
 						ToggleButton.Visible = false
 						if KeyScript then
@@ -2602,8 +2759,10 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		TitleIcon.Image = ResolveIcon(IconName, "book-open-text")
 	end
 
-	function SettingsHandling:SetTheme(NewThemeName)
+	local function ApplyMainThemeNow(NewThemeName)
 		local NT = ThemesDict[NewThemeName] or ThemesDict["Default"]
+		local OldT = T
+		T = NT
 		MainFrame.BackgroundColor3  = NT.WindowBg
 		TitleBar.BackgroundColor3   = NT.TitleBarBg
 		Sidebar.BackgroundColor3    = NT.SidebarBg
@@ -2616,6 +2775,52 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			local isActive = tabData.Wrapper.Visible
 			tabData.Button.BackgroundColor3 = isActive and NT.TabActive or NT.TabInactive
 		end
+
+		-- Repaint already-created tab controls as well as the window chrome.
+		-- Matching the old palette keeps this compatible with custom controls
+		-- created before the key was accepted.
+		local function RepaintColor(color)
+			if color == OldT.WindowBg then return NT.WindowBg end
+			if color == OldT.TitleBarBg then return NT.TitleBarBg end
+			if color == OldT.SidebarBg then return NT.SidebarBg end
+			if color == OldT.ElementBg then return NT.ElementBg end
+			if color == OldT.PrimaryText then return NT.PrimaryText end
+			if color == OldT.SecondaryText then return NT.SecondaryText end
+			if color == OldT.AccentColor then return NT.AccentColor end
+			if color == OldT.TabActive then return NT.TabActive end
+			if color == OldT.TabInactive then return NT.TabInactive end
+			if color == OldT.SearchBarBg then return NT.SearchBarBg end
+		end
+		for _, object in ipairs(MainFrame:GetDescendants()) do
+			if object:IsA("GuiObject") then
+				local background = RepaintColor(object.BackgroundColor3)
+				if background then object.BackgroundColor3 = background end
+			end
+			if object:IsA("TextLabel") or object:IsA("TextButton") or object:IsA("TextBox") then
+				local textColor = RepaintColor(object.TextColor3)
+				if textColor then object.TextColor3 = textColor end
+			end
+			if object:IsA("TextBox") then
+				local placeholderColor = RepaintColor(object.PlaceholderColor3)
+				if placeholderColor then object.PlaceholderColor3 = placeholderColor end
+			end
+			if object:IsA("ImageLabel") or object:IsA("ImageButton") then
+				local imageColor = RepaintColor(object.ImageColor3)
+				if imageColor then object.ImageColor3 = imageColor end
+			end
+			if object:IsA("UIStroke") then
+				local strokeColor = RepaintColor(object.Color)
+				if strokeColor then object.Color = strokeColor end
+			end
+		end
+		ToggleButton.BackgroundColor3 = NT.ElementBg
+		ToggleButton.ImageColor3 = NT.PrimaryText
+		ToggleStroke.Color = NT.AccentColor
+	end
+	ApplyMainTheme = ApplyMainThemeNow
+
+	function SettingsHandling:SetTheme(NewThemeName)
+		ApplyMainThemeNow(NewThemeName)
 	end
 
 	WindowHandling.Settings = SettingsHandling
