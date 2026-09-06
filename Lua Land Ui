@@ -3,6 +3,7 @@ local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
+local HttpService = game:GetService("HttpService")
 
 local IconsDict = {
 	["a-arrow-down"] = "rbxassetid://92867583610071",
@@ -1540,6 +1541,8 @@ local ThemesDict = {
 	},
 }
 
+local ThemeOrder = {"Default", "Darker", "Fire", "Blossom", "Snow", "Cloudy", "Spring"}
+
 -- Resolves an icon: accepts a Lucide icon name from IconsDict OR a raw
 -- custom asset ("rbxassetid://123", an asset URL, or a numeric id).
 local function ResolveIcon(icon, fallback)
@@ -1576,7 +1579,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local SubtitleString  = WindowConfig.Subtitle  or "Lua Land Dev"
 	local TitleIconString = WindowConfig.TitleIcon or "book-open-text"
 	local ThemeName       = WindowConfig.Theme      or "Default"
-	local T               = ThemesDict[ThemeName] or ThemesDict["Default"]
+	ThemeName              = ThemesDict[ThemeName] and ThemeName or "Default"
+	local T               = ThemesDict[ThemeName]
 
 	local IntroConfig     = WindowConfig.Intro
 	local KeyConfig       = WindowConfig.KeySystem
@@ -1660,6 +1664,30 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local ToggleSize = ResolveToggleSize(ToggleSizeConfig)
 	local KeyPassed = not ShowKey
 	local ApplyMainTheme
+	local ControlRegistry = {}
+	local ControlKeyCounts = {}
+	local SavedConfigs = {}
+	local ConfigOrder = {}
+	local ThemeDropdown
+	local DeleteSlotsDropdown
+	local ConfigListDropdown
+	local RenamePopup
+
+	local function MakeControlKey(tabName, label)
+		local base = tostring(tabName) .. ":" .. tostring(label)
+		ControlKeyCounts[base] = (ControlKeyCounts[base] or 0) + 1
+		return base .. ":" .. tostring(ControlKeyCounts[base])
+	end
+
+	local function RegisterControl(tabName, label, getter, setter)
+		if tabName ~= "Settings" then
+			table.insert(ControlRegistry, {
+				Key = MakeControlKey(tabName, label),
+				Get = getter,
+				Set = setter,
+			})
+		end
+	end
 
 	local ScreenGui = Instance.new("ScreenGui")
 	ScreenGui.Name = "LuaLandGui"
@@ -1667,6 +1695,207 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	ScreenGui.IgnoreGuiInset = true
 	ScreenGui.Parent = RunService:IsStudio()
 		and game.Players.LocalPlayer:WaitForChild("PlayerGui") or CoreGui
+
+	local function CloseGui(gui)
+		if gui and gui.Parent then
+			gui:Destroy()
+		end
+	end
+
+	local function ShowActionNotification(ntTitle, ntDesc, buttons)
+		local NGui = Instance.new("ScreenGui")
+		NGui.Name = "LLActionNotification"
+		NGui.ResetOnSpawn = false
+		NGui.DisplayOrder = 1000
+		NGui.Parent = ScreenGui.Parent
+
+		local NFrame = Instance.new("Frame")
+		NFrame.Size = UDim2.new(0, 310, 0, 116)
+		NFrame.Position = UDim2.new(0, -322, 1, -132)
+		NFrame.BackgroundColor3 = T.TitleBarBg
+		NFrame.BorderSizePixel = 0
+		NFrame.ZIndex = 1000
+		NFrame.Parent = NGui
+
+		local NCorner = Instance.new("UICorner")
+		NCorner.CornerRadius = UDim.new(0, 10)
+		NCorner.Parent = NFrame
+
+		local NAccent = Instance.new("Frame")
+		NAccent.Size = UDim2.new(0, 4, 1, 0)
+		NAccent.BackgroundColor3 = T.AccentColor
+		NAccent.BorderSizePixel = 0
+		NAccent.ZIndex = 1001
+		NAccent.Parent = NFrame
+
+		local NTitle = Instance.new("TextLabel")
+		NTitle.Size = UDim2.new(1, -58, 0, 22)
+		NTitle.Position = UDim2.new(0, 14, 0, 10)
+		NTitle.BackgroundTransparency = 1
+		NTitle.Text = ntTitle
+		NTitle.TextColor3 = T.PrimaryText
+		NTitle.TextSize = 14
+		NTitle.Font = Enum.Font.GothamBold
+		NTitle.TextXAlignment = Enum.TextXAlignment.Left
+		NTitle.TextWrapped = true
+		NTitle.ZIndex = 1001
+		NTitle.Parent = NFrame
+
+		local NDesc = Instance.new("TextLabel")
+		NDesc.Size = UDim2.new(1, -28, 0, 28)
+		NDesc.Position = UDim2.new(0, 14, 0, 35)
+		NDesc.BackgroundTransparency = 1
+		NDesc.Text = ntDesc
+		NDesc.TextColor3 = T.SecondaryText
+		NDesc.TextSize = 11
+		NDesc.Font = Enum.Font.Gotham
+		NDesc.TextXAlignment = Enum.TextXAlignment.Left
+		NDesc.TextWrapped = true
+		NDesc.ZIndex = 1001
+		NDesc.Parent = NFrame
+
+		local NClose = Instance.new("ImageButton")
+		NClose.Size = UDim2.new(0, 16, 0, 16)
+		NClose.Position = UDim2.new(1, -26, 0, 10)
+		NClose.BackgroundTransparency = 1
+		NClose.Image = ResolveIcon("x", "x")
+		NClose.ImageColor3 = T.SecondaryText
+		NClose.ZIndex = 1002
+		NClose.Parent = NFrame
+		NClose.MouseButton1Click:Connect(function() CloseGui(NGui) end)
+
+		local ButtonCount = math.max(1, #buttons)
+		local ButtonWidth = math.floor((286 - ((ButtonCount - 1) * 6)) / ButtonCount)
+		for index, buttonConfig in ipairs(buttons) do
+			local ActionButton = Instance.new("TextButton")
+			ActionButton.Size = UDim2.new(0, ButtonWidth, 0, 28)
+			ActionButton.Position = UDim2.new(0, 14 + ((index - 1) * (ButtonWidth + 6)), 1, -38)
+			ActionButton.BackgroundColor3 = buttonConfig.Color or T.AccentColor
+			ActionButton.BorderSizePixel = 0
+			ActionButton.AutoButtonColor = false
+			ActionButton.Text = buttonConfig.Text or "OK"
+			ActionButton.TextColor3 = T.PrimaryText
+			ActionButton.TextSize = 11
+			ActionButton.Font = Enum.Font.GothamMedium
+			ActionButton.ZIndex = 1001
+			ActionButton.Parent = NFrame
+
+			local ActionCorner = Instance.new("UICorner")
+			ActionCorner.CornerRadius = UDim.new(0, 6)
+			ActionCorner.Parent = ActionButton
+
+			ActionButton.MouseButton1Click:Connect(function()
+				CloseGui(NGui)
+				if buttonConfig.Callback then
+					buttonConfig.Callback()
+				end
+			end)
+		end
+
+		TweenService:Create(NFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+			Position = UDim2.new(0, 12, 1, -132),
+		}):Play()
+		return NGui
+	end
+
+	local function ShowRenamePopup(initialText, onSave)
+		CloseGui(RenamePopup)
+
+		local PGui = Instance.new("ScreenGui")
+		PGui.Name = "LLRenamePopup"
+		PGui.ResetOnSpawn = false
+		PGui.DisplayOrder = 1100
+		PGui.Parent = ScreenGui.Parent
+		RenamePopup = PGui
+
+		local PFrame = Instance.new("Frame")
+		PFrame.Size = UDim2.new(0, 300, 0, 154)
+		PFrame.Position = UDim2.new(0.5, -150, 0.5, -77)
+		PFrame.BackgroundColor3 = T.WindowBg
+		PFrame.BorderSizePixel = 0
+		PFrame.ZIndex = 1100
+		PFrame.Parent = PGui
+
+		local PCorner = Instance.new("UICorner")
+		PCorner.CornerRadius = UDim.new(0, 9)
+		PCorner.Parent = PFrame
+
+		local PTitle = Instance.new("TextLabel")
+		PTitle.Size = UDim2.new(1, -24, 0, 24)
+		PTitle.Position = UDim2.new(0, 12, 0, 12)
+		PTitle.BackgroundTransparency = 1
+		PTitle.Text = "Rename"
+		PTitle.TextColor3 = T.PrimaryText
+		PTitle.TextSize = 16
+		PTitle.Font = Enum.Font.GothamBold
+		PTitle.TextXAlignment = Enum.TextXAlignment.Left
+		PTitle.ZIndex = 1101
+		PTitle.Parent = PFrame
+
+		local PBoxFrame = Instance.new("Frame")
+		PBoxFrame.Size = UDim2.new(1, -24, 0, 34)
+		PBoxFrame.Position = UDim2.new(0, 12, 0, 48)
+		PBoxFrame.BackgroundColor3 = T.SearchBarBg
+		PBoxFrame.BorderSizePixel = 0
+		PBoxFrame.ZIndex = 1101
+		PBoxFrame.Parent = PFrame
+
+		local PBoxCorner = Instance.new("UICorner")
+		PBoxCorner.CornerRadius = UDim.new(0, 6)
+		PBoxCorner.Parent = PBoxFrame
+
+		local PBox = Instance.new("TextBox")
+		PBox.Size = UDim2.new(1, -16, 1, 0)
+		PBox.Position = UDim2.new(0, 8, 0, 0)
+		PBox.BackgroundTransparency = 1
+		PBox.PlaceholderText = "Enter slot name..."
+		PBox.Text = initialText or ""
+		PBox.TextColor3 = T.PrimaryText
+		PBox.PlaceholderColor3 = T.SecondaryText
+		PBox.TextSize = 13
+		PBox.Font = Enum.Font.Gotham
+		PBox.TextXAlignment = Enum.TextXAlignment.Left
+		PBox.ClearTextOnFocus = false
+		PBox.ZIndex = 1102
+		PBox.Parent = PBoxFrame
+		PBox:GetPropertyChangedSignal("Text"):Connect(function()
+			if #PBox.Text > 20 then PBox.Text = PBox.Text:sub(1, 20) end
+		end)
+
+		local function MakePopupButton(text, x, color)
+			local button = Instance.new("TextButton")
+			button.Size = UDim2.new(0, 132, 0, 30)
+			button.Position = UDim2.new(0, x, 1, -42)
+			button.BackgroundColor3 = color
+			button.BorderSizePixel = 0
+			button.AutoButtonColor = false
+			button.Text = text
+			button.TextColor3 = T.PrimaryText
+			button.TextSize = 12
+			button.Font = Enum.Font.GothamMedium
+			button.ZIndex = 1101
+			button.Parent = PFrame
+			local corner = Instance.new("UICorner")
+			corner.CornerRadius = UDim.new(0, 6)
+			corner.Parent = button
+			return button
+		end
+
+		local PSave = MakePopupButton("Save", 12, T.AccentColor)
+		local PCancel = MakePopupButton("Cancel", 156, T.TabActive)
+		PSave.MouseButton1Click:Connect(function()
+			local name = PBox.Text:gsub("^%s+", ""):gsub("%s+$", "")
+			if name == "" then name = "Config " .. tostring(#ConfigOrder + 1) end
+			CloseGui(PGui)
+			RenamePopup = nil
+			onSave(name)
+		end)
+		PCancel.MouseButton1Click:Connect(function()
+			CloseGui(PGui)
+			RenamePopup = nil
+		end)
+		PBox:CaptureFocus()
+	end
 
 	local MainFrame = Instance.new("Frame")
 	MainFrame.Name = "MainFrame"
@@ -2777,7 +3006,11 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local function ApplyMainThemeNow(NewThemeName)
 		local NT = ThemesDict[NewThemeName] or ThemesDict["Default"]
 		local OldT = T
+		ThemeName = ThemesDict[NewThemeName] and NewThemeName or "Default"
 		T = NT
+		if ThemeDropdown and ThemeDropdown.SetSilent then
+			ThemeDropdown:SetSilent(ThemeName)
+		end
 		MainFrame.BackgroundColor3  = NT.WindowBg
 		TitleBar.BackgroundColor3   = NT.TitleBarBg
 		Sidebar.BackgroundColor3    = NT.SidebarBg
@@ -2836,6 +3069,19 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 	function SettingsHandling:SetTheme(NewThemeName)
 		ApplyMainThemeNow(NewThemeName)
+	end
+
+	function SettingsHandling:SetKeybind(NewKeybind)
+		ToggleKeybind = ResolveKeybind(NewKeybind)
+	end
+
+	function SettingsHandling:SetToggleImage(NewImage)
+		ToggleImage = NewImage
+		HasToggleImage = IsValidToggleAsset(ToggleImage)
+		ToggleButton.Image = HasToggleImage and ResolveIcon(ToggleImage) or ""
+		if not MainFrame.Visible then
+			ToggleButton.Visible = KeyPassed and HasToggleImage
+		end
 	end
 
 	WindowHandling.Settings = SettingsHandling
@@ -3003,6 +3249,10 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			end
 		end
 
+		local function RegControl(label, getter, setter)
+			RegisterControl(TabName, label, getter, setter)
+		end
+
 		function TabHandling:CreateSection(SectionText)
 			local SectionLabel = Instance.new("TextLabel")
 			SectionLabel.Size = UDim2.new(1, 0, 0, 0)
@@ -3035,6 +3285,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 
 		function TabHandling:CreateToggle(ToggleText, Callback)
+			Callback = Callback or function() end
 			local ToggleFrame = Instance.new("Frame")
 			ToggleFrame.Size = UDim2.new(1, 0, 0, 38)
 			ToggleFrame.BackgroundColor3 = T.ElementBg
@@ -3084,18 +3335,28 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			ToggleButton.Parent = ToggleFrame
 
 			local Toggled = false
-			ToggleButton.MouseButton1Click:Connect(function()
-				Toggled = not Toggled
+			local function SetToggleValue(value, invokeCallback)
+				Toggled = value == true
 				TweenService:Create(ToggleInner, TweenInfo.new(0.2), {
 					Position = Toggled and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)
 				}):Play()
 				TweenService:Create(ToggleOuter, TweenInfo.new(0.2), {
 					BackgroundColor3 = Toggled and T.AccentColor or Color3.fromRGB(50, 50, 50)
 				}):Play()
-				Callback(Toggled)
+				if invokeCallback then Callback(Toggled) end
+			end
+			ToggleButton.MouseButton1Click:Connect(function()
+				SetToggleValue(not Toggled, true)
 			end)
 
 			Reg(ToggleFrame, ToggleText)
+			RegControl(ToggleText, function() return Toggled end, function(value)
+				SetToggleValue(value, true)
+			end)
+			local ToggleHandling = {}
+			function ToggleHandling:Get() return Toggled end
+			function ToggleHandling:Set(value) SetToggleValue(value, true) end
+			return ToggleHandling
 		end
 
 		function TabHandling:CreateButton(ButtonText, Callback)
@@ -3249,6 +3510,10 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			end)
 
 			Reg(TextboxFrame, TitleStr or PlaceholderStr)
+			RegControl(TitleStr or PlaceholderStr, function() return TBox.Text end, function(value)
+				TBox.Text = tostring(value or ""):sub(1, CharLimit)
+				Callback(TBox.Text, false)
+			end)
 
 			local TextboxHandling = {}
 			function TextboxHandling:Get() return TBox.Text end
@@ -3266,6 +3531,10 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 
 		function TabHandling:CreateSlider(SliderText, MinValue, MaxValue, Callback)
+			Callback = Callback or function() end
+			MinValue = tonumber(MinValue) or 0
+			MaxValue = tonumber(MaxValue) or 100
+			local CurrentValue = MinValue
 			local SliderFrame = Instance.new("Frame")
 			SliderFrame.Size = UDim2.new(1, 0, 0, 0)
 			SliderFrame.AutomaticSize = Enum.AutomaticSize.Y
@@ -3360,8 +3629,18 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				SliderFill.Size = UDim2.new(percent, 0, 1, 0)
 				SliderThumb.Position = UDim2.new(percent, 0, 0.5, 0)
 				local val = math.floor(MinValue + (MaxValue - MinValue) * percent)
+				CurrentValue = val
 				SValueText.Text = tostring(val)
 				Callback(val)
+			end
+
+			local function SetSliderValue(value, invokeCallback)
+				CurrentValue = math.clamp(tonumber(value) or MinValue, MinValue, MaxValue)
+				local percent = (MaxValue == MinValue) and 0 or (CurrentValue - MinValue) / (MaxValue - MinValue)
+				SliderFill.Size = UDim2.new(percent, 0, 1, 0)
+				SliderThumb.Position = UDim2.new(percent, 0, 0.5, 0)
+				SValueText.Text = tostring(CurrentValue)
+				if invokeCallback then Callback(CurrentValue) end
 			end
 
 			SliderBtn.InputBegan:Connect(function(input)
@@ -3385,9 +3664,17 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			end)
 
 			Reg(SliderFrame, SliderText)
+			RegControl(SliderText, function() return CurrentValue end, function(value)
+				SetSliderValue(value, true)
+			end)
+			local SliderHandling = {}
+			function SliderHandling:Get() return CurrentValue end
+			function SliderHandling:Set(value) SetSliderValue(value, true) end
+			return SliderHandling
 		end
 
 		function TabHandling:CreateCheckbox(CheckboxText, Callback)
+			Callback = Callback or function() end
 			local CheckboxFrame = Instance.new("Frame")
 			CheckboxFrame.Size = UDim2.new(1, 0, 0, 38)
 			CheckboxFrame.BackgroundColor3 = T.ElementBg
@@ -3448,24 +3735,43 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			CheckboxBtn.Parent = CheckboxFrame
 
 			local Checked = false
-			CheckboxBtn.MouseButton1Click:Connect(function()
-				Checked = not Checked
+			local function SetChecked(value, invokeCallback)
+				Checked = value == true
 				BoxFill.Visible   = Checked
 				CheckIcon.Visible = Checked
 				TweenService:Create(BoxVisual, TweenInfo.new(0.15), {
 					BackgroundColor3 = Checked and T.AccentColor or Color3.fromRGB(40, 40, 40)
 				}):Play()
-				Callback(Checked)
+				if invokeCallback then Callback(Checked) end
+			end
+			CheckboxBtn.MouseButton1Click:Connect(function()
+				SetChecked(not Checked, true)
 			end)
 			Reg(CheckboxFrame, CheckboxText)
+			RegControl(CheckboxText, function() return Checked end, function(value)
+				SetChecked(value, true)
+			end)
+			local CheckboxHandling = {}
+			function CheckboxHandling:Get() return Checked end
+			function CheckboxHandling:Set(value) SetChecked(value, true) end
+			return CheckboxHandling
 		end
 
 		function TabHandling:CreateDropdown(DropdownConfig, Callback)
+			DropdownConfig = DropdownConfig or {}
+			Callback = Callback or function() end
 			local DropLabel       = DropdownConfig.Label       or "Dropdown"
 			local DropOptions     = DropdownConfig.Options     or {}
 			local DropShowSearch  = DropdownConfig.ShowSearch  ~= false
 			local DropPlaceholder = DropdownConfig.Placeholder or "Select an option..."
 			local DropDefault     = DropdownConfig.Default     or nil
+
+			local function OptionText(option)
+				if type(option) == "table" then
+					return tostring(option.Text or option.Name or "")
+				end
+				return tostring(option)
+			end
 
 			local IsOpen      = false
 			local Selected    = DropDefault
@@ -3607,12 +3913,15 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 					if child:IsA("TextButton") then child:Destroy() end
 				end
 				ItemButtons = {}
+				local visibleCount = 0
 
-				for _, optionText in ipairs(DropOptions) do
+				for _, option in ipairs(DropOptions) do
+					local optionText = OptionText(option)
 					local lq = FilterQuery:lower()
 					if lq ~= "" and not optionText:lower():find(lq, 1, true) then
 						continue
 					end
+					visibleCount = visibleCount + 1
 
 					local ItemBtn = Instance.new("TextButton")
 					ItemBtn.Size = UDim2.new(1, 0, 0, ItemHeight)
@@ -3627,7 +3936,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 					IBCorner.Parent = ItemBtn
 
 					local IBLabel = Instance.new("TextLabel")
-					IBLabel.Size = UDim2.new(1, -34, 1, 0)
+					local hasActions = type(option) == "table" and option.Actions ~= nil
+					IBLabel.Size = UDim2.new(1, hasActions and -76 or -34, 1, 0)
 					IBLabel.Position = UDim2.new(0, 8, 0, 0)
 					IBLabel.BackgroundTransparency = 1
 					IBLabel.Text = optionText
@@ -3639,14 +3949,31 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 					IBLabel.ZIndex = 23
 					IBLabel.Parent = ItemBtn
 
-					local IBIcon = Instance.new("ImageLabel")
-					IBIcon.Size = UDim2.new(0, 14, 0, 14)
-					IBIcon.Position = UDim2.new(1, -20, 0.5, -7)
-					IBIcon.BackgroundTransparency = 1
-					IBIcon.Image = "rbxassetid://9728118892"
-					IBIcon.ImageColor3 = optionText == Selected and T.AccentColor or T.SecondaryText
-					IBIcon.ZIndex = 23
-					IBIcon.Parent = ItemBtn
+					local IBIcon
+					if not hasActions then
+						IBIcon = Instance.new("ImageLabel")
+						IBIcon.Size = UDim2.new(0, 14, 0, 14)
+						IBIcon.Position = UDim2.new(1, -20, 0.5, -7)
+						IBIcon.BackgroundTransparency = 1
+						IBIcon.Image = "rbxassetid://9728118892"
+						IBIcon.ImageColor3 = optionText == Selected and T.AccentColor or T.SecondaryText
+						IBIcon.ZIndex = 23
+						IBIcon.Parent = ItemBtn
+					else
+						for actionIndex, action in ipairs(option.Actions) do
+							local actionButton = Instance.new("ImageButton")
+							actionButton.Size = UDim2.new(0, 18, 0, 18)
+							actionButton.Position = UDim2.new(1, -((#option.Actions - actionIndex + 1) * 22), 0.5, -9)
+							actionButton.BackgroundTransparency = 1
+							actionButton.Image = ResolveIcon(action.Icon, action.Icon)
+							actionButton.ImageColor3 = T.SecondaryText
+							actionButton.ZIndex = 24
+							actionButton.Parent = ItemBtn
+							actionButton.MouseButton1Click:Connect(function()
+								if action.Callback then action.Callback(optionText) end
+							end)
+						end
+					end
 
 					ItemBtn.MouseButton1Click:Connect(function()
 						Selected = optionText
@@ -3661,6 +3988,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 					table.insert(ItemButtons, {Btn = ItemBtn, Label = IBLabel, Icon = IBIcon})
 				end
+				DropPopup.Size = UDim2.new(1, 0, 0,
+					SearchH + math.min(visibleCount, MaxVisible) * ItemHeight + 6)
 			end
 
 			BuildItems()
@@ -3684,10 +4013,272 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			end)
 
 			Reg(DropFrame, DropLabel)
+			RegControl(DropLabel, function() return Selected end, function(value)
+				value = tostring(value or "")
+				for _, option in ipairs(DropOptions) do
+					if OptionText(option) == value then
+						Selected = value
+						DSelectedTxt.Text = value
+						DSelectedTxt.TextColor3 = T.PrimaryText
+						BuildItems()
+						return
+					end
+				end
+			end)
+
+			local DropdownHandling = {}
+			function DropdownHandling:Get() return Selected end
+			function DropdownHandling:Set(value)
+				value = tostring(value or "")
+				for _, option in ipairs(DropOptions) do
+					if OptionText(option) == value then
+						Selected = value
+						DSelectedTxt.Text = value
+						DSelectedTxt.TextColor3 = T.PrimaryText
+						BuildItems()
+						Callback(value)
+						return
+					end
+				end
+			end
+			function DropdownHandling:SetSilent(value)
+				value = tostring(value or "")
+				for _, option in ipairs(DropOptions) do
+					if OptionText(option) == value then
+						Selected = value
+						DSelectedTxt.Text = value
+						DSelectedTxt.TextColor3 = T.PrimaryText
+						BuildItems()
+						return
+					end
+				end
+			end
+			function DropdownHandling:SetOptions(newOptions)
+				DropOptions = newOptions or {}
+				if Selected then
+					local stillExists = false
+					for _, option in ipairs(DropOptions) do
+						if OptionText(option) == Selected then stillExists = true break end
+					end
+					if not stillExists then
+						Selected = nil
+						DSelectedTxt.Text = DropPlaceholder
+						DSelectedTxt.TextColor3 = T.SecondaryText
+					end
+				end
+				BuildItems()
+			end
+			function DropdownHandling:Clear()
+				Selected = nil
+				DSelectedTxt.Text = DropPlaceholder
+				DSelectedTxt.TextColor3 = T.SecondaryText
+				BuildItems()
+			end
+			return DropdownHandling
 		end
 
 		return TabHandling
 	end
+
+	local ConfigFileName = "LuaLand_" .. TitleString:gsub("[^%w%-_]", "_") .. "_configs.json"
+	local ConfigPersistence = WindowConfig.PersistConfigs ~= false
+
+	local function PersistConfigs()
+		if not ConfigPersistence or type(writefile) ~= "function" then return end
+		pcall(function()
+			writefile(ConfigFileName, HttpService:JSONEncode({
+				Order = ConfigOrder,
+				Configs = SavedConfigs,
+			}))
+		end)
+	end
+
+	local function RestoreConfigs()
+		if not ConfigPersistence or type(readfile) ~= "function" or type(isfile) ~= "function" then
+			return
+		end
+		if not isfile(ConfigFileName) then return end
+		pcall(function()
+			local decoded = HttpService:JSONDecode(readfile(ConfigFileName))
+			if type(decoded) ~= "table" then return end
+			if type(decoded.Configs) == "table" then SavedConfigs = decoded.Configs end
+			if type(decoded.Order) == "table" then
+				for _, name in ipairs(decoded.Order) do
+					if SavedConfigs[name] ~= nil then table.insert(ConfigOrder, name) end
+				end
+			end
+			for name in pairs(SavedConfigs) do
+				local found = false
+				for _, orderedName in ipairs(ConfigOrder) do
+					if orderedName == name then found = true break end
+				end
+				if not found then table.insert(ConfigOrder, name) end
+			end
+		end)
+	end
+
+	local function GetCurrentConfig()
+		local config = {
+			Theme = ThemeName,
+			Keybind = ToggleKeybind and ToggleKeybind.Name or "RightControl",
+			ToggleImage = ToggleImage,
+			Controls = {},
+		}
+		for _, entry in ipairs(ControlRegistry) do
+			local ok, value = pcall(entry.Get)
+			if ok then config.Controls[entry.Key] = value end
+		end
+		return config
+	end
+
+	local function ApplyConfig(config)
+		if type(config) ~= "table" then return end
+		if config.Theme then SettingsHandling:SetTheme(config.Theme) end
+		if config.Keybind then SettingsHandling:SetKeybind(config.Keybind) end
+		if config.ToggleImage ~= nil then SettingsHandling:SetToggleImage(config.ToggleImage) end
+		if type(config.Controls) == "table" then
+			for _, entry in ipairs(ControlRegistry) do
+				if config.Controls[entry.Key] ~= nil then
+					pcall(entry.Set, config.Controls[entry.Key])
+				end
+			end
+		end
+	end
+
+	local function UpdateConfigDropdowns()
+		if not ConfigListDropdown or not DeleteSlotsDropdown then return end
+		local names = {}
+		local deleteOptions = {}
+		for _, name in ipairs(ConfigOrder) do
+			if SavedConfigs[name] then
+				table.insert(names, name)
+				table.insert(deleteOptions, {
+					Text = name,
+					Actions = {
+						{
+							Icon = "delete",
+							Callback = function()
+								ShowActionNotification(
+									"Are you sure delete " .. name .. "?",
+									"",
+									{
+										{Text = "Delete", Callback = function()
+											SavedConfigs[name] = nil
+											for index, orderedName in ipairs(ConfigOrder) do
+												if orderedName == name then
+													table.remove(ConfigOrder, index)
+													break
+												end
+											end
+											PersistConfigs()
+											UpdateConfigDropdowns()
+										end},
+										{Text = "Cancel", Color = T.TabActive},
+									}
+								)
+							end,
+						},
+						{
+							Icon = "pencil-line",
+							Callback = function()
+								ShowRenamePopup(name, function(newName)
+									if newName == name then return end
+									SavedConfigs[newName] = SavedConfigs[name]
+									SavedConfigs[name] = nil
+									for index, orderedName in ipairs(ConfigOrder) do
+										if orderedName == name then
+											ConfigOrder[index] = newName
+											break
+										end
+									end
+									PersistConfigs()
+									UpdateConfigDropdowns()
+								end)
+							end,
+						},
+					},
+				})
+			end
+		end
+		ConfigListDropdown:SetOptions(names)
+		DeleteSlotsDropdown:SetOptions(deleteOptions)
+	end
+
+	local function SaveConfigSlot(name, config)
+		name = tostring(name or ""):gsub("^%s+", ""):gsub("%s+$", "")
+		if name == "" then name = "Config " .. tostring(#ConfigOrder + 1) end
+		if SavedConfigs[name] == nil then table.insert(ConfigOrder, name) end
+		SavedConfigs[name] = config or GetCurrentConfig()
+		PersistConfigs()
+		UpdateConfigDropdowns()
+	end
+
+	RestoreConfigs()
+
+	local SettingsTab = WindowHandling:CreateTab({
+		Name = "Settings",
+		Icon = "cog",
+		SearchBar = false,
+	})
+	SettingsTab:CreateSection("Configure Ui Settings")
+	SettingsTab:CreateSection("Appearance")
+	ThemeDropdown = SettingsTab:CreateDropdown({
+		Label = "Themes",
+		Options = ThemeOrder,
+		Default = ThemeName,
+		ShowSearch = false,
+	}, function(themeName)
+		ApplyMainThemeNow(themeName)
+	end)
+
+	SettingsTab:CreateSection("Keybind")
+	SettingsTab:CreateTextbox({
+		Placeholder = "Enter keybind...",
+		Limit = 20,
+	}, function(value)
+		SettingsHandling:SetKeybind(value)
+	end)
+
+	SettingsTab:CreateSection("Toggle Button")
+	SettingsTab:CreateTextbox({
+		Placeholder = "Enter image asset...",
+		Limit = 200,
+	}, function(value)
+		SettingsHandling:SetToggleImage(value)
+	end)
+
+	SettingsTab:CreateSection("Save Config")
+	SettingsTab:CreateButton("Save Config", function()
+		ShowActionNotification(
+			"Name your config!",
+			"Would you like to give a name of your slot?",
+			{
+				{Text = "Rename", Callback = function()
+					ShowRenamePopup(nil, function(name)
+						SaveConfigSlot(name, GetCurrentConfig())
+					end)
+				end},
+			}
+		)
+	end)
+	SettingsTab:CreateLabel("Save your configured slot.")
+
+	SettingsTab:CreateSection("Delete Config")
+	DeleteSlotsDropdown = SettingsTab:CreateDropdown({
+		Label = "Delete slots",
+		Options = {},
+		ShowSearch = false,
+	}, function() end)
+
+	SettingsTab:CreateSection("Load Config")
+	ConfigListDropdown = SettingsTab:CreateDropdown({
+		Label = "Config List",
+		Options = {},
+		ShowSearch = true,
+	}, function(name)
+		ApplyConfig(SavedConfigs[name])
+	end)
+	UpdateConfigDropdowns()
 
 	return WindowHandling
 end
