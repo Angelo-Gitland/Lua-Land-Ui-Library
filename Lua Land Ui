@@ -1672,6 +1672,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local DeleteSlotsDropdown
 	local ConfigListDropdown
 	local RenamePopup
+	local SettingsTabButton
+	local SettingsTabWrapper
 
 	local function MakeControlKey(tabName, label)
 		local base = tostring(tabName) .. ":" .. tostring(label)
@@ -1720,6 +1722,12 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		local NCorner = Instance.new("UICorner")
 		NCorner.CornerRadius = UDim.new(0, 10)
 		NCorner.Parent = NFrame
+
+		local NStroke = Instance.new("UIStroke")
+		NStroke.Color = T.AccentColor
+		NStroke.Thickness = 1
+		NStroke.Transparency = 0.1
+		NStroke.Parent = NFrame
 
 		local NAccent = Instance.new("Frame")
 		NAccent.Size = UDim2.new(0, 4, 1, 0)
@@ -1820,6 +1828,12 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		PCorner.CornerRadius = UDim.new(0, 9)
 		PCorner.Parent = PFrame
 
+		local PStroke = Instance.new("UIStroke")
+		PStroke.Color = T.AccentColor
+		PStroke.Thickness = 1
+		PStroke.Transparency = 0.1
+		PStroke.Parent = PFrame
+
 		local PTitle = Instance.new("TextLabel")
 		PTitle.Size = UDim2.new(1, -24, 0, 24)
 		PTitle.Position = UDim2.new(0, 12, 0, 12)
@@ -1885,7 +1899,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		local PCancel = MakePopupButton("Cancel", 156, T.TabActive)
 		PSave.MouseButton1Click:Connect(function()
 			local name = PBox.Text:gsub("^%s+", ""):gsub("%s+$", "")
-			if name == "" then name = "Config " .. tostring(#ConfigOrder + 1) end
+			if name == "" then name = "Slot #" .. tostring(#ConfigOrder + 1) end
 			CloseGui(PGui)
 			RenamePopup = nil
 			onSave(name)
@@ -3226,6 +3240,16 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		ContentPadding.Parent = TabContent
 
 		table.insert(TabsCollection, {Button = TabButton, Wrapper = TabWrapper})
+		if TabName == "Settings" then
+			SettingsTabButton = TabButton
+			SettingsTabWrapper = TabWrapper
+			TabButton.LayoutOrder = 1000000
+		else
+			TabButton.LayoutOrder = #TabsCollection
+			if SettingsTabButton then
+				SettingsTabButton.LayoutOrder = 1000000
+			end
+		end
 
 		TabButton.MouseButton1Click:Connect(function()
 			for _, t in ipairs(TabsCollection) do
@@ -3237,6 +3261,13 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end)
 
 		if #TabsCollection == 1 then
+			TabWrapper.Visible = true
+			TabButton.BackgroundColor3 = T.TabActive
+		elseif TabName ~= "Settings" and SettingsTabWrapper and #TabsCollection == 2 then
+			for _, t in ipairs(TabsCollection) do
+				t.Wrapper.Visible = false
+				t.Button.BackgroundColor3 = T.TabInactive
+			end
 			TabWrapper.Visible = true
 			TabButton.BackgroundColor3 = T.TabActive
 		end
@@ -4206,11 +4237,20 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 	local function SaveConfigSlot(name, config)
 		name = tostring(name or ""):gsub("^%s+", ""):gsub("%s+$", "")
-		if name == "" then name = "Config " .. tostring(#ConfigOrder + 1) end
+		if name == "" then name = "Slot #" .. tostring(#ConfigOrder + 1) end
+		if SavedConfigs[name] == nil and #ConfigOrder >= 5 then
+			ShowActionNotification(
+				"Out of slot!",
+				"You hitted the rate limit of maximum slot creation! Delete at least 1 slot to save!",
+				{}
+			)
+			return false
+		end
 		if SavedConfigs[name] == nil then table.insert(ConfigOrder, name) end
 		SavedConfigs[name] = config or GetCurrentConfig()
 		PersistConfigs()
 		UpdateConfigDropdowns()
+		return true
 	end
 
 	RestoreConfigs()
@@ -4221,34 +4261,16 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		SearchBar = false,
 	})
 	SettingsTab:CreateSection("Configure Ui Settings")
-	SettingsTab:CreateSection("Appearance")
-	ThemeDropdown = SettingsTab:CreateDropdown({
-		Label = "Themes",
-		Options = ThemeOrder,
-		Default = ThemeName,
-		ShowSearch = false,
-	}, function(themeName)
-		ApplyMainThemeNow(themeName)
-	end)
-
-	SettingsTab:CreateSection("Keybind")
-	SettingsTab:CreateTextbox({
-		Placeholder = "Enter keybind...",
-		Limit = 20,
-	}, function(value)
-		SettingsHandling:SetKeybind(value)
-	end)
-
-	SettingsTab:CreateSection("Toggle Button")
-	SettingsTab:CreateTextbox({
-		Placeholder = "Enter image asset...",
-		Limit = 200,
-	}, function(value)
-		SettingsHandling:SetToggleImage(value)
-	end)
-
 	SettingsTab:CreateSection("Save Config")
 	SettingsTab:CreateButton("Save Config", function()
+		if #ConfigOrder >= 5 then
+			ShowActionNotification(
+				"Out of slot!",
+				"You hitted the rate limit of maximum slot creation! Delete at least 1 slot to save!",
+				{}
+			)
+			return
+		end
 		ShowActionNotification(
 			"Name your config!",
 			"Would you like to give a name of your slot?",
@@ -4263,20 +4285,45 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	end)
 	SettingsTab:CreateLabel("Save your configured slot.")
 
-	SettingsTab:CreateSection("Delete Config")
+	SettingsTab:CreateSection("Delete Slot")
 	DeleteSlotsDropdown = SettingsTab:CreateDropdown({
 		Label = "Delete slots",
 		Options = {},
 		ShowSearch = false,
 	}, function() end)
 
-	SettingsTab:CreateSection("Load Config")
+	SettingsTab:CreateSection("Load Slot")
 	ConfigListDropdown = SettingsTab:CreateDropdown({
 		Label = "Config List",
 		Options = {},
 		ShowSearch = true,
 	}, function(name)
 		ApplyConfig(SavedConfigs[name])
+	end)
+
+	SettingsTab:CreateSection("Theme")
+	ThemeDropdown = SettingsTab:CreateDropdown({
+		Label = "Themes",
+		Options = ThemeOrder,
+		Default = ThemeName,
+		ShowSearch = false,
+	}, function(themeName)
+		ApplyMainThemeNow(themeName)
+	end)
+	SettingsTab:CreateTextbox({
+		Title = "Keybind",
+		Placeholder = "Enter keybind...",
+		Limit = 20,
+	}, function(value)
+		SettingsHandling:SetKeybind(value)
+	end)
+
+	SettingsTab:CreateSection("Toggle Image")
+	SettingsTab:CreateTextbox({
+		Placeholder = "Enter image asset...",
+		Limit = 30,
+	}, function(value)
+		SettingsHandling:SetToggleImage(value)
 	end)
 	UpdateConfigDropdowns()
 
