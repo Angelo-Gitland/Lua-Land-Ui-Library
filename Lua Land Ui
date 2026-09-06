@@ -2043,8 +2043,9 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 	local MainFrame = Instance.new("Frame")
 	MainFrame.Name = "MainFrame"
+	MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 	MainFrame.Size = UDim2.new(0, 500, 0, 350)
-	MainFrame.Position = UDim2.new(0.5, -250, 0.5, -175)
+	MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 	MainFrame.BackgroundColor3 = T.WindowBg
 	MainFrame.BorderSizePixel = 0
 	MainFrame.ClipsDescendants = true
@@ -2138,7 +2139,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local function ShowMainWindow()
 		MainFrame.Visible = true
 		MainFrame.Size = NormalSize
-		MainFrame.Position = UDim2.new(0.5, -250, 0.6, -175)
+		MainFrame.Position = UDim2.new(0.5, 0, 0.6, 0)
 		MainFrame.BackgroundTransparency = 1
 		IsMinimized = false
 		if Body then
@@ -2146,7 +2147,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 		ToggleButton.Visible = false
 		TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-			Position = UDim2.new(0.5, -250, 0.5, -175),
+			Position = UDim2.new(0.5, 0, 0.5, 0),
 			BackgroundTransparency = 0,
 		}):Play()
 	end
@@ -2158,8 +2159,6 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		ToggleButton.Visible = false
 		TweenService:Create(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
 			Size = UDim2.new(0, 500, 0, 0),
-			Position = UDim2.new(MainFrame.Position.X.Scale, MainFrame.Position.X.Offset,
-				MainFrame.Position.Y.Scale, MainFrame.Position.Y.Offset + 175),
 		}):Play()
 		task.delay(0.22, function()
 			if MainFrame.Parent then
@@ -3099,6 +3098,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 	end)
 
+	local TabScrollFrames = {}
+
 	local Sidebar = Instance.new("ScrollingFrame")
 	Sidebar.Name = "Sidebar"
 	Sidebar.Size = UDim2.new(0, 130, 1, 0)
@@ -3119,8 +3120,28 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	SidebarPadding.PaddingTop   = UDim.new(0, 5)
 	SidebarPadding.Parent = Sidebar
 
+	local function RefreshScrollingFrame(frame)
+		if not frame or not frame.Parent then return end
+		local canvasSize = frame.AbsoluteCanvasSize
+		local windowSize = frame.AbsoluteWindowSize
+		frame.CanvasPosition = Vector2.new(
+			math.clamp(frame.CanvasPosition.X, 0, math.max(0, canvasSize.X - windowSize.X)),
+			math.clamp(frame.CanvasPosition.Y, 0, math.max(0, canvasSize.Y - windowSize.Y))
+		)
+	end
+
 	SidebarLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 		Sidebar.CanvasSize = UDim2.new(0, 0, 0, SidebarLayout.AbsoluteContentSize.Y + 10)
+		RefreshScrollingFrame(Sidebar)
+	end)
+
+	MainUiScale:GetPropertyChangedSignal("Scale"):Connect(function()
+		task.defer(function()
+			RefreshScrollingFrame(Sidebar)
+			for _, frame in ipairs(TabScrollFrames) do
+				RefreshScrollingFrame(frame)
+			end
+		end)
 	end)
 
 	local ContentContainer = Instance.new("Frame")
@@ -3409,6 +3430,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		ContentPadding.PaddingTop    = UDim.new(0, 5)
 		ContentPadding.PaddingBottom = UDim.new(0, 10)
 		ContentPadding.Parent = TabContent
+		table.insert(TabScrollFrames, TabContent)
 
 		table.insert(TabsCollection, {Button = TabButton, Wrapper = TabWrapper})
 		if TabName == "Settings" then
@@ -3841,9 +3863,13 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			end
 
 			local SliderDragging = false
+			local CenterSnapThreshold = 0.04
 
 			local function UpdateSlider(mouseX)
 				local percent = math.clamp((mouseX - SliderBg.AbsolutePosition.X) / SliderBg.AbsoluteSize.X, 0, 1)
+				if math.abs(percent - 0.5) <= CenterSnapThreshold then
+					percent = 0.5
+				end
 				SliderFill.Size = UDim2.new(percent, 0, 1, 0)
 				SliderThumb.Position = UDim2.new(percent, 0, 0.5, 0)
 				local val = math.floor(MinValue + (MaxValue - MinValue) * percent)
