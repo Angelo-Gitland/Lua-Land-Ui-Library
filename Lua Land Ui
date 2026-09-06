@@ -1543,8 +1543,8 @@ local ThemesDict = {
 
 local ThemeOrder = {"Default", "Darker", "Fire", "Blossom", "Snow", "Cloudy", "Spring"}
 
--- Resolves an icon: accepts a Lucide icon name from IconsDict OR a raw
--- custom asset ("rbxassetid://123", an asset URL, or a numeric id).
+
+
 local function ResolveIcon(icon, fallback)
 	if typeof(icon) == "number" then
 		return "rbxassetid://" .. tostring(icon)
@@ -1585,8 +1585,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local IntroConfig     = WindowConfig.Intro
 	local KeyConfig       = WindowConfig.KeySystem
 	local ShowKey        = KeyConfig ~= nil
-	-- A key system always boots after an intro. If no intro table was
-	-- supplied, use the library defaults so KeySystem still works by itself.
+	
+	
 	local ShowIntro       = IntroConfig ~= nil or ShowKey
 	IntroConfig            = IntroConfig or {}
 
@@ -1921,8 +1921,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	MainFrame.Visible = false
 	MainFrame.Parent = ScreenGui
 
-	-- The main window is hidden instead of destroyed so the toggle and hotkey
-	-- can restore it after the user closes it.
+	
+	
 	local NormalSize = UDim2.new(0, 500, 0, 350)
 	local MinimizedSize = UDim2.new(0, 500, 0, 50)
 	local IsMinimized = false
@@ -1931,8 +1931,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local ToggleButton = Instance.new("ImageButton")
 	ToggleButton.Name = "ToggleButton"
 	ToggleButton.Size = ToggleSize
-	-- The default location is the top-center on every screen size. The
-	-- position is converted to pixel offsets so it can be clamped reliably.
+	
+	
 	ToggleButton.Position = UDim2.new(0.5, -math.floor(ToggleSize.X.Offset / 2), 0, 16)
 	ToggleButton.AnchorPoint = Vector2.new(0, 0)
 	ToggleButton.BackgroundColor3 = T.ElementBg
@@ -2214,8 +2214,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			task.wait(0.45)
 			IntroFrame:Destroy()
 
-			-- Reuse the intro as the handoff between an accepted key and the
-			-- main window: intro -> key system -> intro -> main window.
+			
+			
 			local function PlayIntroAgain()
 				local HandoffFrame = Instance.new("Frame")
 				HandoffFrame.Name = "IntroHandoff"
@@ -2392,7 +2392,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				KCorner.CornerRadius = UDim.new(0, 10)
 				KCorner.Parent = KFrame
 
-				-- ===== Title bar : title (top + left), icon left of title, subtitle below =====
+				
 				local KTitleBar = Instance.new("Frame")
 				KTitleBar.Name = "KTitleBar"
 				KTitleBar.Size = UDim2.new(1, 0, 0, 58)
@@ -2457,7 +2457,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				KDivider.BorderSizePixel = 0
 				KDivider.Parent = KFrame
 
-				-- ===== Key entry : left column =====
+				
 				local KTextboxFrame = Instance.new("Frame")
 				KTextboxFrame.Size = UDim2.new(1, -28, 0, 42)
 				KTextboxFrame.Position = UDim2.new(0, 14, 0, 78)
@@ -2543,17 +2543,17 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 					return Btn, BIcon, BLabel
 				end
 
-				-- The action row follows the input: check, get, then theme.
+				
 				local SubmitBtn = MakeKeyBtn("Check Key", "check", KeyT.AccentColor,
 					UDim2.new(0, 14, 0, 130), UDim2.new(0, 130, 0, 40))
 				local GetBtn = MakeKeyBtn("Get Key", "hand-grab", KeyT.TabActive,
 					UDim2.new(0, 152, 0, 130), UDim2.new(0, 130, 0, 40))
 				local ClearBtn2 = MakeKeyBtn("Clear", "trash", KeyT.TabActive,
-					-- One wide, left-aligned button: approximately the combined
-					-- width of Check Key and Get Key.
+					
+					
 					UDim2.new(0, 14, 0, 176), UDim2.new(0, 268, 0, 40))
 
-				-- ===== Theme selector (slide-open list) : right column =====
+				
 				local ThemeOrder = {"Default", "Darker", "Fire", "Blossom", "Snow", "Cloudy", "Spring"}
 
 				local ThemeBtn = Instance.new("TextButton")
@@ -2629,7 +2629,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 				local ThemeItems = {}
 
-				-- Repaint every part of the key window with the newly picked theme
+				
 				local function ApplyKeyTheme(newName)
 					local NT = ThemesDict[newName] or ThemesDict["Default"]
 					KeyT = NT
@@ -3038,9 +3038,9 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			tabData.Button.BackgroundColor3 = isActive and NT.TabActive or NT.TabInactive
 		end
 
-		-- Repaint already-created tab controls as well as the window chrome.
-		-- Matching the old palette keeps this compatible with custom controls
-		-- created before the key was accepted.
+		
+		
+		
 		local function RepaintColor(color)
 			if color == OldT.WindowBg then return NT.WindowBg end
 			if color == OldT.TitleBarBg then return NT.TitleBarBg end
