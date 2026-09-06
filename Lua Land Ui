@@ -1543,6 +1543,60 @@ local ThemesDict = {
 
 local ThemeOrder = {"Default", "Darker", "Fire", "Blossom", "Snow", "Cloudy", "Spring"}
 
+local TextFontAssets = {
+	["Accanthis ADF Std"] = "AccanthisADFStd",
+	["Amatic SC"] = "AmaticSC",
+	["Arimo"] = "Arimo",
+	["Balthazar"] = "Balthazar",
+	["Bangers"] = "Bangers",
+	["Builder Extended"] = "BuilderExtended",
+	["Builder Mono"] = "BuilderMono",
+	["Builder Sans"] = "BuilderSans",
+	["Comic Neue Angular"] = "ComicNeueAngular",
+	["Creepster"] = "Creepster",
+	["Denk One"] = "DenkOne",
+	["Fondamento"] = "Fondamento",
+	["Fredoka One"] = "FredokaOne",
+	["Grenze Gotisch"] = "GrenzeGotisch",
+	["Guru"] = "Guru",
+	["Highway Gothic"] = "HighwayGothic",
+	["Inconsolata"] = "Inconsolata",
+	["Indie Flower"] = "IndieFlower",
+	["Josefin Sans"] = "JosefinSans",
+	["Jura"] = "Jura",
+	["Kalam"] = "Kalam",
+	["Luckiest Guy"] = "LuckiestGuy",
+	["Merriweather"] = "Merriweather",
+	["Michroma"] = "Michroma",
+	["Montserrat"] = "Montserrat",
+	["Nunito"] = "Nunito",
+	["Oswald"] = "Oswald",
+	["Patrick Hand"] = "PatrickHand",
+	["Permanent Marker"] = "PermanentMarker",
+	["Press Start 2P"] = "PressStart2P",
+	["Roboto"] = "Roboto",
+	["Roboto Condensed"] = "RobotoCondensed",
+	["Roboto Mono"] = "RobotoMono",
+	["Roman Antique"] = "RomanAntique",
+	["Sarpanch"] = "Sarpanch",
+	["Source Sans Pro"] = "SourceSansPro",
+	["Special Elite"] = "SpecialElite",
+	["Titillium Web"] = "TitilliumWeb",
+	["Ubuntu"] = "Ubuntu",
+	["Zekton"] = "Zekton",
+}
+
+local TextFontOrder = {
+	"Default", "Accanthis ADF Std", "Amatic SC", "Arimo", "Balthazar", "Bangers",
+	"Builder Extended", "Builder Mono", "Builder Sans", "Comic Neue Angular", "Creepster",
+	"Denk One", "Fondamento", "Fredoka One", "Grenze Gotisch", "Guru", "Highway Gothic",
+	"Inconsolata", "Indie Flower", "Josefin Sans", "Jura", "Kalam", "Luckiest Guy",
+	"Merriweather", "Michroma", "Montserrat", "Nunito", "Oswald", "Patrick Hand",
+	"Permanent Marker", "Press Start 2P", "Roboto", "Roboto Condensed", "Roboto Mono",
+	"Roman Antique", "Sarpanch", "Source Sans Pro", "Special Elite", "Titillium Web",
+	"Ubuntu", "Zekton",
+}
+
 
 
 local function ResolveIcon(icon, fallback)
@@ -1581,6 +1635,52 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	local ThemeName       = WindowConfig.Theme      or "Default"
 	ThemeName              = ThemesDict[ThemeName] and ThemeName or "Default"
 	local T               = ThemesDict[ThemeName]
+
+	local TextFontName = "Default"
+	local CustomUiDesign = ""
+	local TextFontDefaults = setmetatable({}, {__mode = "k"})
+	local TextFontWeights = setmetatable({}, {__mode = "k"})
+
+	local function GetTextFontWeight(object)
+		if object.Font == Enum.Font.GothamBold then
+			return Enum.FontWeight.Bold
+		elseif object.Font == Enum.Font.GothamMedium then
+			return Enum.FontWeight.SemiBold
+		end
+		return Enum.FontWeight.Regular
+	end
+
+	local function ApplyTextFontObject(object)
+		if not (object:IsA("TextLabel") or object:IsA("TextButton") or object:IsA("TextBox")) then
+			return
+		end
+		if not TextFontDefaults[object] then
+			TextFontDefaults[object] = object.Font
+			TextFontWeights[object] = GetTextFontWeight(object)
+		end
+		if TextFontName == "Default" then
+			object.Font = TextFontDefaults[object]
+			return
+		end
+		local assetName = TextFontAssets[TextFontName]
+		if not assetName then return end
+		local ok, fontFace = pcall(function()
+			return Font.new(
+				"rbxasset://fonts/families/" .. assetName .. ".json",
+				TextFontWeights[object]
+			)
+		end)
+		if ok then object.FontFace = fontFace end
+	end
+
+	local function ApplyTextFontToGui(root)
+		if root:IsA("TextLabel") or root:IsA("TextButton") or root:IsA("TextBox") then
+			ApplyTextFontObject(root)
+		end
+		for _, object in ipairs(root:GetDescendants()) do
+			ApplyTextFontObject(object)
+		end
+	end
 
 	local IntroConfig     = WindowConfig.Intro
 	local KeyConfig       = WindowConfig.KeySystem
@@ -1638,6 +1738,18 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			or asset:match("^rbxassetid://%d+$") ~= nil
 			or asset:match("^rbxasset://.+") ~= nil
 			or asset:match("^https?://.+") ~= nil
+	end
+
+	local function IsValidCustomUiDesign(value)
+		if typeof(value) == "number" then
+			return value > 0
+		end
+		if type(value) ~= "string" then
+			return false
+		end
+		local asset = value:gsub("%s+", "")
+		return asset:match("^%d+$") ~= nil
+			or asset:match("^rbxassetid://%d+$") ~= nil
 	end
 	local HasToggleImage = IsValidToggleAsset(ToggleImage)
 	local ToggleSizeConfig = ShowKey and (KeyConfig.ToggleButtonSize or KeyConfig.ToggleSize
@@ -1697,6 +1809,12 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	ScreenGui.IgnoreGuiInset = true
 	ScreenGui.Parent = RunService:IsStudio()
 		and game.Players.LocalPlayer:WaitForChild("PlayerGui") or CoreGui
+
+	ScreenGui.DescendantAdded:Connect(function(object)
+		task.defer(function()
+			if object.Parent then ApplyTextFontObject(object) end
+		end)
+	end)
 
 	local function CloseGui(gui)
 		if gui and gui.Parent then
@@ -1908,6 +2026,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			CloseGui(PGui)
 			RenamePopup = nil
 		end)
+		ApplyTextFontToGui(PGui)
 		PBox:CaptureFocus()
 	end
 
@@ -1920,6 +2039,17 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	MainFrame.ClipsDescendants = true
 	MainFrame.Visible = false
 	MainFrame.Parent = ScreenGui
+
+	local CustomDesignImage = Instance.new("ImageLabel")
+	CustomDesignImage.Name = "CustomUiDesign"
+	CustomDesignImage.Size = UDim2.new(1, 0, 1, 0)
+	CustomDesignImage.Position = UDim2.new(0, 0, 0, 0)
+	CustomDesignImage.BackgroundTransparency = 1
+	CustomDesignImage.ImageTransparency = 0.65
+	CustomDesignImage.ScaleType = Enum.ScaleType.Crop
+	CustomDesignImage.Visible = false
+	CustomDesignImage.ZIndex = 0
+	CustomDesignImage.Parent = MainFrame
 
 	
 	
@@ -2355,7 +2485,9 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 				NProgCorner.CornerRadius = UDim.new(1, 0)
 				NProgCorner.Parent = NProgress
 
-				local nfast = TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+				ApplyTextFontToGui(NGui)
+
+		local nfast = TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
 				local nslow = TweenInfo.new(5, Enum.EasingStyle.Linear)
 				local nexit = TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In)
 
@@ -3096,6 +3228,22 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		if not MainFrame.Visible then
 			ToggleButton.Visible = KeyPassed and HasToggleImage
 		end
+	end
+
+	function SettingsHandling:SetTextFont(NewFontName)
+		if type(NewFontName) == "string" and (NewFontName == "Default" or TextFontAssets[NewFontName]) then
+			TextFontName = NewFontName
+		else
+			TextFontName = "Default"
+		end
+		ApplyTextFontToGui(ScreenGui)
+	end
+
+	function SettingsHandling:SetCustomUiDesign(NewDesign)
+		CustomUiDesign = NewDesign or ""
+		local isValid = IsValidCustomUiDesign(CustomUiDesign)
+		CustomDesignImage.Image = isValid and ResolveIcon(CustomUiDesign) or ""
+		CustomDesignImage.Visible = isValid
 	end
 
 	WindowHandling.Settings = SettingsHandling
@@ -4153,6 +4301,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 			Theme = ThemeName,
 			Keybind = ToggleKeybind and ToggleKeybind.Name or "RightControl",
 			ToggleImage = ToggleImage,
+			TextFont = TextFontName,
+			CustomUiDesign = CustomUiDesign,
 			Controls = {},
 		}
 		for _, entry in ipairs(ControlRegistry) do
@@ -4167,6 +4317,8 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		if config.Theme then SettingsHandling:SetTheme(config.Theme) end
 		if config.Keybind then SettingsHandling:SetKeybind(config.Keybind) end
 		if config.ToggleImage ~= nil then SettingsHandling:SetToggleImage(config.ToggleImage) end
+		if config.TextFont ~= nil then SettingsHandling:SetTextFont(config.TextFont) end
+		if config.CustomUiDesign ~= nil then SettingsHandling:SetCustomUiDesign(config.CustomUiDesign) end
 		if type(config.Controls) == "table" then
 			for _, entry in ipairs(ControlRegistry) do
 				if config.Controls[entry.Key] ~= nil then
@@ -4324,6 +4476,25 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		Limit = 30,
 	}, function(value)
 		SettingsHandling:SetToggleImage(value)
+	end)
+
+
+	SettingsTab:CreateSection("Text Font Styles")
+	SettingsTab:CreateDropdown({
+		Label = "Text Fonts",
+		Options = TextFontOrder,
+		Default = TextFontName,
+		ShowSearch = true,
+	}, function(fontName)
+		SettingsHandling:SetTextFont(fontName)
+	end)
+
+	SettingsTab:CreateSection("Custom Ui Design")
+	SettingsTab:CreateTextbox({
+		Placeholder = "Enter a valid assetid.",
+		Limit = 25,
+	}, function(value)
+		SettingsHandling:SetCustomUiDesign(value)
 	end)
 	UpdateConfigDropdowns()
 
