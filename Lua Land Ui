@@ -2108,6 +2108,38 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		return camera and camera.ViewportSize or Vector2.new(800, 600)
 	end
 
+	local function GetMainFrameSize()
+		local width = MainFrame.AbsoluteSize.X
+		local height = MainFrame.AbsoluteSize.Y
+		local scale = MainUiScale.Scale
+		if width <= 0 then width = MainFrame.Size.X.Offset * scale end
+		if height <= 0 then height = NormalSize.Y.Offset * scale end
+		return width, height
+	end
+
+	local function ClampMainFrameCenter(x, y, width, height)
+		local viewport = GetViewportSize()
+		width = width or GetMainFrameSize()
+		height = height or select(2, GetMainFrameSize())
+		local minX = math.min(width / 2, viewport.X / 2)
+		local maxX = math.max(viewport.X - width / 2, viewport.X / 2)
+		local minY = math.min(height / 2, viewport.Y / 2)
+		local maxY = math.max(viewport.Y - height / 2, viewport.Y / 2)
+		return math.clamp(x, minX, maxX), math.clamp(y, minY, maxY)
+	end
+
+	local function SetMainFramePosition(x, y)
+		local clampedX, clampedY = ClampMainFrameCenter(x, y)
+		MainFrame.Position = UDim2.new(0, clampedX, 0, clampedY)
+	end
+
+	local function ClampCurrentMainFramePosition()
+		local viewport = GetViewportSize()
+		local position = MainFrame.Position
+		SetMainFramePosition(position.X.Scale * viewport.X + position.X.Offset,
+			position.Y.Scale * viewport.Y + position.Y.Offset)
+	end
+
 	local function ClampTogglePosition(x, y)
 		local viewport = GetViewportSize()
 		local width = ToggleButton.AbsoluteSize.X > 0 and ToggleButton.AbsoluteSize.X or ToggleSize.X.Offset
@@ -2135,6 +2167,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	end
 
 	ResetTogglePosition()
+	ClampCurrentMainFramePosition()
 
 	local function ShowMainWindow()
 		MainFrame.Visible = true
@@ -2231,14 +2264,18 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		end
 	end)
 
-	local function BindToggleViewport(camera)
+	local function BindViewport(camera)
 		if camera then
-			camera:GetPropertyChangedSignal("ViewportSize"):Connect(ClampCurrentTogglePosition)
+			camera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+				ClampCurrentMainFramePosition()
+				ClampCurrentTogglePosition()
+			end)
 		end
 	end
-	BindToggleViewport(workspace.CurrentCamera)
+	BindViewport(workspace.CurrentCamera)
 	workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function()
-		BindToggleViewport(workspace.CurrentCamera)
+		BindViewport(workspace.CurrentCamera)
+		ClampCurrentMainFramePosition()
 		ClampCurrentTogglePosition()
 	end)
 
@@ -3057,10 +3094,20 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 		TweenService:Create(MinimizeLine, TweenInfo.new(0.15), {BackgroundColor3 = T.PrimaryText}):Play()
 	end)
 
+	local function IsPointInsideGui(position, object)
+		local objectPosition = object.AbsolutePosition
+		local objectSize = object.AbsoluteSize
+		return position.X >= objectPosition.X and position.X <= objectPosition.X + objectSize.X
+			and position.Y >= objectPosition.Y and position.Y <= objectPosition.Y + objectSize.Y
+	end
+
 	local Dragging, DragInput, DragStart, StartPos = false, nil, nil, nil
 	TitleBar.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1
 			or input.UserInputType == Enum.UserInputType.Touch then
+			if IsPointInsideGui(input.Position, CloseBtn) or IsPointInsideGui(input.Position, MinimizeBtn) then
+				return
+			end
 			Dragging = true; DragStart = input.Position; StartPos = MainFrame.Position
 			input.Changed:Connect(function()
 				if input.UserInputState == Enum.UserInputState.End then Dragging = false end
@@ -3074,8 +3121,11 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	UserInputService.InputChanged:Connect(function(input)
 		if input == DragInput and Dragging then
 			local d = input.Position - DragStart
-			MainFrame.Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + d.X,
-			                               StartPos.Y.Scale, StartPos.Y.Offset + d.Y)
+			local viewport = GetViewportSize()
+			SetMainFramePosition(
+				StartPos.X.Scale * viewport.X + StartPos.X.Offset + d.X,
+				StartPos.Y.Scale * viewport.Y + StartPos.Y.Offset + d.Y
+			)
 		end
 	end)
 
@@ -3088,12 +3138,24 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 	Body.Parent = MainFrame
 
 	MinimizeBtn.MouseButton1Click:Connect(function()
+		local frameTop = MainFrame.AbsolutePosition.Y
+		local frameCenter = MainFrame.AbsolutePosition + MainFrame.AbsoluteSize / 2
+		local targetSize = IsMinimized and NormalSize or MinimizedSize
+		local targetWidth = targetSize.X.Offset * MainUiScale.Scale
+		local targetHeight = targetSize.Y.Offset * MainUiScale.Scale
+		local targetX, targetY = ClampMainFrameCenter(frameCenter.X, frameTop + targetHeight / 2, targetWidth, targetHeight)
 		IsMinimized = not IsMinimized
 		if IsMinimized then
 			Body.Visible = false
-			TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = MinimizedSize}):Play()
+			TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+				Size = MinimizedSize,
+				Position = UDim2.new(0, targetX, 0, targetY),
+			}):Play()
 		else
-			TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = NormalSize}):Play()
+			TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+				Size = NormalSize,
+				Position = UDim2.new(0, targetX, 0, targetY),
+			}):Play()
 			task.delay(0.05, function() Body.Visible = true end)
 		end
 	end)
@@ -3137,6 +3199,7 @@ function LuaLandLibrary:CreateWindow(WindowConfig)
 
 	MainUiScale:GetPropertyChangedSignal("Scale"):Connect(function()
 		task.defer(function()
+			ClampCurrentMainFramePosition()
 			RefreshScrollingFrame(Sidebar)
 			for _, frame in ipairs(TabScrollFrames) do
 				RefreshScrollingFrame(frame)
